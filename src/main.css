@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.blur-c {
+    background-color: rgba(128, 128, 128, 0.034);
+    backdrop-filter: blur(27px);
+}
+
+.gradiant {
+    background-image: linear-gradient(to right, rgb(6, 95, 95), #555);
+}
+
+
+
+@media (min-width:767px) {
+    .nav-aside {
+        position: fixed;
+        top: 10px;
+        left: 15px;
+        height: calc(100% - 20px);
+        width: 300px;
+        border-radius: 10px;
+    }
+
+    .sh-nav-aside {
+        box-shadow: #111 1px 1px 30px 10px;
+    }
+}
