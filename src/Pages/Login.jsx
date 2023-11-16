@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Logo from "../Components/Logo";
-import { $, hash } from "../js/cocktail";
+import { $, hash, stringify } from "../js/cocktail";
 import { filterData } from "../js/db";
 import { success, warn } from "../js/global";
 import styles from "../js/styles";
@@ -15,20 +15,22 @@ function Login() {
             if (!$('#email').value || !$('#pass').value) { $('#warn').textContent = `Fill all inputs`; return }
 
             const isUser = await filterData({
-                dbName:'Users',
-                value:$('#email').value ,
-                boolean:true
+                dbName: 'Users',
+                value: $('#email').value,
+                boolean: true
             });
 
             console.log(isUser);
-            // if(isUser.ok && isUser.data[0].password == hash($('#pass').value)){
-            //     success(`Successfully Login`);
-            //     setTimeout(() => {
-            //         navigate('/');
-            //     }, 1500);
-            // }else{
-            //     warn(`Email or Password is wrong`)
-            // }
+            if (isUser.ok && isUser.data[0].password == hash($('#pass').value)) {
+                delete isUser.data[0].password;
+                localStorage.setItem('user',stringify(isUser.data[0]));
+                success(`Successfully Login`);
+                setTimeout(() => {
+                    navigate('/');
+                }, 1500);
+            } else {
+                warn(`Email or Password is wrong`)
+            }
         } catch (error) {
             throw new Error(error.message)
         }

@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Signup from './Pages/Signup';
 import Login from './Pages/Login'
 import './main.css'
+import Posts from './Components/Posts';
 
 const root = createRoot(document.getElementById('root'));
 const wss = new WebSocket(`ws://localhost:9090 `);
@@ -13,7 +14,9 @@ const wss = new WebSocket(`ws://localhost:9090 `);
 root.render(
     <BrowserRouter>
         <Routes>
-            <Route path='/' element={<App wss={wss} />} />
+            <Route path='/' element={<App wss={wss} />} >
+                {/* <Route path='/posts' element={<Posts/>}/> */}
+            </Route>
             <Route path='/signup' element={<Signup wss={wss} />} />
             <Route path='/login' element={<Login wss={wss} />} />
         </Routes>

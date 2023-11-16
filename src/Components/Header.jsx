@@ -17,7 +17,7 @@ function Header({ wss, SearchlistComp }) {
     //Methods
     const getProfImgAndName = async () => {
         try {
-           if(!user || !user.profImg){setProfImg(userAvatar); return} 
+           if(!user || !user.profImgId){setProfImg(userAvatar); return} 
           setProfImg(await tb.getFileFromBot(user.profImgId))
         } catch (error) {
             throw new Error(error.message)
@@ -42,7 +42,7 @@ function Header({ wss, SearchlistComp }) {
     return (
         <header className="w-full h-fit p-3 bg-gray-900" title='header'>
 
-            <section className="container m-auto flex items-center justify-between" title='container'>
+            <section className=" m-auto flex items-center justify-between" title='container'>
 
                 <figure className="flex items-center gap-2">
                     <i className="fa-solid fa-bolt text-3xl text-cyan-400" title='thunder logo'></i>
@@ -50,8 +50,8 @@ function Header({ wss, SearchlistComp }) {
                 </figure>
 
                 <article className="items-center w-3/5 gap-2 bg-gray-950 p-2 rounded-lg hidden md:flex">
+                    <input type="search" className=" w-full bg-transparent font-bold outline-none" placeholder="Search" title="search input" onKeyUp={handleSearch} />
                     <i className="fa-solid  fa-search text-1xl text-white" title='search icon'></i>
-                    <input type="search" className=" w-full bg-transparent font-bold outline-none" placeholder="Search... " title="search input" onKeyUp={handleSearch} />
                 </article>
 
                 <figure className="flex items-center gap-2 px-2 rounded h-full" onClick={showLogOrSignComp}>
