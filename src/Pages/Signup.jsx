@@ -4,7 +4,7 @@ import Logo from '../Components/Logo';
 import styles from '../js/styles';
 import { useNavigate } from 'react-router-dom';
 import { filterData, setData, tb } from '../js/db';
-import { success, warn } from '../js/global';
+import { getReqFromGs, showMarquee, success, warn } from '../js/global';
 
 /**
  * Returns Signup component
@@ -12,13 +12,14 @@ import { success, warn } from '../js/global';
  * @returns {string}
  */
 
-function Signup({ wss }) {
+function Signup() {
     const navigate = useNavigate()
     let profImgId;
 
     const signup = async (e) => {
         try {
             e.preventDefault();
+            showMarquee(true);
             const validation = [
                 isValidName($('#name').value),
                 isValidEmail($('#email').value),
@@ -29,39 +30,46 @@ function Signup({ wss }) {
 
             for (const result of validation) {
                 const { valid, msg } = result;
-                if (!valid) {warn(msg) ; return }
+                if (!valid) {warn(msg) ; showMarquee(false);return }
             };
             warn('');
 
             const data = {
                 _id: uniqueID(),
                 name: $('#name').value,
-                email: $('#email').value,
+                email: $('#email').value.toLowerCase(),
                 password: hash($('#pass').value),
                 date: $('#date').value,
                 profImgId: profImgId || ''
             }
 
             //Check if User already in use
-            const isUser = await filterData({
-                dbName: 'Users',
-                value: data.email,
-                boolean:true
+            // const isUser = await filterData({
+            //     dbName: 'Users',
+            //     value: data.email,
+            //     boolean:true
+            // })
+
+            // if(isUser.ok){ warn(`Email already in use.`); return}
+
+            // const res = await setData({
+            //     dbName: `Users`,
+            //     data
+            // });
+
+            const res = await getReqFromGs({
+                type:`signup`,
+                sheetName:'Users',
+                dataJson:encodeURIComponent(stringify(data))
             })
 
-            if(isUser.ok){ warn(`Email already in use.`); return}
-
-            const res = await setData({
-                dbName: `Users`,
-                data
-            });
-
-            console.log(res);
-            if (res._id) {
-                delete data.password
-                localStorage.setItem('user',stringify(data));
-                success(`Successfully regstired`)
+            showMarquee(false); 
+            if (res.ok) {
+                localStorage.setItem('user',stringify(res.user));
+                success(res.msg)
                 setTimeout(() => { navigate('/') }, 1500);
+            }else{
+                warn(res.msg);
             }
         } catch (error) {
             throw new Error(error.message);
@@ -96,6 +104,7 @@ function Signup({ wss }) {
         <>
             <Logo />
             <form className={styles.form} onSubmit={signup} >
+                <marquee className="w-full h-[2px] scale-0" id="marq" direction="right" scrollamount="50"><div className='h-[2px] w-[150px] bg-cyan-400'></div></marquee>
                 <h1 className={styles.title}>Signup</h1>
                 <img src={userAvater} className="w-32 h-32 cursor-pointer rounded-full" id="profImg" onClick={() => { $('#inpFile').click() }} alt="user avatar" />
                 <div id="warn" className={styles.warn}></div>

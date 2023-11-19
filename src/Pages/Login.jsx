@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Logo from "../Components/Logo";
 import { $, hash, stringify } from "../js/cocktail";
 import { filterData } from "../js/db";
-import { success, warn } from "../js/global";
+import { getReqFromGs, showMarquee, success, warn } from "../js/global";
 import styles from "../js/styles";
 
 function Login() {
@@ -12,24 +12,33 @@ function Login() {
     const login = async (e) => {
         try {
             e.preventDefault();
-            if (!$('#email').value || !$('#pass').value) { $('#warn').textContent = `Fill all inputs`; return }
+            showMarquee(true);
+            const data = { email: $('#email').value.toLowerCase(), password: hash($('#pass').value) };
+            if (!data.email || !data.password) { $('#warn').textContent = `Fill all inputs`; return }
 
-            const isUser = await filterData({
-                dbName: 'Users',
-                value: $('#email').value,
-                boolean: true
-            });
+            // const isUser = await filterData({
+            //     dbName: 'Users',
+            //     value: $('#email').value,
+            //     boolean: true
+            // });
 
-            console.log(isUser);
-            if (isUser.ok && isUser.data[0].password == hash($('#pass').value)) {
-                delete isUser.data[0].password;
-                localStorage.setItem('user',stringify(isUser.data[0]));
-                success(`Successfully Login`);
+            // console.log(isUser);
+
+            const res = await getReqFromGs({
+                type: 'login',
+                sheetName: 'Users',
+                dataJson: encodeURIComponent(stringify(data))
+            })
+
+            showMarquee(false);
+            if (res.ok) {
+                localStorage.setItem('user', stringify(res.user));
+                success(res.msg);
                 setTimeout(() => {
                     navigate('/');
                 }, 1500);
             } else {
-                warn(`Email or Password is wrong`)
+                warn(res.msg)
             }
         } catch (error) {
             throw new Error(error.message)
@@ -53,6 +62,7 @@ function Login() {
         <>
             <Logo />
             <form className={styles.form} onSubmit={login} title="Login form">
+                <marquee className="w-full h-[2px] scale-0" id="marq" direction="right" scrollamount="50"><div className='h-[2px] w-[150px] bg-cyan-400'></div></marquee>
                 <h1 className={styles.title}>Login</h1>
                 <p id="warn" className={styles.warn}></p>
                 <input id="email" type="email" className={styles.input} autoComplete="true" placeholder="Email" title="Email input" />

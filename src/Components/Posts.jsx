@@ -1,8 +1,9 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { $, parse, stringify } from '../js/cocktail';
+import { $, get, parse, stringify } from '../js/cocktail';
 import Anonymous from './Anonymous';
 import { useEffect, useState } from 'react';
 import { filterData, getData, tb } from '../js/db';
+import { getReqFromGs } from '../js/global';
 
 function Posts() {
     const [user, setUser] = useState(parse(localStorage.getItem('user')));
@@ -14,10 +15,20 @@ function Posts() {
 
     useEffect(() => {
         (async () => {
+            // console.log(await getReqFromGs({
+            //     type:'find',
+            //     sheetName:'Users',
+            //     input:encodeURIComponent(user.email)
+            // }));
+            // const url = `https://sheets.googleapis.com/v4/spreadsheets/[SPREADSHEETID]/values/[RANGE]?key=${}`
+            // console.log(await(await get({
+            //     url
+            // })).json());
             await checkUser();
             await getPosts({ from: 0, to: 25 })
         })();
     }, [])
+
 
     //Methods
     const checkUser = async () => {

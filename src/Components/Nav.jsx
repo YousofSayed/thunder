@@ -22,7 +22,7 @@ function Nav() {
         <nav className=" bg-gray-900 hidden md:block md:w-[calc(24%)] h-full rounded-lg p-2">
             <figure className='w-full flex gap-3 bg-gray-950 rounded-lg p-2 items-center'>
                 <img src={profImg} alt="profImg" className='w-14 h-14 rounded-full cursor-pointer' />
-                <p className='font-bold text-xl capitalize'>{user?.name? user.name : 'Anonymous'}</p>
+                <p className='font-bold text-xl capitalize'>{user?.name? user.name : 'Whoami'}</p>
             </figure>
 
             <ul className='list-none py-3 flex flex-col gap-4'>
