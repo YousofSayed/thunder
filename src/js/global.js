@@ -33,13 +33,25 @@ export async function headers() {
     }
 }
 
-export async function getAllSheet(sheetName) {
+export async function getAllSheetValues(sheetName) {
     try {
         const url = `https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${sheetName}?key=${env('VITE_SHEET_AKEY')}`;
         const res = await (await get({ url, headers: await headers() }));
         const jsonRes = await res.json()
         if (res.ok) {
-            console.log(handleValues(jsonRes.values));
+            const data = handleValues(jsonRes.values);
+            return {
+                data,
+                filter:async(key,value)=>{
+                    const result = [];
+                    for (const val of data) { //I used for insted of filter method because of fast performance
+                        if(val[key] == value){
+                            result.push(val)
+                        }
+                    }
+                    return result[0]? result : null ;
+                }
+            }
         } else {
             console.log(jsonRes.error.message);
         }
@@ -101,4 +113,4 @@ async function getAToken() {
 
 
 
-console.log(await getAllSheet('Users'));
+console.log(await(await getAllSheetValues('Users')).filter('name','Foxw'));

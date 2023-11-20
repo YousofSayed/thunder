@@ -30,7 +30,7 @@ function Signup() {
 
             for (const result of validation) {
                 const { valid, msg } = result;
-                if (!valid) {warn(msg) ; showMarquee(false);return }
+                if (!valid) { warn(msg); showMarquee(false); return }
             };
             warn('');
 
@@ -58,17 +58,17 @@ function Signup() {
             // });
 
             const res = await getReqFromGs({
-                type:`signup`,
-                sheetName:'Users',
-                dataJson:encodeURIComponent(stringify(data))
+                type: `signup`,
+                sheetName: 'Users',
+                dataJson: encodeURIComponent(stringify(data))
             })
 
-            showMarquee(false); 
+            showMarquee(false);
             if (res.ok) {
-                localStorage.setItem('user',stringify(res.user));
+                localStorage.setItem('user', stringify(res.user));
                 success(res.msg)
                 setTimeout(() => { navigate('/') }, 1500);
-            }else{
+            } else {
                 warn(res.msg);
             }
         } catch (error) {
@@ -101,24 +101,26 @@ function Signup() {
     }
 
     return (
-        <>
+        <section className='w-full h-full'>
             <Logo />
-            <form className={styles.form} onSubmit={signup} >
-                <marquee className="w-full h-[2px] scale-0" id="marq" direction="right" scrollamount="50"><div className='h-[2px] w-[150px] bg-cyan-400'></div></marquee>
-                <h1 className={styles.title}>Signup</h1>
-                <img src={userAvater} className="w-32 h-32 cursor-pointer rounded-full" id="profImg" onClick={() => { $('#inpFile').click() }} alt="user avatar" />
-                <div id="warn" className={styles.warn}></div>
-                <input type="text" id="name" placeholder="Enter your name" className={styles.input} />
-                <input type="email" id="email" placeholder="Enter your email" className={styles.input} />
-                <input type="date" id="date" placeholder="Enter your date" className={styles.input} />
-                <div className="w-full relative"><input type="password" id="pass" placeholder="Enter your password" className={styles.input} /> <i className={styles.eyeHidePass} onClick={(e) => { showAndHidePass(e, '#pass') }}></i></div>
-                <div className="w-full relative"><input type="password" id="rePass" placeholder="Re passowrd" className={styles.input} /> <i className={styles.eyeHidePass} onClick={(e) => { showAndHidePass(e, '#rePass') }}></i></div>
+            <section className='h-[calc(100%-56px)] grid items-center'>
+                <form className={styles.form} onSubmit={signup} >
+                    <marquee className="w-full h-[2px] scale-0" id="marq" direction="right" scrollamount="50"><div className='h-[2px] w-[150px] bg-cyan-400'></div></marquee>
+                    <h1 className={styles.title}>Signup</h1>
+                    <img src={userAvater} className="w-32 h-32 cursor-pointer rounded-full" id="profImg" onClick={() => { $('#inpFile').click() }} alt="user avatar" />
+                    <div id="warn" className={styles.warn}></div>
+                    <input type="text" id="name" placeholder="Enter your name" className={styles.input} />
+                    <input type="email" id="email" placeholder="Enter your email" className={styles.input} />
+                    <input type="date" id="date" placeholder="Enter your date" className={styles.input} />
+                    <div className="w-full relative"><input type="password" id="pass" placeholder="Enter your password" className={styles.input} /> <i className={styles.eyeHidePass} onClick={(e) => { showAndHidePass(e, '#pass') }}></i></div>
+                    <div className="w-full relative"><input type="password" id="rePass" placeholder="Re passowrd" className={styles.input} /> <i className={styles.eyeHidePass} onClick={(e) => { showAndHidePass(e, '#rePass') }}></i></div>
 
-                <button type="submit" className={styles.btn}>Signup</button>
+                    <button type="submit" className={styles.btn}>Signup</button>
 
-                <input type="file" onChange={uploadProfImg} id="inpFile" className="hidden" />
-            </form>
-        </>
+                    <input type="file" onChange={uploadProfImg} id="inpFile" className="hidden" />
+                </form>
+            </section>
+        </section>
     );
 }
 

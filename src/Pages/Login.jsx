@@ -59,17 +59,19 @@ function Login() {
     }
 
     return (
-        <>
+        <section className='w-full h-full'>
             <Logo />
-            <form className={styles.form} onSubmit={login} title="Login form">
-                <marquee className="w-full h-[2px] scale-0" id="marq" direction="right" scrollamount="50"><div className='h-[2px] w-[150px] bg-cyan-400'></div></marquee>
-                <h1 className={styles.title}>Login</h1>
-                <p id="warn" className={styles.warn}></p>
-                <input id="email" type="email" className={styles.input} autoComplete="true" placeholder="Email" title="Email input" />
-                <div className="w-full relative"><input id="pass" type="password" className={styles.input} autoComplete='true' placeholder="Password" title="Password input" /><i className={styles.eyeHidePass} onClick={(e) => { showAndHidePass(e, '#pass') }}></i></div>
-                <button className={styles.btn} type="submit" title="Login button">Login</button>
-            </form>
-        </>
+            <section className='h-[calc(100%-56px)] grid items-center'>
+                <form className={styles.form} onSubmit={login} title="Login form">
+                    <marquee className="w-full h-[2px] scale-0" id="marq" direction="right" scrollamount="50"><div className='h-[2px] w-[150px] bg-cyan-400'></div></marquee>
+                    <h1 className={styles.title}>Login</h1>
+                    <p id="warn" className={styles.warn}></p>
+                    <input id="email" type="email" className={styles.input} autoComplete="true" placeholder="Email" title="Email input" />
+                    <div className="w-full relative"><input id="pass" type="password" className={styles.input} autoComplete='true' placeholder="Password" title="Password input" /><i className={styles.eyeHidePass} onClick={(e) => { showAndHidePass(e, '#pass') }}></i></div>
+                    <button className={styles.btn} type="submit" title="Login button">Login</button>
+                </form>
+            </section>
+        </section>
     );
 }
 
