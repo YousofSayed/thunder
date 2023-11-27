@@ -1,4 +1,4 @@
-import { $, get, post } from "./cocktail";
+import { $, copyToClipboard, get, post } from "./cocktail";
 
 export function success(msg) {
     $('#warn').classList.replace('text-red-600', 'text-green-400')
@@ -31,6 +31,7 @@ export async function headers() {
         Accept: `application/json`,
         'Content-Type': `application/json`
     }
+    return headers
 }
 
 export async function getAllSheetValues(sheetName) {
@@ -40,16 +41,17 @@ export async function getAllSheetValues(sheetName) {
         const jsonRes = await res.json()
         if (res.ok) {
             const data = handleValues(jsonRes.values);
+            // console.log(data);
             return {
                 data,
-                filter:async(key,value)=>{
+                filter: async (key, value) => {
                     const result = [];
                     for (const val of data) { //I used for insted of filter method because of fast performance
-                        if(val[key] == value){
+                        if (val[key].includes(value)) {
                             result.push(val)
                         }
                     }
-                    return result[0]? result : null ;
+                    return result[0] ? result : null;
                 }
             }
         } else {
@@ -111,6 +113,62 @@ async function getAToken() {
     })).access_token
 }
 
+export async function append(range, cells) {
+    const res = await post({
+        url: `https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${range}:append?valueInputOption=RAW&key=${env('VITE_SHEET_AKEY')}`,
+        headers: await headers(),
+        data: {
+            values: [cells]
+        },
+        json: true,
+    })
+
+    console.log(res);
+}
 
 
-console.log(await(await getAllSheetValues('Users')).filter('name','Foxw'));
+const postDb = JSON.stringify({
+    name: 'Thunder sayed',
+    ImageId: 'https://api.telegram.org/file/bot6183481793:AAGFNrrvs6FgATrNhtG5P1j9SAQ0AHxCsyQ/documents/file_952.jpg',
+    textContent: `y`.repeat(45000),
+})
+
+const cell = [postDb];
+
+
+// const baseRowAuth = `OWp20xuYhcEkrUBFNYM5S5jbUnaG5dav`
+
+// // console.log(await (await get({
+// //     url: "https://api.baserow.io/api/database/rows/table/223500/?user_field_names=true&search='o'",
+// //     headers: {
+// //         Authorization: "Token OWp20xuYhcEkrUBFNYM5S5jbUnaG5dav"
+// //     }
+// // })).json());
+
+
+// const postC = JSON.stringify({
+
+// })
+
+
+// console.log(await getAToken());
+// console.log(await append('Users', cell));
+// setInterval(async () => {
+//     // console.log(await(await getAllSheetValues('Users')).filter('name','sayed'));
+//     console.log(
+
+//         await post({
+//             url: "https://api.baserow.io/api/database/rows/table/223500/?user_field_names=true",
+//             headers: {
+//                 Authorization: `Token ${baseRowAuth}`,
+//                 "Content-Type": "application/json"
+//             },
+//             data: {
+//                 "user": "haha",
+//                 "postContent": 'yousef sayed ahmed',
+//             }
+//         })
+    
+//     );
+// }, 50)
+// console.log(await compress(`yousef `.repeat(45000) ));

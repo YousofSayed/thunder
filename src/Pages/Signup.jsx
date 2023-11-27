@@ -1,10 +1,10 @@
-import { $, hash, isValidDate, isValidEmail, isValidName, isValidPassword, isValidRePassword, stringify, uniqueID, wssEmit } from '../js/cocktail';
+import { $, hash, isValidDate, isValidEmail, isValidName, isValidPassword, isValidRePassword, post, stringify} from '../js/cocktail';
 import userAvater from '../Assets/images/user-avatar.png'
 import Logo from '../Components/Logo';
 import styles from '../js/styles';
 import { useNavigate } from 'react-router-dom';
-import { filterData, setData, tb } from '../js/db';
-import { getReqFromGs, showMarquee, success, warn } from '../js/global';
+import { env, showMarquee, success, warn } from '../js/global';
+import tb from '../js/tb';
 
 /**
  * Returns Signup component
@@ -35,7 +35,6 @@ function Signup() {
             warn('');
 
             const data = {
-                _id: uniqueID(),
                 name: $('#name').value,
                 email: $('#email').value.toLowerCase(),
                 password: hash($('#pass').value),
@@ -56,11 +55,10 @@ function Signup() {
             //     dbName: `Users`,
             //     data
             // });
-
-            const res = await getReqFromGs({
-                type: `signup`,
-                sheetName: 'Users',
-                dataJson: encodeURIComponent(stringify(data))
+            const res = await post({
+                url:`${env('VITE_SERVER_SIDE')}/signup`,
+                data,
+                json:true
             })
 
             showMarquee(false);

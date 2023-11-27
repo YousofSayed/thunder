@@ -1,23 +1,13 @@
-import { Outlet } from "react-router-dom";
 import Header from "../Components/Header";
-import LogOrSign from "../Components/LogOrSign";
-import Nav from "../Components/Nav";
-import SearchlistComp from "../Components/SearchlistComp";
-import { $, getCookies, navigate, render, stringify, wssEmit } from "../js/cocktail";
-import MainContent from "../Components/MainContent";
-/**
- * 
- * @param {WebSocket} wss
- * @returns 
- */
+import Posts from "../Components/Posts";
 
-function App({wss}) {
+function App() {
     return (
         <>
-            <Header wss={wss} SearchlistComp={<SearchlistComp/>}/>
-            <LogOrSign/>
-            <MainContent/>
-            
+            <Header />
+            <main className="w-full h-[calc(100%-74px)] p-2 flex justify-center">
+                <Posts />
+            </main>
         </>
     );
 }

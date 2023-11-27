@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Logo from "../Components/Logo";
 import { $, hash, stringify } from "../js/cocktail";
-import { filterData } from "../js/db";
 import { getReqFromGs, showMarquee, success, warn } from "../js/global";
 import styles from "../js/styles";
 

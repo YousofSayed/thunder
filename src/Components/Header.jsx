@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import textLogo from '../Assets/images/textLogo.png'
-import { $, getCookies, parse, wssEmit } from '../js/cocktail';
-import { tb } from '../js/db';
 import userAvatar from '../Assets/images/user-avatar.png'
+import tb from '../js/tb';
+import { parse } from "../js/cocktail";
 
-function Header({ wss, SearchlistComp }) {
+
+function Header() {
     const [profImg, setProfImg] = useState('');
     const [name, setName] = useState('');
     const [showSearchListComp, setShowSearchListComp] = useState(false);
@@ -17,42 +18,35 @@ function Header({ wss, SearchlistComp }) {
     //Methods
     const getProfImgAndName = async () => {
         try {
-           if(!user || !user.profImgId){setProfImg(userAvatar); return} 
-          setProfImg(await tb.getFileFromBot(user.profImgId))
+            if (!user || !user.profImgId) { setProfImg(userAvatar); return }
+            setProfImg(await tb.getFileFromBot(user.profImgId))
         } catch (error) {
             throw new Error(error.message)
         }
 
     };
 
-    const handleSearch = async (ev) => {
-       if(ev.key == `Enter` || ev.key == `enter`){
-        const wssRes = await wssEmit(wss,'getSearchList',{
-            
-        })
-       }
-    }
 
-    const showLogOrSignComp = ()=>{
-        if(user)return;
+    const showLogOrSignComp = () => {
+        if (user) return;
         $('#logOrSign').classList.remove('hidden');
     }
 
 
     return (
-        <header className="w-full h-fit p-3 bg-gray-900" title='header'>
+        <header className=" h-fit px-2 m-auto mt-[10px] " title='header'>
 
-            <section className=" m-auto flex items-center justify-between" title='container'>
+            <section className=" m-auto container flex items-center p-2 bg-gray-900 justify-between rounded-lg" title='container'>
 
                 <figure className="flex items-center gap-2">
                     <i className="fa-solid fa-bolt text-3xl text-cyan-400" title='thunder logo'></i>
                     <img src={textLogo} alt="thunder" title='thunder text logo' />
                 </figure>
 
-                <article className="items-center w-3/5 gap-2 bg-gray-950 p-2 rounded-lg hidden md:flex">
+                {/* <article className="items-center w-3/5 gap-2 bg-gray-950 p-2 rounded-lg hidden md:flex">
                     <input type="search" className=" w-full bg-transparent font-bold outline-none" placeholder="Search" title="search input" onKeyUp={handleSearch} />
                     <i className="fa-solid  fa-search text-1xl text-white" title='search icon'></i>
-                </article>
+                </article> */}
 
                 <figure className="flex items-center gap-2 px-2 rounded h-full" onClick={showLogOrSignComp}>
                     <p className="font-bold text-xl hidden sm:block" title='name of user'>{name}</p>

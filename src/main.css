@@ -18,7 +18,13 @@
     background-image: linear-gradient(to right, rgb(6, 95, 95), #555);
 }
 
+.scrollBar{
+    scrollbar-width: none;
+}
 
+.scrollBar::-webkit-scrollbar{
+    width: unset;
+}
 
 @media (min-width:767px) {
     .nav-aside {

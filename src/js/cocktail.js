@@ -125,7 +125,7 @@ export function replaceAndCommit(root, oldComponent, newComponent) {
  * @returns {Document}
  */
 export function parseToHTML(text) {
-  return new DOMParser().parseFromString(text, 'text/html');
+  return new DOMParser().parseFromString(text, 'text/html').body.children[0];
 }
 
 //set render class 
