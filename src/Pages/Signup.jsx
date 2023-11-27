@@ -6,12 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { env, showMarquee, success, warn } from '../js/global';
 import tb from '../js/tb';
 
-/**
- * Returns Signup component
- * @param {WebSocket} wss 
- * @returns {string}
- */
-
 function Signup() {
     const navigate = useNavigate()
     let profImgId;
@@ -24,8 +18,8 @@ function Signup() {
                 isValidName($('#name').value),
                 isValidEmail($('#email').value),
                 isValidDate($('#date').value),
-                isValidPassword($('#pass').value),
-                isValidRePassword($('#pass').value, $('#rePass').value),
+                // isValidPassword($('#pass').value),
+                // isValidRePassword($('#pass').value, $('#rePass').value),
             ];
 
             for (const result of validation) {
@@ -37,38 +31,15 @@ function Signup() {
             const data = {
                 name: $('#name').value,
                 email: $('#email').value.toLowerCase(),
-                password: hash($('#pass').value),
+                // password: hash($('#pass').value),
                 date: $('#date').value,
                 profImgId: profImgId || ''
             }
 
-            //Check if User already in use
-            // const isUser = await filterData({
-            //     dbName: 'Users',
-            //     value: data.email,
-            //     boolean:true
-            // })
-
-            // if(isUser.ok){ warn(`Email already in use.`); return}
-
-            // const res = await setData({
-            //     dbName: `Users`,
-            //     data
-            // });
-            const res = await post({
-                url:`${env('VITE_SERVER_SIDE')}/signup`,
-                data,
-                json:true
-            })
-
+           
             showMarquee(false);
-            if (res.ok) {
-                localStorage.setItem('user', stringify(res.user));
-                success(res.msg)
-                setTimeout(() => { navigate('/') }, 1500);
-            } else {
-                warn(res.msg);
-            }
+          
+            localStorage.setItem('user', stringify(data));
         } catch (error) {
             throw new Error(error.message);
         }
@@ -110,8 +81,6 @@ function Signup() {
                     <input type="text" id="name" placeholder="Enter your name" className={styles.input} />
                     <input type="email" id="email" placeholder="Enter your email" className={styles.input} />
                     <input type="date" id="date" placeholder="Enter your date" className={styles.input} />
-                    <div className="w-full relative"><input type="password" id="pass" placeholder="Enter your password" className={styles.input} /> <i className={styles.eyeHidePass} onClick={(e) => { showAndHidePass(e, '#pass') }}></i></div>
-                    <div className="w-full relative"><input type="password" id="rePass" placeholder="Re passowrd" className={styles.input} /> <i className={styles.eyeHidePass} onClick={(e) => { showAndHidePass(e, '#rePass') }}></i></div>
 
                     <button type="submit" className={styles.btn}>Signup</button>
 

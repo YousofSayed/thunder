@@ -1,4 +1,4 @@
-import { $, copyToClipboard, get, post } from "./cocktail";
+import { $, copyToClipboard, get, parse, post, stringify } from "./cocktail";
 
 export function success(msg) {
     $('#warn').classList.replace('text-red-600', 'text-green-400')
@@ -41,7 +41,6 @@ export async function getAllSheetValues(sheetName) {
         const jsonRes = await res.json()
         if (res.ok) {
             const data = handleValues(jsonRes.values);
-            // console.log(data);
             return {
                 data,
                 filter: async (key, value) => {
@@ -60,6 +59,43 @@ export async function getAllSheetValues(sheetName) {
     } catch (error) {
         throw new Error(error.message)
     }
+}
+
+export async function getFromTo(sheetName , from , to) {
+    try {
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${sheetName}!A${from}:Z${to}?key=${env('VITE_SHEET_AKEY')}`;
+        const res = await (await get({ url, headers: await headers() }));
+        const jsonRes = await res.json()
+        const data = jsonRes.values;
+        data.map((item)=>{
+            const obj  = parse(item[0]);
+            obj.index=from;
+            from++
+            item[0]=stringify(obj)
+            return item;
+        })
+        if (res.ok) {
+            return data
+        } else {
+            console.log(jsonRes.error.message);
+        }
+    } catch (error) {
+        
+    }
+}
+
+
+export async function append(range, cells) {
+    const res = await post({
+        url: `https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${range}:append?valueInputOption=RAW&key=${env('VITE_SHEET_AKEY')}`,
+        headers: await headers(),
+        data: {
+            values: [[cells]]
+        },
+        json: true,
+    })
+
+    console.log(res);
 }
 
 
@@ -113,27 +149,15 @@ async function getAToken() {
     })).access_token
 }
 
-export async function append(range, cells) {
-    const res = await post({
-        url: `https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${range}:append?valueInputOption=RAW&key=${env('VITE_SHEET_AKEY')}`,
-        headers: await headers(),
-        data: {
-            values: [cells]
-        },
-        json: true,
-    })
-
-    console.log(res);
-}
 
 
-const postDb = JSON.stringify({
-    name: 'Thunder sayed',
-    ImageId: 'https://api.telegram.org/file/bot6183481793:AAGFNrrvs6FgATrNhtG5P1j9SAQ0AHxCsyQ/documents/file_952.jpg',
-    textContent: `y`.repeat(45000),
-})
+// const postDb = JSON.stringify({
+//     name: 'Thunder sayed',
+//     ImageId: 'https://api.telegram.org/file/bot6183481793:AAGFNrrvs6FgATrNhtG5P1j9SAQ0AHxCsyQ/documents/file_952.jpg',
+//     textContent: `y`.repeat(45000),
+// })
 
-const cell = [postDb];
+// const cell = [postDb];
 
 
 // const baseRowAuth = `OWp20xuYhcEkrUBFNYM5S5jbUnaG5dav`

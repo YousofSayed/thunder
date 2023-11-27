@@ -5,7 +5,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Signup from './Pages/Signup';
 import Login from './Pages/Login';
 import './main.css';
-import Posts from './Components/Posts';
 
 const root = createRoot(document.getElementById('root'));
 
