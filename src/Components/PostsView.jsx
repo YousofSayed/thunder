@@ -1,7 +1,5 @@
-import { $, copyToClipboard, get, parse, parseToHTML, stringify } from '../js/cocktail';
 import { useEffect, useState } from 'react';
-import { append, getFromTo, showMarquee } from '../js/global';
-import tb from '../js/tb';
+import { getFromTo } from '../js/global';
 import CreatePost from './CreatePost';
 import Post from './Post';
 
@@ -18,7 +16,7 @@ function PostsView() {
         setPosts([...posts, ...postsData])
     }
 
-    
+
     return (
         <>
             <section className='h-full relative container bg-gray-900 rounded-lg shadow-xl p-2 overflow-auto scrollBar'>

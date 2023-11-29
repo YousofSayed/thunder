@@ -1,4 +1,4 @@
-import { $, copyToClipboard, get, parse, post, stringify } from "./cocktail";
+import { $, copyToClipboard, get, parse, post, put, stringify } from "./cocktail";
 
 export function success(msg) {
     $('#warn').classList.replace('text-red-600', 'text-green-400')
@@ -12,6 +12,7 @@ export function warn(msg) {
 export function showMarquee(isShow) {
     isShow ? $('#marq').classList.remove('scale-0') : $('#marq').classList.add('scale-0');
 }
+
 
 export async function getReqFromGs(params) {
     let url = import.meta.env.VITE_THUNDERAPI;
@@ -74,6 +75,7 @@ export async function getFromTo(sheetName , from , to) {
             item[0]=stringify(obj)
             return item;
         })
+        console.log(res);
         if (res.ok) {
             return data
         } else {
@@ -98,6 +100,23 @@ export async function append(range, cells) {
     console.log(res);
 }
 
+export async function update(range , value) {
+   try {
+    const res = await put({
+        url:`https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${range}?valueInputOption=RAW&key=${env('VITE_SHEET_AKEY')}`,
+        headers:await headers(),
+        data:{
+            values:[[value]]
+        }
+    }); 
+    
+    console.log(res);
+    return res;
+   } catch (error) {
+    update(range ,value);
+    throw new Error(error.message);
+   }
+}
 
 /**
  * @Start_Handlers

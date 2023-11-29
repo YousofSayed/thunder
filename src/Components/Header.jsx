@@ -40,7 +40,7 @@ function Header() {
 
                 <figure className="flex items-center gap-2">
                     <i className="fa-solid fa-bolt text-3xl text-cyan-400" title='thunder logo'></i>
-                    <img src={textLogo} alt="thunder" title='thunder text logo' />
+                    <img src={textLogo} alt="thunder" className='w-[110px]' title='thunder text logo' loading='lazy'/>
                 </figure>
 
                 <figure className="flex items-center gap-2 px-2 rounded h-full" onClick={showLogOrSignComp}>

@@ -1,4 +1,4 @@
-import { $, get, parse, parseToHTML, stringify } from '../js/cocktail';
+import { $, get, getCurrentTime, parse, parseToHTML, stringify } from '../js/cocktail';
 import { useEffect, useState } from 'react';
 import { append, showMarquee } from '../js/global';
 import tb from '../js/tb';
@@ -25,7 +25,7 @@ function CreatePost() {
 
     const uploadVideo = async (e) => {
         const file = e.target.files[0];
-        if((file.size / 1000000) >= 50 ){alert(`Maximum size is 50MB`); return}
+        if ((file.size / 1000000) >= 50) { alert(`Maximum size is 50MB`); return }
         $('#postContent').classList.remove('min-h-[300px]')
         setVideo([{ blobURL: URL.createObjectURL(file), file }])
     }
@@ -69,23 +69,25 @@ function CreatePost() {
             }
             showMarquee(true);
             const images = [], vid = [];
-    
+
             if (imagesMedia[0]) {
-    
+
                 for (const item of imagesMedia) {
                     const res = await (await tb.sendImage(item.file)).id
                     images.push(res)
                 }
             }
-    
+
             if (video[0]) {
                 for (const item of video) {
                     vid.push(await (await tb.sendVideo(item.file)).id)
                 }
             }
-    
+
             const postData = stringify({
                 name: user.name,
+                userID: user.id,
+                date: getCurrentTime(),
                 email: user.email,
                 profImgId: user.profImgId,
                 postContent,
@@ -95,7 +97,7 @@ function CreatePost() {
                     iframeSrc
                 }
             })
-    
+
             const res = await append('Posts', postData);
             $('#postContent').value = '';
             $('#iframeInput').value = '';
@@ -106,8 +108,8 @@ function CreatePost() {
             setIframeSrc([]);
             showMarquee(false);
         } catch (error) {
-           await postThePost();
-           throw new Error(error.message);
+            await postThePost();
+            throw new Error(error.message);
         }
     }
 

@@ -428,12 +428,20 @@ export function addClickClass(element, clickClass) {
 }
 
 /**
+ * Returns current time
+ * @returns {string}
+ */
+export function getCurrentTime() {
+  const currentDate = new Date();
+  return currentDate.toLocaleString()
+}
+
+/**
  * Returns current date
  * @returns {string}
  */
-export function getCurrentDate() {
-  const currentDate = new Date();
-  return currentDate.toLocaleString()
+export function getLocalDate() {
+  return new Date().toLocaleDateString();
 }
 
 /**
@@ -502,7 +510,7 @@ export function isUndefined(data) {
 export async function post({ url, data = {}, json = true, headers = { 'content-type': 'Application/json' } }) {
   try {
     const response = await fetch(url, { method: "POST", headers, body: JSON.stringify(data) });
-    return json ? await response.json() : response
+    return json ? await response.json() :  response
   } catch (error) {
     throw new Error(error.message)
   }
@@ -513,9 +521,10 @@ export async function post({ url, data = {}, json = true, headers = { 'content-t
  * @param {{url:string , headers:HeadersInit  }} param0 
  * @returns {Promise<Response> }
  */
-export async function get({ url, headers }) {
+export async function get({ url, headers  , json}) {
   try {
-    return await fetch(url, { method: 'GET', headers });
+    const response = await fetch(url, { method: 'GET', headers });
+    return json ? await response.json() :  response
 
   } catch (error) {
     throw new Error(error.message)
@@ -527,9 +536,10 @@ export async function get({ url, headers }) {
  * @param {{url:string , headers:HeadersInit  , data:object}} param0 
  * @returns {Promise<Response> }
  */
-export async function put({ url, headers, data }) {
+export async function put({ url, headers, data, json }) {
   try {
-    return await fetch(url, { method: "PUT", headers, body: JSON.stringify(data) })
+    const response = await fetch(url, { method: "PUT", headers, body: JSON.stringify(data) })
+    return json ? await response.json() :  response;
   } catch (error) {
     throw new Error(error.message);
   }
@@ -1050,16 +1060,16 @@ export function parse(obj) {
  */
 export function wssEmit(wss, type, msg) {
   wss.send(stringify(msg));
-  
+
   return new Promise((res, rej) => {
-    const getMsg = (ev)=>{
-      if(parse(ev.data).type !== type)return;
-      if(!parse(ev.data)){rej(`No data founded :(`) ;return}
+    const getMsg = (ev) => {
+      if (parse(ev.data).type !== type) return;
+      if (!parse(ev.data)) { rej(`No data founded :(`); return }
       res(parse(ev.data));
-      wss.removeEventListener('message',getMsg);
+      wss.removeEventListener('message', getMsg);
     }
 
-    wss.addEventListener('message',getMsg);
+    wss.addEventListener('message', getMsg);
   });
 }
 
@@ -1068,15 +1078,15 @@ export function wssEmit(wss, type, msg) {
  * @returns {object}
  */
 export function getCookies() {
-  const {cookie} = document;
+  const { cookie } = document;
   const ckValues = cookie.split(/\s+|\;/ig);
   const obj = {};
 
-  ckValues.forEach((val)=>{
-    if(!val){return}
+  ckValues.forEach((val) => {
+    if (!val) { return }
     const key = val.match(/\w+\=/ig) ? val.match(/\w+\=/ig)[0] : null;
-    if(!key)return;
-    obj[key.replace('=','')] = val.replace(key,'');
+    if (!key) return;
+    obj[key.replace('=', '')] = val.replace(key, '');
   });
 
   return obj
