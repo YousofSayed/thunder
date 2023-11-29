@@ -10,7 +10,7 @@ function LogOrSign() {
     }
 
     return ( 
-        <section className="w-full h-full fixed flex justify-center items-center blur-c hidden" id="logOrSign">
+        <section id="logOrSign" className="w-full h-full fixed flex justify-center items-center blur-c">
             <button className="fixed right-9 top-7 w-8 h-8 rounded-full bg-gray-950 hover:text-cyan-400 transition" onClick={hide}><i className="fa-solid fa-x"></i></button>
             <article className="p-4 bg-gray-900">
                 <p className="p-4 font-bold">You Should Login Or Signup</p>

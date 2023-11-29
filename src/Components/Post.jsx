@@ -21,6 +21,8 @@ function Post({ data }) {
         getImages()
     });
 
+    console.log(parse(localStorage.getItem('lol')));
+
     const getImages = () => {
         $a(`#post-${index} img`).forEach(async (img) => img.src = await tb.getFileFromBot(img.id))
         $a(`#post-${index} video`).forEach(async (vid) => vid.src = await tb.getFileFromBot(vid.id))

@@ -1,4 +1,4 @@
-import { $, copyToClipboard, get, parse, post, put, stringify } from "./cocktail";
+import { $,  get, parse, post, put, stringify } from "./cocktail";
 
 export function success(msg) {
     $('#warn').classList.replace('text-red-600', 'text-green-400')
