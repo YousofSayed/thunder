@@ -95,6 +95,11 @@ function CreatePost() {
                     images,
                     vid,
                     iframeSrc
+                },
+                reacts:{
+                    love:0,
+                    angry:0,
+                    retweet:0
                 }
             })
 
@@ -135,7 +140,7 @@ function CreatePost() {
                 <button className='w-[50px] h-full bg-cyan-600 rounded-lg p-2 font-bold' onClick={uploadIframe}>OK</button>
             </section>
 
-            {imagesMedia[0] || video[0] || iframeSrc[0] ?
+            {imagesMedia.length || video.length || iframeSrc.length ?
                 <section className='w-full p-4 flex  flex-wrap justify-between gap-2 items-center bg-gray-900 mt-3 rounded-lg' id='media'>
                     {imagesMedia.map((srcs, i) => {
                         return (

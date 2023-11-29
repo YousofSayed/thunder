@@ -2,22 +2,20 @@ import { useEffect, useState } from "react";
 import { $a, $, parse, getLocalDate } from "../js/cocktail";
 import tb from "../js/tb";
 
-let isPopupGlobal;
 window.addEventListener('click', (e) => {
     const { target } = e;
     if (target.id == 'popup' || target.parentNode.id == 'popup' || target.parentNode.parentNode.id == 'popup' || target.id == 'popupHandler') {
         return
     } else {
-        $a('#popup').forEach((popup) => popup.remove());
-        isPopupGlobal = false;
+        $a('#popup').forEach((popup) => !popup.classList.contains('hidden') ? popup.classList.add('hidden') : null);
     }
 })
 
 
 function Post({ data }) {
-    const [isPopup ,setIsPopup] = useState(false)
     data = parse(data);
     const { name, profImgId, email, userId, date, postContent, media, index } = data
+    const user = parse(localStorage.getItem('user'));
     console.log(data);
     useEffect(() => {
         getImages()
@@ -37,10 +35,11 @@ function Post({ data }) {
         }
     }
 
-    const showPopup = () => {
-        isPopupGlobal = isPopupGlobal ? false : true;
-        setIsPopup(isPopupGlobal)
+    const showPopup = (index) => {
         // isPopup ? setIsPopup(false) : setIsPopup(true);
+        const popup = $(`#post-${index} #popup`);
+        // console.log(popup.classList.contains('hidden'));
+        popup.classList.toggle('hidden')
     }
 
 
@@ -52,35 +51,32 @@ function Post({ data }) {
                     <p className="font-bold">{name}</p>
                 </figure>
 
-                <i id="popupHandler" className="fa-solid fa-ellipsis text-xl cursor-pointer" onClick={() => { showPopup() }}></i>
+                <i id="popupHandler" className="fa-solid fa-ellipsis text-xl cursor-pointer" onClick={() => { showPopup(index) }}></i>
 
-                {
-                    isPopup
-                    &&
-                    <ul id="popup" className="flex flex-col z-10 gap-2 p-2 rounded-lg absolute right-[7px] top-[35px] bg-gray-900">
-                        <li className="flex items-center gap-3 font-bold py-1 cursor-pointer bg-gray-950 p-2 rounded-lg"><i className="fa-solid fa-pen-to-square text-lg "></i> Edit</li>
-                        <li className="flex items-center gap-3 font-bold py-1 cursor-pointer bg-gray-950 p-2 rounded-lg"><i className="fa-solid fa-bookmark text-lg "></i> Save</li>
-                        <li className="flex items-center gap-3 font-bold py-1 cursor-pointer bg-gray-950 p-2 rounded-lg"><i className="fa-solid fa-flag text-lg "></i> Report</li>
-                        <li className="flex items-center gap-3 font-bold py-1 cursor-pointer bg-gray-950 p-2 rounded-lg"><i className="fa-solid fa-trash text-red-500 text-lg"></i> Delete</li>
-                    </ul>
-                }
+
+                <ul id="popup" className="flex flex-col hidden z-10 gap-2 p-2 rounded-lg absolute right-[7px] top-[35px] bg-gray-900">
+                    {user.id == userId && <li className="flex items-center gap-3 font-bold py-1 cursor-pointer bg-gray-950 p-2 rounded-lg"><i className="fa-solid fa-pen-to-square text-lg "></i> Edit</li>}
+                    <li className="flex items-center gap-3 font-bold py-1 cursor-pointer bg-gray-950 p-2 rounded-lg"><i className="fa-solid fa-bookmark text-lg "></i> Save</li>
+                    <li className="flex items-center gap-3 font-bold py-1 cursor-pointer bg-gray-950 p-2 rounded-lg"><i className="fa-solid fa-flag text-lg "></i> Report</li>
+                    {user.id == userId && <li className="flex items-center gap-3 font-bold py-1 cursor-pointer bg-gray-950 p-2 rounded-lg"><i className="fa-solid fa-trash text-red-500 text-lg"></i> Delete</li>}
+                </ul>
             </header>
 
-            <article className="dark:text-gray-400 text-sm font-bold py-3">
+            <article id="date" className="dark:text-gray-400 text-sm font-bold py-2">
                 {date.split(',')[0] == getLocalDate() ? `Today , ${date.split(',')[1]}` : date}
             </article>
 
-            <article className="p-2 my-2 font-bold rounded-lg">
+            <article id="postContent" className="my-2 pb-2 font-bold rounded-lg">
                 {postContent.match(/\w+(\W+)?/ig).slice(0, 50).join(' ')}
 
                 {
-                    postContent.match(/\w+/ig).length > 50
+                    postContent.match(/\w+(\W+)?/ig).length > 50
                     &&
                     <details onClick={showMoreOrLess}>
                         <summary id={`sumry-${index}`} className="text-cyan-400">
                             Showmore
                         </summary>
-                        {postContent.match(/\w+/ig).slice(50).join(' ')}
+                        {postContent.match(/\w+(\W+)?/ig).slice(50).join(' ')}
                     </details>
                 }
             </article>
@@ -125,7 +121,7 @@ function Post({ data }) {
                         media.iframeSrc.map((src, i) => {
                             return (
                                 <figure className="w-full flex items-center justify-center" key={i}>
-                                    <iframe src={src} className=" rounded-sm h-[300px] w-full" loading="lazy"></iframe>
+                                    <iframe src={src + '&rel=0'} className=" rounded-sm h-[300px] w-full" loading="lazy" allowFullScreen={true}></iframe>
                                 </figure>
                             )
                         })
@@ -133,10 +129,11 @@ function Post({ data }) {
                 </section>
             }
 
-            <section className="mt-2 p-2 bg-gray-900 rounded-lg w-fit">
-                <i className="fa-regular fa-heart cursor-pointer text-lg hover:text-cyan-400 transition-all"></i>
-                <i className="fa-solid fa-retweet ml-8 cursor-pointer text-lg hover:text-cyan-400 transition-all"></i>
-            </section>
+            <ul className="mt-2 p-2 flex items-center justify-between bg-gray-900 rounded-lg w-full">
+                <li><i className="fa-regular fa-heart cursor-pointer text-xl hover:text-cyan-400 transition-all"></i> <span className="ml-1">0</span></li>
+                <li><i className="fa-regular fa-face-angry cursor-pointer text-xl hover:text-cyan-400 transition-all"></i> <span className="ml-1">0</span></li>
+                <li><i className="fa-solid fa-retweet cursor-pointer text-xl hover:text-cyan-400 transition-all"></i> <span className="ml-1">0</span></li>
+            </ul>
         </section>
     );
 }

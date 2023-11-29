@@ -29,7 +29,7 @@ function PostsView() {
                 <CreatePost />
 
                 {
-                    posts[0]
+                    posts.length
                     &&
                     posts.map((postData, i) => {
                         return (

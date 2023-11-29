@@ -118,6 +118,22 @@ export async function update(range , value) {
    }
 }
 
+export async function clear(range) {
+
+   try {
+    const res = await post({
+        url:`https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${range}:clear?alt=json&key=${env('VITE_SHEET_AKEY')}`,
+        headers:await headers(),
+    })
+
+    console.log(res);
+    return res
+   } catch (error) {
+    clear(range);
+    throw new Error(error.message);
+   }
+}
+
 /**
  * @Start_Handlers
  */
