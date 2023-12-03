@@ -1,7 +1,7 @@
-import { $, get, getCurrentTime, parse, parseToHTML, stringify } from '../js/cocktail';
+import { $, POST,  getCurrentTime, parse, parseToHTML} from '../js/cocktail';
 import { useEffect, useState } from 'react';
-import { append, showMarquee } from '../js/global';
 import tb from '../js/tb';
+import { showMarquee } from '../js/global';
 
 function CreatePost() {
     const [imagesMedia, setImagesMedia] = useState([]);
@@ -61,8 +61,9 @@ function CreatePost() {
         $('#postContent').classList.contains('min-h-[300px]') ? $('#postContent').classList.remove('min-h-[300px]') : $('#postContent').classList.add('min-h-[300px]')
     }
 
-    const postThePost = async () => {
+    const createPost = async (ev) => {
         try {
+            ev.target.disabled = true;
             if (!postContent) {
                 alert(`Enter content to post`);
                 return;
@@ -84,8 +85,8 @@ function CreatePost() {
                 }
             }
 
-            const postData = stringify({
-                name: user.name,
+            const postData = {
+                userName: user.name,
                 userID: user.id,
                 date: getCurrentTime(),
                 email: user.email,
@@ -96,24 +97,38 @@ function CreatePost() {
                     vid,
                     iframeSrc
                 },
-                reacts:{
-                    love:0,
-                    angry:0,
-                    retweet:0
-                }
-            })
+                reacts: {
+                    love: 0,
+                    haha: 0,
+                    sad: 0,
+                    angry: 0,
+                },
+                retweets: 0,
+                reports: 0,
+                watches: 0,
+            }
 
-            const res = await append('Posts', postData);
-            $('#postContent').value = '';
-            $('#iframeInput').value = '';
-            setPostContent('');
-            setcharLength(0);
-            setImagesMedia([]);
-            setVideo([]);
-            setIframeSrc([]);
-            showMarquee(false);
+            const res = await POST({
+                url: `http://localhost:9090/createPost`,
+                data: postData,
+                json: true,
+            });
+            console.log(res);
+
+            if (res.ok) {
+                $('#postContent').value = '';
+                $('#iframeInput').value = '';
+                setPostContent('');
+                setcharLength(0);
+                setImagesMedia([]);
+                setVideo([]);
+                setIframeSrc([]);
+                showMarquee(false);
+            }
+            ev.target.disabled = false;
+
         } catch (error) {
-            await postThePost();
+            ev.target.disabled = false;
             throw new Error(error.message);
         }
     }
@@ -195,7 +210,7 @@ function CreatePost() {
                     <i className='fa-solid fa-link cursor-pointer transition-all text-cyan-400 text-lg' onClick={() => { $('#iframeSection').classList.toggle('hidden') }}></i>
                     <span className='p-2 bg-cyan-500 font-bold rounded-lg '>{charLength}/5000</span>
                 </ul>
-                <button className='px-2 py-1 bg-cyan-600 rounded-md font-bold' onClick={postThePost}>POST</button>
+                <button className='px-2 py-1 bg-cyan-600 rounded-md font-bold' onClick={createPost}>POST</button>
             </section>
         </section>
 

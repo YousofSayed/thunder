@@ -433,7 +433,7 @@ export function addClickClass(element, clickClass) {
  */
 export function getCurrentTime() {
   const currentDate = new Date();
-  return currentDate.toLocaleString()
+  return currentDate.toLocaleString('us-en')
 }
 
 /**
@@ -504,13 +504,19 @@ export function isUndefined(data) {
 //send to server
 /**
  * Returns Post response
- * @param {{url:string , data:{[key : symbol]: any} , json:boolean , headers:HeadersInit  }} param0 
+ * @param {{url:string , data:{[key : symbol]: any} , json:boolean , headers:HeadersInit ,queries:{[key]:string} }} param0 
  * @returns {Promise<Response> | string}
  */
-export async function post({ url, data = {}, json = true, headers = { 'content-type': 'Application/json' } }) {
+export async function POST({ url, data = {}, json = true, headers = { 'content-type': 'Application/json' }, queries }) {
   try {
+    if (queries && typeof queries == 'object') {
+      url += '?';
+      for (const key in queries) {
+        url += `${key}=${queries[key]}&`
+      }
+    }
     const response = await fetch(url, { method: "POST", headers, body: JSON.stringify(data) });
-    return json ? await response.json() :  response
+    return json ? await response.json() : response
   } catch (error) {
     throw new Error(error.message)
   }
@@ -518,13 +524,19 @@ export async function post({ url, data = {}, json = true, headers = { 'content-t
 
 /**
  * Returns Get response
- * @param {{url:string , headers:HeadersInit  }} param0 
+ * @param {{url:string , headers:HeadersInit , queries:{[key]:string} , json:boolean }} param0 
  * @returns {Promise<Response> }
  */
-export async function get({ url, headers  , json}) {
+export async function GET({ url, headers = { 'content-type': 'Application/json' }, queries, json }) {
   try {
+    if (queries && typeof queries == 'object') {
+      url += '?';
+      for (const key in queries) {
+        url += `${key}=${queries[key]}&`
+      }
+    }
     const response = await fetch(url, { method: 'GET', headers });
-    return json ? await response.json() :  response
+    return json ? await response.json() : response
 
   } catch (error) {
     throw new Error(error.message)
@@ -533,13 +545,39 @@ export async function get({ url, headers  , json}) {
 
 /**
  * Returns Put response
- * @param {{url:string , headers:HeadersInit  , data:object}} param0 
+ * @param {{url:string , headers:HeadersInit , queries:{[key]:string} , data:object , json:boolean}} param0 
  * @returns {Promise<Response> }
  */
-export async function put({ url, headers, data, json }) {
+export async function PUT({ url, headers = { 'content-type': 'Application/json' }, json ,data, queries }) {
   try {
+    if (queries && typeof queries == 'object') {
+      url += '?';
+      for (const key in queries) {
+        url += `${key}=${queries[key]}&`
+      }
+    }
     const response = await fetch(url, { method: "PUT", headers, body: JSON.stringify(data) })
-    return json ? await response.json() :  response;
+    return json ? await response.json() : response;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+/**
+ * 
+ * @param {{url:string , headers:HeadersInit , queries:{[key]:string} , data:object}} param0 
+ * @returns {Promise<Response> }
+ */
+export async function DELETE({ url, headers = { 'content-type': 'Application/json' }, data, queries, json }) {
+  try {
+    if (queries && typeof queries == 'object') {
+      url += '?';
+      for (const key in queries) {
+        url += `${key}=${queries[key]}&`
+      }
+    }
+    const response = await fetch(url, { method:"DELETE", headers, body: JSON.stringify(data) })
+    return json ? await response.json() : response;
   } catch (error) {
     throw new Error(error.message);
   }

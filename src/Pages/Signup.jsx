@@ -1,9 +1,9 @@
-import { $, hash, isValidDate, isValidEmail, isValidName, isValidPassword, isValidRePassword, post, stringify} from '../js/cocktail';
+import { $, isValidDate, isValidEmail, isValidName, stringify, uniqueID } from '../js/cocktail';
 import userAvater from '../Assets/images/user-avatar.png'
 import Logo from '../Components/Logo';
 import styles from '../js/styles';
 import { useNavigate } from 'react-router-dom';
-import { env, showMarquee, success, warn } from '../js/global';
+import { showMarquee, warn } from '../js/global';
 import tb from '../js/tb';
 
 function Signup() {
@@ -18,8 +18,6 @@ function Signup() {
                 isValidName($('#name').value),
                 isValidEmail($('#email').value),
                 isValidDate($('#date').value),
-                // isValidPassword($('#pass').value),
-                // isValidRePassword($('#pass').value, $('#rePass').value),
             ];
 
             for (const result of validation) {
@@ -31,15 +29,17 @@ function Signup() {
             const data = {
                 name: $('#name').value,
                 email: $('#email').value.toLowerCase(),
-                // password: hash($('#pass').value),
                 date: $('#date').value,
+                id: uniqueID(),
                 profImgId: profImgId || ''
             }
 
-           
+
             showMarquee(false);
-          
             localStorage.setItem('user', stringify(data));
+            setTimeout(() => {
+                navigate('/')
+            })
         } catch (error) {
             throw new Error(error.message);
         }
@@ -55,18 +55,6 @@ function Signup() {
         } catch (error) {
             throw new Error(error.message)
         }
-    }
-
-    const showAndHidePass = (e, inputRoot) => {
-        if (e.target.classList.contains('fa-eye-slash')) {
-            e.target.classList.replace('fa-eye-slash', 'fa-eye');
-            $(inputRoot).type = 'text';
-        }
-        else {
-            e.target.classList.replace('fa-eye', 'fa-eye-slash');
-            $(inputRoot).type = 'password';
-        }
-
     }
 
     return (

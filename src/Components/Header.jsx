@@ -21,6 +21,7 @@ function Header() {
             if (!user || !user.profImgId) { setProfImg(userAvatar); return }
             setProfImg(await tb.getFileFromBot(user.profImgId))
         } catch (error) {
+            getProfImgAndName();
             throw new Error(error.message)
         }
 
