@@ -512,7 +512,6 @@ export function isArray(data) {
   return data instanceof Array;
 }
 
-
 /**
  * Returns boolean value if the data param is undefined or not
  * @param {undefined} data 
@@ -521,6 +520,16 @@ export function isArray(data) {
 export function isUndefined(data) {
   return typeof data === 'undefined'
 }
+
+/**
+ * Returns boolean value if the data param is undefined or not
+ * @param {number | string} data 
+ * @returns {boolean}
+ */
+export function isNumber(data) {
+  return typeof +data === 'number'
+}
+
 /*******************@End_functions ==========================*/
 
 //send to server

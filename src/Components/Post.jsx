@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { $a, $, parse, getLocalDate, stringify, PUT, DELETE, CocktailDB, nFormatter } from "../js/cocktail";
+import { $a, $, parse, getLocalDate, stringify, PUT, DELETE, CocktailDB, nFormatter, isNumber } from "../js/cocktail";
 import tb from "../js/tb";
 import initAndCreateColIndexedDb from "../js/initIndexedDB";
 import styles from "../js/styles";
@@ -103,10 +103,10 @@ function Post({ data, posts, setPosts }) {
 
       if (decAndIncRes.ok) {
         reactedIcon.classList.remove("fa-solid", "text-cyan-400");
-        +reactedNum.textContent && +reactedNum.textContent > 0 ? +reactedNum.textContent-- : null;
+        isNumber(reactedNum.textContent) && +reactedNum.textContent > 0 ? +reactedNum.textContent-- : null;
 
         reactIcon.classList.add("fa-solid", "text-cyan-400");
-        +reactNum.textContent ? +reactNum.textContent++ : null;
+        isNumber(reactNum.textContent) ? +reactNum.textContent++ : null;
 
         setReact(nameOfReact)
         postSocket.emit('updateReact', { root: `#post-${_id} #${react}N-${_id}`, num: decAndIncRes.post.reacts[react] })
@@ -128,11 +128,9 @@ function Post({ data, posts, setPosts }) {
 
       if (decRest.ok) {
         reactIcon.classList.remove("fa-solid", "text-cyan-400");
-        +reactNum.textContent && +reactNum.textContent > 0 ? +reactNum.textContent-- : null;
+        isNumber(reactNum.textContent) && +reactNum.textContent > 0 ? +reactNum.textContent-- : null;
         setReact('');
         postSocket.emit('updateReact', { root: `#post-${_id} #${nameOfReact}N-${_id}`, num: decRest.post.reacts[nameOfReact] })
-        console.log(decRest, 'lolo');
-
       }
     }
     else if (!react) {
@@ -146,7 +144,7 @@ function Post({ data, posts, setPosts }) {
 
       if (incRes.ok) {
         reactIcon.classList.add("fa-solid", "text-cyan-400");
-        +reactNum.textContent ? +reactNum.textContent++ : null;
+        isNumber(reactNum.textContent) ? +reactNum.textContent++ : null;
         postSocket.emit('updateReact', { root: `#post-${_id} #${nameOfReact}N-${_id}`, num: incRes.post.reacts[nameOfReact] })
         setReact(nameOfReact);
       }
@@ -224,6 +222,8 @@ function Post({ data, posts, setPosts }) {
     if (isReport) {
       await (await reportedColl).deleteOne({ _id });
       setIsReport(false);
+      showMarquee(false);
+      btn.disabled = false;
       return;
     }
 
@@ -243,8 +243,8 @@ function Post({ data, posts, setPosts }) {
       console.error(res.msg);
     }
 
-    btn.disabled = false;
     showMarquee(false);
+    btn.disabled = false;
   };
 
   const savePost = async (ev) => {
@@ -437,28 +437,28 @@ function Post({ data, posts, setPosts }) {
 
           <button onClick={(ev) => { doReact(ev, _id, `love`); }} className="w-fit">
             <i id={`loveR-${_id}`} className={`fa-regular  fa-heart cursor-pointer text-xl hover:text-cyan-400 transition-all`}></i>
-            <span id={`loveN-${_id}`} className="ml-1 text-cyan-400">
+            <span id={`loveN-${_id}`} className="ml-1 text-cyan-400 font-semibold">
               {nFormatter(reacts.love)}
             </span>
           </button>
 
           <button onClick={(ev) => { doReact(ev, _id, `haha`); }}>
             <i id={`hahaR-${_id}`} className="fa-regular fa-face-grin-tears cursor-pointer text-xl hover:text-cyan-400 transition-all"></i>{" "}
-            <span id={`hahaN-${_id}`} className="ml-1 text-cyan-400">
+            <span id={`hahaN-${_id}`} className="ml-1 text-cyan-400 font-semibold">
               {nFormatter(reacts.haha)}
             </span>
           </button>
 
           <button onClick={(ev) => { doReact(ev, _id, `sad`); }}>
             <i id={`sadR-${_id}`} className="fa-regular fa-face-sad-tear cursor-pointer text-xl hover:text-cyan-400 transition-all"></i>
-            <span id={`sadN-${_id}`} className="ml-1 text-cyan-400">
+            <span id={`sadN-${_id}`} className="ml-1 text-cyan-400 font-semibold">
               {nFormatter(reacts.sad)}
             </span>
           </button>
 
           <button onClick={(ev) => { doReact(ev, _id, `angry`); }}>
             <i id={`angryR-${_id}`} className={`fa-regular fa-face-angry cursor-pointer text-xl hover:text-cyan-400 transition-all`}></i>
-            <span id={`angryN-${_id}`} className="ml-1 text-cyan-400">
+            <span id={`angryN-${_id}`} className="ml-1 text-cyan-400 font-semibold">
               {nFormatter(reacts.angry)}
             </span>
           </button>
