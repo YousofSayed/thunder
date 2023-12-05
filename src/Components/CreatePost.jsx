@@ -1,7 +1,9 @@
-import { $, POST,  getCurrentTime, parse, parseToHTML} from '../js/cocktail';
+import { $, POST, getCurrentTime, parse, parseToHTML, stringify, uniqueID } from '../js/cocktail';
 import { useEffect, useState } from 'react';
 import tb from '../js/tb';
 import { showMarquee } from '../js/global';
+import { postSocket } from '../js/initSockets';
+
 
 function CreatePost() {
     const [imagesMedia, setImagesMedia] = useState([]);
@@ -63,6 +65,7 @@ function CreatePost() {
 
     const createPost = async (ev) => {
         try {
+
             ev.target.disabled = true;
             if (!postContent) {
                 alert(`Enter content to post`);
@@ -108,6 +111,7 @@ function CreatePost() {
                 watches: 0,
             }
 
+
             const res = await POST({
                 url: `http://localhost:9090/createPost`,
                 data: postData,
@@ -124,7 +128,10 @@ function CreatePost() {
                 setVideo([]);
                 setIframeSrc([]);
                 showMarquee(false);
+                postSocket.emit('post', res.post);
+
             }
+
             ev.target.disabled = false;
 
         } catch (error) {

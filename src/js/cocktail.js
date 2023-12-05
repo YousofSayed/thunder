@@ -416,6 +416,28 @@ export function makeAppResponsive(root) {
 }
 
 /**
+ * Returns formate number (it usually used in social media apps)
+ * @example 1K or +1K (if number more than 1000 and less than 1000000)
+ * @param {string | number} num 
+ * @returns {string}
+ */
+export function nFormatter(num) {
+  num = num.toString();
+  if (+num >= 1000000000) {
+    return +num == 1000000000 ? `${+num.split('0')[0]}G` : `+${num.slice(0, 1)}G`
+  }
+  else if (+num >= 1000000) {
+    return +num == 1000000 ? `${+num.split('0')[0]}M` : `+${+num.slice(0, 1)}M`
+  }
+  else if (+num >= 1000) {
+    return +num == 1000 ? `${+num[0]}K` : `+${+num.slice(0, 1)}K`
+  }
+  else {
+    return num;
+  }
+}
+
+/**
  * It handle click class that you created by css
  * @param {HTMLElement} element 
  * @param {string} clickClass 
@@ -548,7 +570,7 @@ export async function GET({ url, headers = { 'content-type': 'Application/json' 
  * @param {{url:string , headers:HeadersInit , queries:{[key]:string} , data:object , json:boolean}} param0 
  * @returns {Promise<Response> }
  */
-export async function PUT({ url, headers = { 'content-type': 'Application/json' }, json ,data, queries }) {
+export async function PUT({ url, headers = { 'content-type': 'Application/json' }, json, data, queries }) {
   try {
     if (queries && typeof queries == 'object') {
       url += '?';
@@ -576,7 +598,7 @@ export async function DELETE({ url, headers = { 'content-type': 'Application/jso
         url += `${key}=${queries[key]}&`
       }
     }
-    const response = await fetch(url, { method:"DELETE", headers, body: JSON.stringify(data) })
+    const response = await fetch(url, { method: "DELETE", headers, body: JSON.stringify(data) })
     return json ? await response.json() : response;
   } catch (error) {
     throw new Error(error.message);
@@ -711,15 +733,14 @@ export class CocktailDB {
    * @param {string} dbname 
    */
   constructor(dbname = "string") {
-    this.updateI = 1;
+    this.updateI = +localStorage.getItem('IDBV') || 1;
     this.dbname = dbname;
     this.handlers = {
       doRequest: async (callback = () => { }) => {
-        const request = indexedDB.open(dbname, this.updateI - 1);
+        const request = indexedDB.open(dbname, this.updateI);
         let db = new Promise((res, rej) => {
           request.addEventListener('success', function (ev) {
-            let dbHandlerCallback = callback(this.result);
-            res(dbHandlerCallback)
+            res(callback(this.result))
           })
 
           request.addEventListener('error', function () {
@@ -783,6 +804,145 @@ export class CocktailDB {
 
     }
 
+    this.collectionHandler = (name) => {
+      const methods = {
+        /**
+         * Returns all documents in your collection after your update
+         * @param {object} query 
+         * @example 
+         * set({text : uniqueText}) 
+         * @returns 
+         */
+        set: async (query) => {
+          try {
+            await this.handlers.doRequest(async (db) => {
+              let lastId = await methods.find();
+              query.id = lastId.at(-1) ? lastId[lastId.length - 1].id + 1 : 0;
+              db.transaction(name, 'readwrite').objectStore(name).add(query);
+              db.close();
+            });
+            return await methods.find()
+          } catch (error) {
+            throw new Error(error.message);
+          }
+        },
+
+        /**
+        * Returns first document which match in your collection
+        * @param {object} query 
+        * @example 
+        * set({text : uniqueText})  
+        * @returns 
+        */
+        findOne: async (query) => {
+          try {
+            if (query instanceof Object && !Object.entries(query)[0]) { throw new Error(`query must not be an empty`) }
+            if (typeof query !== typeof {}) { throw new Error(`query type must be an object`) }
+            return await this.handlers.findHandler(name, query, matches => matches[0])
+          } catch (error) {
+            throw new Error(error.message);
+          }
+        },
+
+        /**
+        * It find all document that matches your query and update it 
+        * @param {object} query 
+        * @example 
+        * set({text : uniqueText})  
+        * @returns 
+        */
+        findOneAndUpdate: async (oldQuery, newQuery) => {
+          try {
+            this.handlers.doRequest(async (db) => {
+              let key = await methods.findOne(oldQuery);
+              newQuery.id = key.id;
+              db.transaction(name, 'readwrite').objectStore(name).put(newQuery)
+            })
+          } catch (error) {
+            throw new Error(error.message);
+          }
+        },
+
+        /**
+        * It find all documents that matche your query 
+        * @param {object} query 
+        * @example 
+        * set({text : uniqueText})  
+        * @returns 
+        */
+        find: async (query) => {
+          try {
+            if (query && typeof query !== typeof {}) { throw new Error(`Query type must be an object like that => {Query}`) };
+            return await this.handlers.findHandler(name, query, matches => matches)
+          } catch (error) {
+            throw new Error(error.message);
+          }
+        },
+
+        /**
+        * It find all documents that matche your query and update them all
+        * @param {object} query 
+        * @example 
+        * set({text : uniqueText})  
+        * @returns 
+        */
+        findAndUpdate: async (oldQuery, newQuery) => {
+          try {
+            this.handlers.doRequest(async (db) => {
+              let key = await methods.find(oldQuery);
+              for (let i = 0; i < key.length; i++) {
+                newQuery.id = key[i].id;
+                db.transaction(name, 'readwrite').objectStore(name).put(newQuery)
+              }
+            })
+          } catch (error) {
+            throw new Error(error.message);
+          }
+        },
+
+        /**
+        * It find all documents that matches your query and delete them all
+        * @param {object} query 
+        * @example 
+        * set({text : uniqueText})  
+        * @returns 
+        */
+        delete: async (query) => {
+          try {
+            this.handlers.doRequest(async (db) => {
+              let targetQuery = await methods.find(query);
+              for (let i = 0; i < targetQuery.length; i++) {
+                db.transaction(name, 'readwrite').objectStore(name).delete(targetQuery[i].id)
+              }
+            })
+          } catch (error) {
+            throw new Error(error.message);
+          }
+        },
+
+        /**
+        * It find first document that matche your query and delete it 
+        * @param {object} query 
+        * @example 
+        * set({text : uniqueText})  
+        * @returns 
+        */
+        deleteOne: async (query) => {
+          try {
+            return await this.handlers.doRequest(async (db) => {
+              let targetQuery = await methods.findOne(query);
+              const res = db.transaction(name, 'readwrite').objectStore(name).delete(targetQuery.id);
+              return await methods.find()
+            })
+          } catch (error) {
+            throw new Error(error.message);
+          }
+        },
+
+      }
+      return methods
+    }
+
   };
 
   /**
@@ -794,145 +954,14 @@ export class CocktailDB {
     const request = indexedDB.open(this.dbname, this.updateI);
     this.updateI++; //to update version to create new objectStore (collection)
     this.handlers.createObjectStore(name, request); //to create new objectStore (collection)
+    localStorage.setItem('IDBV', this.updateI);
 
-    const methods = {
-      /**
-       * Returns all documents in your collection after your update
-       * @param {object} query 
-       * @example 
-       * set({text : uniqueText}) 
-       * @returns 
-       */
-      set: async (query) => {
-        try {
-          await this.handlers.doRequest(async (db) => {
-            let lastId = await methods.find();
-            query.id = lastId.at(-1) ? lastId[lastId.length - 1].id + 1 : 0;
-            db.transaction(name, 'readwrite').objectStore(name).add(query);
-            db.close();
-          });
-          return await methods.find()
-        } catch (error) {
-          throw new Error(error.message);
-        }
-      },
-
-      /**
-      * Returns first document which match in your collection
-      * @param {object} query 
-      * @example 
-      * set({text : uniqueText})  
-      * @returns 
-      */
-      findOne: async (query) => {
-        try {
-          if (query instanceof Object && !Object.entries(query)[0]) { throw new Error(`query must not be an empty`) }
-          if (typeof query !== typeof {}) { throw new Error(`query type must be an object`) }
-          return await this.handlers.findHandler(name, query, matches => matches[0])
-        } catch (error) {
-          throw new Error(error.message);
-        }
-      },
-
-      /**
-      * It find all document that matches your query and update it 
-      * @param {object} query 
-      * @example 
-      * set({text : uniqueText})  
-      * @returns 
-      */
-      findOneAndUpdate: async (oldQuery, newQuery) => {
-        try {
-          this.handlers.doRequest(async (db) => {
-            let key = await methods.findOne(oldQuery);
-            newQuery.id = key.id;
-            db.transaction(name, 'readwrite').objectStore(name).put(newQuery)
-          })
-        } catch (error) {
-          throw new Error(error.message);
-        }
-      },
-
-      /**
-      * It find all documents that matche your query 
-      * @param {object} query 
-      * @example 
-      * set({text : uniqueText})  
-      * @returns 
-      */
-      find: async (query) => {
-        try {
-          if (query && typeof query !== typeof {}) { throw new Error(`Query type must be an object like that => {Query}`) };
-          return await this.handlers.findHandler(name, query, matches => matches)
-        } catch (error) {
-          throw new Error(error.message);
-        }
-      },
-
-      /**
-      * It find all documents that matche your query and update them all
-      * @param {object} query 
-      * @example 
-      * set({text : uniqueText})  
-      * @returns 
-      */
-      findAndUpdate: async (oldQuery, newQuery) => {
-        try {
-          this.handlers.doRequest(async (db) => {
-            let key = await methods.find(oldQuery);
-            for (let i = 0; i < key.length; i++) {
-              newQuery.id = key[i].id;
-              db.transaction(name, 'readwrite').objectStore(name).put(newQuery)
-            }
-          })
-        } catch (error) {
-          throw new Error(error.message);
-        }
-      },
-
-      /**
-      * It find all documents that matches your query and delete them all
-      * @param {object} query 
-      * @example 
-      * set({text : uniqueText})  
-      * @returns 
-      */
-      delete: async (query) => {
-        try {
-          this.handlers.doRequest(async (db) => {
-            let targetQuery = await methods.find(query);
-            for (let i = 0; i < targetQuery.length; i++) {
-              db.transaction(name, 'readwrite').objectStore(name).delete(targetQuery[i].id)
-            }
-          })
-        } catch (error) {
-          throw new Error(error.message);
-        }
-      },
-
-      /**
-      * It find first document that matche your query and delete it 
-      * @param {object} query 
-      * @example 
-      * set({text : uniqueText})  
-      * @returns 
-      */
-      deleteOne: async (query) => {
-        try {
-          return await this.handlers.doRequest(async (db) => {
-            let targetQuery = await methods.findOne(query);
-            const res = db.transaction(name, 'readwrite').objectStore(name).delete(targetQuery.id);
-            return await methods.find()
-          })
-        } catch (error) {
-          throw new Error(error.message);
-        }
-      },
-
-    }
-
-    return methods
+    return this.collectionHandler(name)
   };
+
+  async openCollection(name) {
+    return this.collectionHandler(name);
+  }
 
   deleteDatabase() {
     indexedDB.deleteDatabase(dbname)

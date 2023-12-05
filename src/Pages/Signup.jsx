@@ -1,4 +1,4 @@
-import { $, isValidDate, isValidEmail, isValidName, stringify, uniqueID } from '../js/cocktail';
+import { $, CocktailDB, isValidDate, isValidEmail, isValidName, stringify, uniqueID } from '../js/cocktail';
 import userAvater from '../Assets/images/user-avatar.png'
 import Logo from '../Components/Logo';
 import styles from '../js/styles';
@@ -37,6 +37,13 @@ function Signup() {
 
             showMarquee(false);
             localStorage.setItem('user', stringify(data));
+            const db = new CocktailDB(data.email);
+            await db.createCollction('Bookmarks');
+            await db.createCollction('Reports');
+            await db.createCollction('Retweets');
+            await db.createCollction('Followers');
+            await db.createCollction('Following');
+            await db.createCollction('Posts');
             setTimeout(() => {
                 navigate('/')
             })
@@ -66,9 +73,9 @@ function Signup() {
                     <h1 className={styles.title}>Signup</h1>
                     <img src={userAvater} className="w-32 h-32 cursor-pointer rounded-full" id="profImg" onClick={() => { $('#inpFile').click() }} alt="user avatar" />
                     <div id="warn" className={styles.warn}></div>
-                    <input type="text" id="name" placeholder="Enter your name" className={styles.input} />
-                    <input type="email" id="email" placeholder="Enter your email" className={styles.input} />
-                    <input type="date" id="date" placeholder="Enter your date" className={styles.input} />
+                    <input type="text" id="name" placeholder="Enter Your Name" className={styles.input} />
+                    <input type="email" id="email" placeholder="Enter Your Email" className={styles.input} />
+                    <input type="text" id="date" placeholder="YYYY/MM/DD" className={styles.input} />
 
                     <button type="submit" className={styles.btn}>Signup</button>
 
