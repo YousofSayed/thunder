@@ -108,7 +108,7 @@ function Post({ post }) {
                 </section>
             }
 
-            <Reacts index={index} _id={_id} reacts={reacts} retweets={retweets} userID={userID}/>
+            <Reacts index={index} _id={_id} reacts={reacts} retweets={retweets} userID={userID} post={post}/>
         </section>
     );
 }

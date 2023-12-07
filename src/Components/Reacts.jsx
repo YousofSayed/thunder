@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { $, isNumber, nFormatter, parse } from "../js/cocktail";
+import { $, CocktailDB, isNumber, nFormatter, parse } from "../js/cocktail";
 import { getFromTo, update } from "../js/global";
 import { postSocket } from "../js/initSockets";
 
-function Reacts({ reacts, retweets, _id, index , userID}) {
+function Reacts({ reacts, retweets, _id, index , userID }) {
     const [react, setReact] = useState('');
     const [retweet , setRetweet] = useState(false)
     const user = parse(localStorage.getItem('user'));
+    const db = new CocktailDB(user.email);
+
 
     const doReact = async (ev,nameOfReact) => {
         const btn = ev.currentTarget;
@@ -48,8 +50,11 @@ function Reacts({ reacts, retweets, _id, index , userID}) {
     const doRetweet = async (ev) => {
         const btn = ev.currentTarget;
         btn.disabled = true;
-        
-
+        const post = await getFromTo('Posts', index, index);
+        if(post[0]){
+            post[0] = parse(post[0]);
+            post[0].schema.retweets++;
+        }
     }
 
     return (
@@ -61,7 +66,7 @@ function Reacts({ reacts, retweets, _id, index , userID}) {
                 </span>
             </button>
 
-            <button className="flex items-center gap-2" onClick={retweet}>
+            <button className="flex items-center gap-2" onClick={doRetweet}>
                 <i id={`retweet-${_id}`} className="fa-solid fa-retweet cursor-pointer text-xl hover:text-cyan-400 transition-all"></i>{" "}
                 <span className="ml-1">{nFormatter(retweets)}</span>
             </button>
