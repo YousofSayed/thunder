@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import textLogo from '../Assets/images/textLogo.png'
-import userAvatar from '../Assets/images/user-avatar.png'
+import textLogo from '../Assets/images/textLogo.png';
+import userAvatar from '../Assets/images/user-avatar.png';
 import tb from '../js/tb';
 import { parse } from "../js/cocktail";
 
@@ -21,6 +21,7 @@ function Header() {
             if (!user || !user.profImgId) { setProfImg(userAvatar); return }
             setProfImg(await tb.getFileFromBot(user.profImgId))
         } catch (error) {
+            getProfImgAndName();
             throw new Error(error.message)
         }
 

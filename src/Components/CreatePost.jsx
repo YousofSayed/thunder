@@ -1,7 +1,8 @@
-import { $, get, getCurrentTime, parse, parseToHTML, stringify } from '../js/cocktail';
+import { $, GET, getCurrentTime, parse, parseToHTML, stringify } from '../js/cocktail';
 import { useEffect, useState } from 'react';
 import { append, showMarquee } from '../js/global';
 import tb from '../js/tb';
+import postSchema from '../Schemas/postSchema';
 
 function CreatePost() {
     const [imagesMedia, setImagesMedia] = useState([]);
@@ -85,23 +86,9 @@ function CreatePost() {
             }
 
             const postData = stringify({
-                name: user.name,
-                userID: user.id,
-                date: getCurrentTime(),
-                email: user.email,
-                profImgId: user.profImgId,
-                postContent,
-                media: {
-                    images,
-                    vid,
-                    iframeSrc
-                },
-                reacts:{
-                    love:0,
-                    angry:0,
-                    retweet:0
-                }
-            })
+                type: 'post',
+                schema: postSchema({ user, postContent, images, vid, iframeSrc })
+            });
 
             const res = await append('Posts', postData);
             $('#postContent').value = '';
@@ -113,7 +100,7 @@ function CreatePost() {
             setIframeSrc([]);
             showMarquee(false);
         } catch (error) {
-            await postThePost();
+            setTimeout(async () => await postThePost(), 1000)
             throw new Error(error.message);
         }
     }

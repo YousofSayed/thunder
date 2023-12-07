@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { getFromTo } from '../js/global';
 import CreatePost from './CreatePost';
 import Post from './Post';
+import { $, nFormatter, parse } from '../js/cocktail';
+import { postSocket } from '../js/initSockets';
 
 
 function PostsView() {
@@ -11,9 +13,34 @@ function PostsView() {
         getPosts(2, 10)
     }, []);
 
+    useEffect(()=>{
+        postSocket.on('updateReact',updateReact);
+        postSocket.on('updateDoubleReact',updateDoubleReact)
+    });
+
     const getPosts = async (from, to) => {
-        const postsData = await getFromTo('Posts', from, to) || []
-        setPosts([...posts, ...postsData])
+        try {
+            const postsData = await getFromTo('Posts', from, to) || []
+            console.log(postsData);
+            setPosts([...posts, ...postsData].reverse())
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    };
+
+    const updateReact = ({elementRoot , num})=>{
+        $(elementRoot).textContent = nFormatter(num);
+    }
+
+    const updateDoubleReact = ({reactedElementRoot , tergtedElementRoot ,newReactedVal,newTargtedVal})=>{
+        $(reactedElementRoot).textContent = nFormatter(newReactedVal);
+        $(tergtedElementRoot).textContent = nFormatter(newTargtedVal);
+    }
+
+    const getPostFromSocket = (post)=>{
+
+        postSocket.removeListener('updateReact',updateReact)
+        postSocket.removeListener('updateDoubleReact',updateDoubleReact);
     }
 
 
@@ -29,11 +56,13 @@ function PostsView() {
                 <CreatePost />
 
                 {
-                    posts.length
+                    posts[0]
                     &&
                     posts.map((postData, i) => {
+                        postData = parse(postData);
+                        if(postData.type != 'post')return;
                         return (
-                            <Post data={postData[0]} key={i} />
+                            <Post post={postData.schema} key={i} />
                         )
                     })
                 }

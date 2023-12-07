@@ -1,9 +1,9 @@
-import { $, hash, isValidDate, isValidEmail, isValidName, isValidPassword, isValidRePassword, post, stringify} from '../js/cocktail';
+import { $, CocktailDB, isValidDate, isValidEmail, isValidName, stringify, uniqueID } from '../js/cocktail';
 import userAvater from '../Assets/images/user-avatar.png'
 import Logo from '../Components/Logo';
 import styles from '../js/styles';
 import { useNavigate } from 'react-router-dom';
-import { env, showMarquee, success, warn } from '../js/global';
+import { showMarquee, warn } from '../js/global';
 import tb from '../js/tb';
 
 function Signup() {
@@ -18,8 +18,6 @@ function Signup() {
                 isValidName($('#name').value),
                 isValidEmail($('#email').value),
                 isValidDate($('#date').value),
-                // isValidPassword($('#pass').value),
-                // isValidRePassword($('#pass').value, $('#rePass').value),
             ];
 
             for (const result of validation) {
@@ -31,15 +29,24 @@ function Signup() {
             const data = {
                 name: $('#name').value,
                 email: $('#email').value.toLowerCase(),
-                // password: hash($('#pass').value),
                 date: $('#date').value,
+                id: uniqueID(),
                 profImgId: profImgId || ''
             }
 
-           
+
             showMarquee(false);
-          
             localStorage.setItem('user', stringify(data));
+            const db = new CocktailDB(data.email);
+            await db.createCollction('Bookmarks');
+            await db.createCollction('Reports');
+            await db.createCollction('Retweets');
+            await db.createCollction('Followers');
+            await db.createCollction('Following');
+            await db.createCollction('Posts');
+            setTimeout(() => {
+                navigate('/')
+            })
         } catch (error) {
             throw new Error(error.message);
         }
@@ -57,18 +64,6 @@ function Signup() {
         }
     }
 
-    const showAndHidePass = (e, inputRoot) => {
-        if (e.target.classList.contains('fa-eye-slash')) {
-            e.target.classList.replace('fa-eye-slash', 'fa-eye');
-            $(inputRoot).type = 'text';
-        }
-        else {
-            e.target.classList.replace('fa-eye', 'fa-eye-slash');
-            $(inputRoot).type = 'password';
-        }
-
-    }
-
     return (
         <section className='w-full h-full'>
             <Logo />
@@ -78,9 +73,9 @@ function Signup() {
                     <h1 className={styles.title}>Signup</h1>
                     <img src={userAvater} className="w-32 h-32 cursor-pointer rounded-full" id="profImg" onClick={() => { $('#inpFile').click() }} alt="user avatar" />
                     <div id="warn" className={styles.warn}></div>
-                    <input type="text" id="name" placeholder="Enter your name" className={styles.input} />
-                    <input type="email" id="email" placeholder="Enter your email" className={styles.input} />
-                    <input type="date" id="date" placeholder="Enter your date" className={styles.input} />
+                    <input type="text" id="name" placeholder="Enter Your Name" className={styles.input} />
+                    <input type="email" id="email" placeholder="Enter Your Email" className={styles.input} />
+                    <input type="text" id="date" placeholder="YYYY/MM/DD" className={styles.input} />
 
                     <button type="submit" className={styles.btn}>Signup</button>
 
@@ -92,5 +87,4 @@ function Signup() {
 }
 
 export default Signup;
-
 

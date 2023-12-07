@@ -1,4 +1,4 @@
-import { $,  get, parse, post, put, stringify } from "./cocktail";
+import { $,  copyToClipboard,  GET, parse, POST, PUT, stringify } from "./cocktail";
 
 export function success(msg) {
     $('#warn').classList.replace('text-red-600', 'text-green-400')
@@ -14,18 +14,6 @@ export function showMarquee(isShow) {
 }
 
 
-export async function getReqFromGs(params) {
-    let url = import.meta.env.VITE_THUNDERAPI;
-    if (typeof params != 'object') throw new TypeError(`Params must object type`);
-    if (params && typeof params == 'object') {
-        for (const param in params) {
-            url += `${param}=${params[param]}&`;
-        }
-    }
-    return (await get({ url })).json()
-}
-
-
 export async function headers() {
     const headers = {
         Authorization: `Bearer ${await getAToken()}`,
@@ -38,9 +26,9 @@ export async function headers() {
 export async function getAllSheetValues(sheetName) {
     try {
         const url = `https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${sheetName}?key=${env('VITE_SHEET_AKEY')}`;
-        const res = await (await get({ url, headers: await headers() }));
+        const res = await (await GET({ url, headers: await headers() }));
         const jsonRes = await res.json()
-        if (res.ok) {
+        if (res.status == 200) {
             const data = handleValues(jsonRes.values);
             return {
                 data,
@@ -54,9 +42,7 @@ export async function getAllSheetValues(sheetName) {
                     return result[0] ? result : null;
                 }
             }
-        } else {
-            console.log(jsonRes.error.message);
-        }
+        } 
     } catch (error) {
         throw new Error(error.message)
     }
@@ -65,30 +51,36 @@ export async function getAllSheetValues(sheetName) {
 export async function getFromTo(sheetName , from , to) {
     try {
         const url = `https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${sheetName}!A${from}:Z${to}?key=${env('VITE_SHEET_AKEY')}`;
-        const res = await (await get({ url, headers: await headers() }));
+        const res = await (await GET({ url, headers: await headers() }));
         const jsonRes = await res.json()
-        const data = jsonRes.values;
-        data.map((item)=>{
-            const obj  = parse(item[0]);
-            obj.index=from;
-            from++
-            item[0]=stringify(obj)
-            return item;
-        })
-        console.log(res);
-        if (res.ok) {
-            return data
-        } else {
-            console.log(jsonRes.error.message);
-        }
+        const data = jsonRes.values || [];
+        if (res.status == 200) {
+           const rangedData = data?.map((item)=>{
+                const obj  = parse(item[0]);
+                console.log(obj);
+                obj.schema.index=from;
+                from++
+                item[0]=stringify(obj)
+                return item;
+            });
+            return rangedData;
+        } 
+        return data
     } catch (error) {
-        
+        throw new Error(error.message)
     }
 }
 
+// window.addEventListener('click',async ()=>{
+//     console.log(await getFromTo('Posts',2,2));
+// })
+// const data  = {"name":"Thunder","email":"yousef.sayed1231@gmail.com","id":"a9d8c77c-ee30-4f8b-b134-7ec767575383","profImgId":"BQACAgQAAxkDAAICUWVZG7ZthKQtzOkjzXDhXBVvdrwyAAL9FgACmuTJUhYYd87_qH_lMwQ","date":"2023-11-15","undefined":" "}
+// 1u66NoFwvKj4aV3hUbv44qB8R_Mnie5r5042ozCEoBLk
+// console.log(await getAllSheetValues('Data'));
+// localStorage.setItem('user',stringify(data))
 
 export async function append(range, cells) {
-    const res = await post({
+    const res = await POST({
         url: `https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${range}:append?valueInputOption=RAW&key=${env('VITE_SHEET_AKEY')}`,
         headers: await headers(),
         data: {
@@ -102,15 +94,15 @@ export async function append(range, cells) {
 
 export async function update(range , value) {
    try {
-    const res = await put({
+    const res = await PUT({
         url:`https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${range}?valueInputOption=RAW&key=${env('VITE_SHEET_AKEY')}`,
         headers:await headers(),
         data:{
-            values:[[value]]
+            values:[[stringify(value)]]
         }
     }); 
     
-    console.log(res);
+    // console.log(res);
     return res;
    } catch (error) {
     update(range ,value);
@@ -121,7 +113,7 @@ export async function update(range , value) {
 export async function clear(range) {
 
    try {
-    const res = await post({
+    const res = await POST({
         url:`https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${range}:clear?alt=json&key=${env('VITE_SHEET_AKEY')}`,
         headers:await headers(),
     })
@@ -173,7 +165,7 @@ export function env(key) {
  * @returns {string}
  */
 async function getAToken() {
-    return await (await post({
+    return await (await POST({
         url: `https://www.googleapis.com/oauth2/v4/token`,
         data: {
             client_id: env('VITE_CLIENT_ID'),
@@ -186,18 +178,18 @@ async function getAToken() {
 
 
 
-// const postDb = JSON.stringify({
+// const POSTtDb = JSON.stringify({
 //     name: 'Thunder sayed',
 //     ImageId: 'https://api.telegram.org/file/bot6183481793:AAGFNrrvs6FgATrNhtG5P1j9SAQ0AHxCsyQ/documents/file_952.jpg',
 //     textContent: `y`.repeat(45000),
 // })
 
-// const cell = [postDb];
+// const cell = [POSTtDb];
 
 
 // const baseRowAuth = `OWp20xuYhcEkrUBFNYM5S5jbUnaG5dav`
 
-// // console.log(await (await get({
+// // console.log(await (await GET({
 // //     url: "https://api.baserow.io/api/database/rows/table/223500/?user_field_names=true&search='o'",
 // //     headers: {
 // //         Authorization: "Token OWp20xuYhcEkrUBFNYM5S5jbUnaG5dav"
@@ -205,18 +197,18 @@ async function getAToken() {
 // // })).json());
 
 
-// const postC = JSON.stringify({
+// const POSTtC = JSON.stringify({
 
 // })
 
 
-// console.log(await getAToken());
+// console.log(await GETAToken());
 // console.log(await append('Users', cell));
 // setInterval(async () => {
-//     // console.log(await(await getAllSheetValues('Users')).filter('name','sayed'));
+//     // console.log(await(await GETAllSheetValues('Users')).filter('name','sayed'));
 //     console.log(
 
-//         await post({
+//         await POSTt({
 //             url: "https://api.baserow.io/api/database/rows/table/223500/?user_field_names=true",
 //             headers: {
 //                 Authorization: `Token ${baseRowAuth}`,
@@ -224,7 +216,7 @@ async function getAToken() {
 //             },
 //             data: {
 //                 "user": "haha",
-//                 "postContent": 'yousef sayed ahmed',
+//                 "POSTtContent": 'yousef sayed ahmed',
 //             }
 //         })
     

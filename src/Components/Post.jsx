@@ -1,30 +1,24 @@
 import { useEffect, useState } from "react";
-import { $a, $, parse, getLocalDate } from "../js/cocktail";
+import { $a, $, parse, getLocalDate, stringify } from "../js/cocktail";
 import tb from "../js/tb";
+import { update } from "../js/global";
+import userAvatar from '../Assets/images/user-avatar.png';
+import Reacts from "./Reacts";
 
-window.addEventListener('click', (e) => {
-    const { target } = e;
-    if (target.id == 'popup' || target.parentNode.id == 'popup' || target.parentNode.parentNode.id == 'popup' || target.id == 'popupHandler') {
-        return
-    } else {
-        $a('#popup').forEach((popup) => !popup.classList.contains('hidden') ? popup.classList.add('hidden') : null);
-    }
-})
-
-
-function Post({ data }) {
-    data = parse(data);
-    const { name, profImgId, email, userId, date, postContent, media, index } = data
+function Post({ post }) {
+    const { _id, userName, profImgId, email, userID, date, postContent, media, index, reacts, retweets } = post
+    console.log('#######', index);
     const user = parse(localStorage.getItem('user'));
-    console.log(data);
+
     useEffect(() => {
-        getImages()
+        getImagesAndVideos();
     });
 
-    console.log(parse(localStorage.getItem('lol')));
-
-    const getImages = () => {
-        $a(`#post-${index} img`).forEach(async (img) => img.src = await tb.getFileFromBot(img.id))
+    const getImagesAndVideos = () => {
+        $a(`#post-${index} img`).forEach(async (img) => {
+            if (!img.id) return;
+            img.src = await tb.getFileFromBot(img.id)
+        })
         $a(`#post-${index} video`).forEach(async (vid) => vid.src = await tb.getFileFromBot(vid.id))
     }
 
@@ -37,31 +31,14 @@ function Post({ data }) {
         }
     }
 
-    const showPopup = (index) => {
-        // isPopup ? setIsPopup(false) : setIsPopup(true);
-        const popup = $(`#post-${index} #popup`);
-        // console.log(popup.classList.contains('hidden'));
-        popup.classList.toggle('hidden')
-    }
-
 
     return (
         <section id={`post-${index}`} className="p-2 my-3 bg-gray-950 rounded-lg rtl ring-1">
             <header className="relative flex justify-between items-center">
-                <figure className="w-fit flex gap-2 rounded-lg items-center px-2 py-1  bg-gray-900 ">
-                    <img id={profImgId} className="w-9 h-9 rounded-full cursor-pointer" />
-                    <p className="font-bold">{name}</p>
+                <figure className="w-fit flex gap-2 rounded-lg items-center px-2 py-1  bg-gray-900 ring-1">
+                    <img src={userAvatar} id={profImgId} className="w-9 h-9 rounded-full cursor-pointer" />
+                    <p className="font-bold">{userName}</p>
                 </figure>
-
-                <i id="popupHandler" className="fa-solid fa-ellipsis text-xl cursor-pointer" onClick={() => { showPopup(index) }}></i>
-
-
-                <ul id="popup" className="flex flex-col hidden z-10 gap-2 p-2 rounded-lg absolute right-[7px] top-[35px] bg-gray-900">
-                    {user.id == userId && <li className="flex items-center gap-3 font-bold py-1 cursor-pointer bg-gray-950 p-2 rounded-lg"><i className="fa-solid fa-pen-to-square text-lg "></i> Edit</li>}
-                    <li className="flex items-center gap-3 font-bold py-1 cursor-pointer bg-gray-950 p-2 rounded-lg"><i className="fa-solid fa-bookmark text-lg "></i> Save</li>
-                    <li className="flex items-center gap-3 font-bold py-1 cursor-pointer bg-gray-950 p-2 rounded-lg"><i className="fa-solid fa-flag text-lg "></i> Report</li>
-                    {user.id == userId && <li className="flex items-center gap-3 font-bold py-1 cursor-pointer bg-gray-950 p-2 rounded-lg"><i className="fa-solid fa-trash text-red-500 text-lg"></i> Delete</li>}
-                </ul>
             </header>
 
             <article id="date" className="dark:text-gray-400 text-sm font-bold py-2">
@@ -69,16 +46,16 @@ function Post({ data }) {
             </article>
 
             <article id="postContent" className="my-2 pb-2 font-bold rounded-lg">
-                {postContent.match(/\w+(\W+)?/ig).slice(0, 50).join(' ')}
+                {postContent.match(/\w+(\W+)?|.+/ig).slice(0, 50).join(' ')}
 
                 {
-                    postContent.match(/\w+(\W+)?/ig).length > 50
+                    postContent.match(/\w+(\W+)?|.+/ig).length > 50
                     &&
                     <details onClick={showMoreOrLess}>
                         <summary id={`sumry-${index}`} className="text-cyan-400">
                             Showmore
                         </summary>
-                        {postContent.match(/\w+(\W+)?/ig).slice(50).join(' ')}
+                        {postContent.match(/\w+(\W+)?|.+/ig).slice(50).join(' ')}
                     </details>
                 }
             </article>
@@ -107,7 +84,7 @@ function Post({ data }) {
                         media.vid.map((vidId, i) => {
                             return (
                                 <figure className="w-full flex items-center justify-center" key={i}>
-                                    <video id={vidId} className=" rounded-sm" controls />
+                                    <video id={vidId} className=" rounded-lg" controls />
                                 </figure>
                             )
                         })
@@ -131,11 +108,7 @@ function Post({ data }) {
                 </section>
             }
 
-            <ul className="mt-2 p-2 flex items-center justify-between bg-gray-900 rounded-lg w-full">
-                <li><i className="fa-regular fa-heart cursor-pointer text-xl hover:text-cyan-400 transition-all"></i> <span className="ml-1">0</span></li>
-                <li><i className="fa-regular fa-face-angry cursor-pointer text-xl hover:text-cyan-400 transition-all"></i> <span className="ml-1">0</span></li>
-                <li><i className="fa-solid fa-retweet cursor-pointer text-xl hover:text-cyan-400 transition-all"></i> <span className="ml-1">0</span></li>
-            </ul>
+            <Reacts index={index} _id={_id} reacts={reacts} retweets={retweets} userID={userID}/>
         </section>
     );
 }

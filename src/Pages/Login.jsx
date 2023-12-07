@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Logo from "../Components/Logo";
 import { $, hash, stringify } from "../js/cocktail";
-import { getReqFromGs, showMarquee, success, warn } from "../js/global";
+import { showMarquee, success, warn } from "../js/global";
 import styles from "../js/styles";
 
 function Login() {
@@ -23,11 +23,11 @@ function Login() {
 
             // console.log(isUser);
 
-            const res = await getReqFromGs({
-                type: 'login',
-                sheetName: 'Users',
-                dataJson: encodeURIComponent(stringify(data))
-            })
+            // const res = await getReqFromGs({
+            //     type: 'login',
+            //     sheetName: 'Users',
+            //     dataJson: encodeURIComponent(stringify(data))
+            // })
 
             showMarquee(false);
             if (res.ok) {
