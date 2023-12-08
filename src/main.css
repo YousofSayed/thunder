@@ -26,6 +26,22 @@
     width: unset;
 }
 
+.click{
+    animation: click .2s linear;
+}
+
+@keyframes click{
+    0%{
+        transform: scale(1);
+    }
+    50%{
+        transform: scale(.7);
+    }
+    100%{
+        transform: scale(1);
+    }
+}
+
 @media (min-width:767px) {
     .nav-aside {
         position: fixed;

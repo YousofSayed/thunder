@@ -10,7 +10,7 @@ function PostsView() {
     const [posts, setPosts] = useState([]);
 
     useEffect(() => {
-        getPosts(2, 10)
+        getPosts(2, 100)
     }, []);
 
     useEffect(()=>{
