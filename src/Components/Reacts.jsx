@@ -12,39 +12,42 @@ function Reacts({ reacts, retweets, _id, index , userID }) {
 
     const doReact = async (ev,nameOfReact) => {
         const btn = ev.currentTarget;
-        const reactIcon = $(`#${nameOfReact}I-${_id}`);
-        const reactNum = $(`#${nameOfReact}N-${_id}`);
-        btn.disabled = true;
-
-
-        if (!react) {
-            reactIcon.classList.add('text-red-700', 'fa-solid', 'text-2xl');
-            isNumber(reactNum.textContent) ? reactNum.textContent++ : null;
-            const post = await getFromTo('Posts', index, index);
-            setReact(nameOfReact);
-            if (post[0]) {
-                post[0] = parse(post[0]);
-                post[0].schema.reacts[nameOfReact]++;
-                const updateRespone = await update(`Posts!A${index}`, post[0]);
-                console.log(updateRespone);
-                postSocket.emit('updateReact', { elementRoot: `#${nameOfReact}N-${_id}`, num: post[0].schema.reacts[nameOfReact] })
+        try {
+            const reactIcon = $(`#${nameOfReact}I-${_id}`);
+            const reactNum = $(`#${nameOfReact}N-${_id}`);
+            btn.disabled = true;
+    
+    
+            if (!react) {
+                reactIcon.classList.add('text-red-700', 'fa-solid', 'text-2xl');
+                isNumber(reactNum.textContent) ? reactNum.textContent++ : null;
+                const post = await getFromTo('Posts', index, index);
+                console.log(post);
+                setReact(nameOfReact);
+                if (post[0] && post[0].type == 'post') {
+                    post[0].schema.reacts[nameOfReact]++;
+                    const updateRespone = await update(`Posts!A${index}`, post[0]);
+                    postSocket.emit('updateReact', { elementRoot: `#${nameOfReact}N-${_id}`, num: post[0].schema.reacts[nameOfReact] })
+                }
             }
-        }
-        else {
-            reactIcon.classList.remove('text-red-700', 'fa-solid', 'text-2xl');
-            isNumber(reactNum.textContent) && reactNum.textContent > 0 ? reactNum.textContent-- : null;
-            const post = await getFromTo('Posts', index, index);
-            setReact('');
-            if (post[0]) {
-                post[0] = parse(post[0]);
-                +post[0].schema.reacts[nameOfReact] > 0 ? +post[0].schema.reacts[nameOfReact]-- : null;
-                const updateRespone = await update(`Posts!A${index}`, post[0]);
-                console.log(updateRespone);
-                postSocket.emit('updateReact', { elementRoot: `#${nameOfReact}N-${_id}`, num: post[0].schema.reacts[nameOfReact] })
+            else {
+                reactIcon.classList.remove('text-red-700', 'fa-solid', 'text-2xl');
+                isNumber(reactNum.textContent) && reactNum.textContent > 0 ? reactNum.textContent-- : null;
+                const post = await getFromTo('Posts', index, index);
+                setReact('');
+                if (post[0]) {
+                    +post[0].schema.reacts[nameOfReact] > 0 ? +post[0].schema.reacts[nameOfReact]-- : null;
+                    const updateRespone = await update(`Posts!A${index}`, post[0]);
+                    console.log(updateRespone);
+                    postSocket.emit('updateReact', { elementRoot: `#${nameOfReact}N-${_id}`, num: post[0].schema.reacts[nameOfReact] })
+                }
             }
+    
+            btn.disabled = false;
+        } catch (error) {
+            btn.disabled = false;
+            throw new Error(error.message);
         }
-
-        btn.disabled = false;
     }
 
     const doRetweet = async (ev) => {

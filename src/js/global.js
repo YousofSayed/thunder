@@ -14,18 +14,6 @@ export function showMarquee(isShow) {
 }
 
 
-export async function getReqFromGs(params) {
-    let url = import.meta.env.VITE_THUNDERAPI;
-    if (typeof params != 'object') throw new TypeError(`Params must object type`);
-    if (params && typeof params == 'object') {
-        for (const param in params) {
-            url += `${param}=${params[param]}&`;
-        }
-    }
-    return (await get({ url })).json()
-}
-
-
 export async function headers() {
     const headers = {
         Authorization: `Bearer ${await getAToken()}`,
@@ -65,27 +53,25 @@ export async function getFromTo(sheetName , from , to) {
         const url = `https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${sheetName}!A${from}:Z${to}?key=${env('VITE_SHEET_AKEY')}`;
         const res = await (await GET({ url, headers: await headers() }));
         const jsonRes = await res.json()
-        const data = jsonRes.values || [];
+        const data = jsonRes.values;
         if (res.status == 200) {
-           const rangedData = data?.map((item)=>{
-                const obj  = parse(item[0]);
-                console.log(obj);
-                obj.schema.index=from;
-                from++
-                item[0]=stringify(obj)
-                return item;
+           const rangedData = data.map((item)=>{
+            item = parse(item);
+            item.schema.index = from;
+            from++
+            return item;
             });
             return rangedData;
         } 
-        return data
+        return [];
     } catch (error) {
-        
+        throw new Error(error.message)
     }
 }
 
 
 export async function append(range, cells) {
-    const res = await post({
+    const res = await POST({
         url: `https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${range}:append?valueInputOption=RAW&key=${env('VITE_SHEET_AKEY')}`,
         headers: await headers(),
         data: {
@@ -99,7 +85,7 @@ export async function append(range, cells) {
 
 export async function update(range , value) {
    try {
-    const res = await put({
+    const res = await PUT({
         url:`https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${range}?valueInputOption=RAW&key=${env('VITE_SHEET_AKEY')}`,
         headers:await headers(),
         data:{

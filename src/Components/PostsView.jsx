@@ -59,7 +59,6 @@ function PostsView() {
                     posts[0]
                     &&
                     posts.map((postData, i) => {
-                        postData = parse(postData);
                         if(postData.type != 'post')return;
                         return (
                             <Post post={postData.schema} key={i} />
