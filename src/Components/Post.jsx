@@ -32,6 +32,7 @@ function Post({ post }) {
     }
 
 
+
     return (
         <section id={`post-${index}`} className="p-2 my-3 bg-gray-950 rounded-lg rtl ring-1">
             <header className="relative flex justify-between items-center">
@@ -108,7 +109,7 @@ function Post({ post }) {
                 </section>
             }
 
-            <Reacts index={index} _id={_id} reacts={reacts} retweets={retweets} userID={userID} post={post}/>
+            <Reacts index={index} _id={_id} reacts={reacts} retweets={retweets} userID={userID}/>
         </section>
     );
 }
