@@ -14,6 +14,18 @@ export function showMarquee(isShow) {
 }
 
 
+export async function getReqFromGs(params) {
+    let url = import.meta.env.VITE_THUNDERAPI;
+    if (typeof params != 'object') throw new TypeError(`Params must object type`);
+    if (params && typeof params == 'object') {
+        for (const param in params) {
+            url += `${param}=${params[param]}&`;
+        }
+    }
+    return (await get({ url })).json()
+}
+
+
 export async function headers() {
     const headers = {
         Authorization: `Bearer ${await getAToken()}`,
@@ -67,20 +79,13 @@ export async function getFromTo(sheetName , from , to) {
         } 
         return data
     } catch (error) {
-        throw new Error(error.message)
+        
     }
 }
 
-// window.addEventListener('click',async ()=>{
-//     console.log(await getFromTo('Posts',2,2));
-// })
-// const data  = {"name":"Thunder","email":"yousef.sayed1231@gmail.com","id":"a9d8c77c-ee30-4f8b-b134-7ec767575383","profImgId":"BQACAgQAAxkDAAICUWVZG7ZthKQtzOkjzXDhXBVvdrwyAAL9FgACmuTJUhYYd87_qH_lMwQ","date":"2023-11-15","undefined":" "}
-// 1u66NoFwvKj4aV3hUbv44qB8R_Mnie5r5042ozCEoBLk
-// console.log(await getAllSheetValues('Data'));
-// localStorage.setItem('user',stringify(data))
 
 export async function append(range, cells) {
-    const res = await POST({
+    const res = await post({
         url: `https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${range}:append?valueInputOption=RAW&key=${env('VITE_SHEET_AKEY')}`,
         headers: await headers(),
         data: {
@@ -94,7 +99,7 @@ export async function append(range, cells) {
 
 export async function update(range , value) {
    try {
-    const res = await PUT({
+    const res = await put({
         url:`https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${range}?valueInputOption=RAW&key=${env('VITE_SHEET_AKEY')}`,
         headers:await headers(),
         data:{

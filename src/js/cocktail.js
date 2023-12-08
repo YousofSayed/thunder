@@ -438,6 +438,7 @@ export function nFormatter(num) {
 }
 
 /**
+<<<<<<< HEAD
  * It is make for 
  * @param {number} start 
  * @param {number} end 
@@ -453,6 +454,8 @@ export function forInterval(start , end , duration, method) {
 }
 
 /**
+=======
+>>>>>>> e104798848a728abe257f6741a48f6679d6cac5e
  * It handle click class that you created by css
  * @param {HTMLElement} element 
  * @param {string} clickClass 
@@ -470,7 +473,11 @@ export function addClickClass(element, clickClass) {
  */
 export function getCurrentTime(formate = `en-US`) {
   const currentDate = new Date();
+<<<<<<< HEAD
   return currentDate.toLocaleString(formate)
+=======
+  return currentDate.toLocaleString('us-en')
+>>>>>>> e104798848a728abe257f6741a48f6679d6cac5e
 }
 
 /**
