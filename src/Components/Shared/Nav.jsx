@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import userAvatar from'../Assets/images/user-avatar.png';
-import { parse } from '../js/cocktail';
+import { parse } from '../../js/cocktail';
 import { tb } from '../js/db';
 import { Link } from 'react-router-dom';
 

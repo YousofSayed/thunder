@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import Button from "../Button";
+import Button from "../Shared/Button";
 import { PostContext } from "../Post";
 
 function PostHeader({userAvatar , profImgId , userName}) {

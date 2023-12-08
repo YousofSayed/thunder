@@ -3,7 +3,7 @@ import { $a, $, parse, getLocalDate, stringify } from "../js/cocktail";
 import tb from "../js/tb";
 import { update } from "../js/global";
 import userAvatar from '../Assets/images/user-avatar.png';
-import Reacts from "./Reacts";
+import Reacts from "./Post/Reacts";
 import PostHeader from "./Post/Header";
 import PostArticle from "./Post/Article";
 import PostDate from "./Post/Date";

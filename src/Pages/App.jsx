@@ -1,4 +1,4 @@
-import Header from "../Components/Header";
+import Header from "../Components/Shared/Header";
 import PostsView from "../Components/PostsView";
 import LogOrSign from "../Components/LogOrSign"
 import { parse } from "../js/cocktail";

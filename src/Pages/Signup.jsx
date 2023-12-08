@@ -1,6 +1,6 @@
-import { $, CocktailDB, isValidDate, isValidEmail, isValidName, stringify, uniqueID } from '../js/cocktail';
+import { $, CocktailDB, hash, isValidDate, isValidEmail, isValidName, stringify, uniqueID } from '../js/cocktail';
 import userAvater from '../Assets/images/user-avatar.png'
-import Logo from '../Components/Logo';
+import Logo from '../Components/Shared/Logo';
 import styles from '../js/styles';
 import { useNavigate } from 'react-router-dom';
 import { showMarquee, warn } from '../js/global';
@@ -30,7 +30,7 @@ function Signup() {
                 name: $('#name').value,
                 email: $('#email').value.toLowerCase(),
                 date: $('#date').value,
-                id: uniqueID(),
+                id: hash($('#email').value.toLowerCase()),
                 profImgId: profImgId || ''
             }
 

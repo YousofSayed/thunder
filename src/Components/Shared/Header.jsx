@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import textLogo from '../Assets/images/textLogo.png';
-import userAvatar from '../Assets/images/user-avatar.png';
-import tb from '../js/tb';
-import { parse } from "../js/cocktail";
+import textLogo from '../../Assets/images/textLogo.png';
+import userAvatar from '../../Assets/images/user-avatar.png';
+import tb from '../../js/tb';
+import { parse } from "../../js/cocktail";
 
 
 function Header() {

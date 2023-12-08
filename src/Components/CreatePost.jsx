@@ -1,6 +1,6 @@
 import { $, GET, getCurrentTime, parse, parseToHTML, stringify } from '../js/cocktail';
 import { createContext, useEffect, useState } from 'react';
-import Textarea from './Textarea';
+import Textarea from './Shared/Textarea';
 import IframeSectionHandler from './CreatePost/IframeSection';
 import CreatePostMedia from './CreatePost/Media';
 import CreatePostFooter from './CreatePost/Footer';

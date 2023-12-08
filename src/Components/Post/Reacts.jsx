@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
-import { $, CocktailDB, addClickClass, copyToClipboard, isNumber, nFormatter, parse } from "../js/cocktail";
-import { getFromTo, update } from "../js/global";
-import { postSocket } from "../js/initSockets";
-import { PostContext } from "./Post";
+import { $, CocktailDB, addClickClass, copyToClipboard, isNumber, nFormatter, parse } from "../../js/cocktail";
+import { getFromTo, update } from "../../js/global";
+import { postSocket } from "../../js/initSockets";
+import { PostContext } from "../Post";
 
 function Reacts({ reacts, retweets, _id, index, userID }) {
     const [react, setReact] = useState('');

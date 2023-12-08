@@ -1,6 +1,6 @@
 import { useContext, useState } from "react"
 import { PostContext } from "../Post"
-import Textarea from "../Textarea";
+import Textarea from "../Shared/Textarea";
 
 function PostArticle({ postContent, index }) {
     const [showMore, setShowMore] = useState(false)

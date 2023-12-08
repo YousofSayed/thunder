@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Logo from "../Components/Logo";
+import Logo from "../Components/Shared/Logo";
 import { $, hash, stringify } from "../js/cocktail";
 import { showMarquee, success, warn } from "../js/global";
 import styles from "../js/styles";
