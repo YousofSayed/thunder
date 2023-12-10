@@ -20,7 +20,7 @@ function PostArticle({context , setContext}) {
 
                 :
 
-                <Textarea lengthLimit={5000} value={editeValue} focus={true} context={context} setContext={setContext}/>
+                <Textarea lengthLimit={5000} value={editeValue} focus={true} context={context} setContext={setContext} overwriteValue={'editeValue'}/>
             }
         </>
     );
