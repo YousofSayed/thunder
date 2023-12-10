@@ -11,14 +11,13 @@ import PostMedia from "./Post/Media";
 export const PostContext = createContext();
 
 function Post({ post }) {
-    const [showPostEditBtn, setShowPostEditBtn] = useState(false);
-    const [editeValue , setEditValue] = useState('');
-    const context =
-    {
-        showPostEditBtn, setShowPostEditBtn,
-        editeValue , setEditValue,
-    }
-    const { _id, userName, profImgId, email, userID, date, postContent, media, index, reacts, retweets } = post
+    const { _id, userName, profImgId, userID, date, postContent, media, index, reacts, retweets } = post
+    const [context, setContext] = useState({
+        showPostEditBtn: false,
+        editeValue: postContent,
+        content: postContent,
+    });
+
     const user = parse(localStorage.getItem('user'));
 
     useEffect(() => {
@@ -34,13 +33,10 @@ function Post({ post }) {
     }
 
 
-
-
-
     return (
         <section id={`post-${index}`} className="p-2 my-3 bg-gray-950 rounded-lg rtl ring-1">
-            <PostContext.Provider value={context}>
-                <PostHeader userAvatar={userAvatar} userName={userName} profImgId={profImgId} />
+            <PostContext.Provider value={{ context, setContext }}>
+                <PostHeader userAvatar={userAvatar} userName={userName} profImgId={profImgId} post={post} />
 
                 <PostDate date={date} />
 

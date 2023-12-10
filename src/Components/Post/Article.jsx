@@ -4,7 +4,8 @@ import Textarea from "../Shared/Textarea";
 
 function PostArticle({ postContent, index }) {
     const [showMore, setShowMore] = useState(false)
-    const { showPostEditBtn } = useContext(PostContext);
+    const {context , setContext} = useContext(PostContext);
+    const { showPostEditBtn , editeValue} = context;
     const mainContent = postContent.slice(0, 500);
     const moreContent = postContent.slice(500);
     return (
@@ -19,7 +20,7 @@ function PostArticle({ postContent, index }) {
 
                 :
 
-                <Textarea value={postContent} focus={true}/>
+                <Textarea value={editeValue} focus={true} context={context} setContext={setContext}/>
             }
         </>
     );

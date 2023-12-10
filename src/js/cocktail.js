@@ -477,8 +477,8 @@ export function getCurrentTime(formate = `en-US`) {
  * Returns current date
  * @returns {string}
  */
-export function getLocalDate() {
-  return new Date().toLocaleDateString();
+export function getLocalDate(formate = `en-US`) {
+  return new Date().toLocaleDateString(formate);
 }
 
 /**

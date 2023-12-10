@@ -40,6 +40,7 @@ function Signup() {
             const db = new CocktailDB(data.email);
             await db.createCollction('Bookmarks');
             await db.createCollction('Reports');
+            await db.createCollction('Reacts');
             await db.createCollction('Retweets');
             await db.createCollction('Followers');
             await db.createCollction('Following');

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 
 function Textarea({ value, focus, setContext, context }) {
+    const { postContent } = context;
     const textAreaRef = useRef();
     useEffect(() => {
         if (focus) {
@@ -19,7 +20,8 @@ function Textarea({ value, focus, setContext, context }) {
         setContext({
             ...context,
             charLength: ev.target.value.length,
-            postContent: ev.target.value
+            postContent: ev.target.value, //For changging of content of create post
+            editeValue: ev.target.value
         })
     };
 
@@ -35,8 +37,8 @@ function Textarea({ value, focus, setContext, context }) {
             <textarea
                 ref={textAreaRef}
                 onInput={limitChars}
-                className=' w-full font-medium break-words outline-none bg-gray-900 p-2 pr-[30px] rounded-lg resize-none transition-all'
-                placeholder='What is in your mind?'
+                className=' w-full font-medium  outline-none bg-gray-900 p-2 ltr:pr-[30px] rtl:pl-[30px] rounded-lg resize-none transition-all'
+                placeholder='What is in your mind ?'
                 defaultValue={value}
             ></textarea>
         </section>

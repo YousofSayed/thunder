@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import App from './Pages/App';
-import { makeAppResponsive} from './js/cocktail';
+import { getLocalDate, makeAppResponsive} from './js/cocktail';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Signup from './Pages/Signup';
 import Login from './Pages/Login';
@@ -8,7 +8,6 @@ import './js/initSockets';
 import './main.css';
 
 const root = createRoot(document.getElementById('root'));
-
 
 root.render(
     <BrowserRouter>
