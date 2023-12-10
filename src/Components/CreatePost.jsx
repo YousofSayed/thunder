@@ -23,7 +23,7 @@ function CreatePost() {
         <section className='flex ring-1 flex-col bg-gray-950 mt-2 h-fit rounded-lg p-2'>
 
             <CreatePostContext.Provider value={{context , setContext}}>
-                <Textarea context={context} setContext={setContext}/>
+                <Textarea lengthLimit={5000} context={context} setContext={setContext}/>
 
                 <IframeSectionHandler />
 

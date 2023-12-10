@@ -18,11 +18,11 @@
     background-image: linear-gradient(to right, rgb(6, 95, 95), #555);
 }
 
-.scrollBar{
+.hide-scrollbar{
     scrollbar-width: none;
 }
 
-.scrollBar::-webkit-scrollbar{
+.hide-scrollbar::-webkit-scrollbar{
     width: unset;
 }
 

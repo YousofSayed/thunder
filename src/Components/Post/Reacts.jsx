@@ -2,17 +2,18 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { $, CocktailDB, addClickClass, copyToClipboard, isNumber, nFormatter, parse } from "../../js/cocktail";
 import { getFromTo, update } from "../../js/global";
 import { postSocket } from "../../js/initSockets";
-import { PostContext } from "../Post";
-
-function Reacts({ reacts, retweets, _id, index, userID }) {
+import { useNavigate } from "react-router-dom";
+// import { PostContext } from "../Post";
+// reacts, retweets, _id, index, userID 
+function Reacts({ context , setContext }) {
     const [react, setReact] = useState('');
-    const [retweet, setRetweet] = useState(false);
+    const [repost, setRepost] = useState(false);
     const reactIconRef = useRef();
     const reacCounterRef = useRef();
-    const retweetRef = useRef();
+    const repostRef = useRef();
     const editeIconRef = useRef();
-    const {context , setContext} = useContext(PostContext);
-    const { showPostEditBtn } = context;
+    const navigete = useNavigate();
+    const { showPostEditBtn , reacts , _id , retweets ,index } = context;
     const user = parse(localStorage.getItem('user'));
     const db = new CocktailDB(user.email);
 
@@ -70,15 +71,8 @@ function Reacts({ reacts, retweets, _id, index, userID }) {
         }
     };
 
-    const doRetweet = async (ev) => {
-        const btn = ev.currentTarget;
-        addClickClass(btn, 'click');
-        btn.disabled = true;
-        const post = await getFromTo('Posts', index, index);
-        if (post[0]) {
-            post[0] = parse(post[0]);
-            post[0].schema.retweets++;
-        }
+    const doRepost = async (ev) => {
+       navigete(`/repost/${index}`);
     };
 
     const doEdit = (ev) => {
@@ -97,7 +91,7 @@ function Reacts({ reacts, retweets, _id, index, userID }) {
                 </span>
             </button>
 
-            <button className="flex items-center gap-2" onClick={doRetweet}>
+            <button className="flex items-center gap-2" onClick={doRepost}>
                 <i id={`retweet-${_id}`} className="fa-solid fa-retweet cursor-pointer text-xl md:hover:text-cyan-400 transition-all"></i>{" "}
                 <span className="ml-1">{nFormatter(retweets)}</span>
             </button>

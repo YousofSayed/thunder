@@ -1,17 +1,27 @@
 import { useContext } from "react";
 import Button from "../Shared/Button";
-import { PostContext } from "../Post";
+// import { PostContext } from "../Post";
 import { showMarquee, update } from "../../js/global";
+import userAvatar from '../../Assets/images/user-avatar.png';
 
-function PostHeader({ userAvatar, profImgId, userName, post }) {
-    const { context, setContext } = useContext(PostContext)
-    const { showPostEditBtn, content, editeValue, editeIconRef } = context;
+
+function PostHeader({ context, setContext }) {
+    // const { context, setContext } = useContext(PostContext)
+    const {
+        showPostEditBtn, 
+        content, 
+        editeValue, 
+        editeIconRef,
+        userName,
+        profImgId,
+        post
+    } = context;
     const postEdit = async () => {
         showMarquee(true);
         editeIconRef.classList.toggle('text-cyan-400');
         if (editeValue == content) {
             showMarquee(false);
-            setContext({...context , showPostEditBtn: false});
+            setContext({ ...context, showPostEditBtn: false });
             return;
         };
         post.postContent = editeValue;

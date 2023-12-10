@@ -70,12 +70,12 @@ export async function getFromTo(sheetName , from , to) {
 }
 
 
-export async function append(range, cells) {
+export async function append(range, values) {
     const res = await POST({
         url: `https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${range}:append?valueInputOption=RAW&key=${env('VITE_SHEET_AKEY')}`,
         headers: await headers(),
         data: {
-            values: [[cells]]
+            values: [[stringify(values)]]
         },
         json: true,
     })
@@ -83,13 +83,13 @@ export async function append(range, cells) {
     console.log(res);
 }
 
-export async function update(range , value) {
+export async function update(range , values) {
    try {
     const res = await PUT({
         url:`https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${range}?valueInputOption=RAW&key=${env('VITE_SHEET_AKEY')}`,
         headers:await headers(),
         data:{
-            values:[[stringify(value)]]
+            values:[[stringify(values)]]
         }
     }); 
     

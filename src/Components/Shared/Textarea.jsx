@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-function Textarea({ value, focus, setContext, context }) {
+function Textarea({ value, focus, lengthLimit, setContext, context , overwriteValue }) {
     const { postContent } = context;
     const textAreaRef = useRef();
     useEffect(() => {
@@ -16,12 +16,13 @@ function Textarea({ value, focus, setContext, context }) {
 
 
     const limitChars = (ev) => {
-        if (+ev.target.value.length > 5000) { ev.target.value = postContent; return }
+        if (+ev.target.value.length > lengthLimit) { ev.target.value = postContent; return }
         setContext({
             ...context,
             charLength: ev.target.value.length,
-            postContent: ev.target.value, //For changging of content of create post
-            editeValue: ev.target.value
+            // postContent: ev.target.value, //For changging of content of create post
+            // editeValue: ev.target.value,
+            [overwriteValue]:ev.target.value
         })
     };
 
