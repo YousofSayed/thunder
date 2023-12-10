@@ -26,6 +26,10 @@
     width: unset;
 }
 
+.ltrD{
+    direction: ltr;
+}
+
 .click{
     animation: click .2s linear;
 }

@@ -37,7 +37,7 @@ function Header() {
     return (
         <header className=" h-fit px-2 m-auto mt-[10px] " title='header'>
 
-            <section className="relative m-auto container flex items-center p-2 bg-gray-900 justify-between rounded-lg" title='container'>
+            <section className="relative m-auto container flex ltrD items-center p-2 bg-gray-900 justify-between rounded-lg" title='container'>
 
                 <figure className="flex items-center gap-2">
                     <i className="fa-solid fa-bolt text-3xl text-cyan-400" title='thunder logo'></i>
