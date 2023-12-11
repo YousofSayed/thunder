@@ -48,10 +48,10 @@ function CreatePostFooter() {
                 }
             }
 
-            const postData = stringify({
+            const postData = {
                 type: 'post',
                 schema: postSchema({ user, postContent, images, vid, iframeSrc })
-            });
+            };
 
             const res = await append('Posts', postData);
             textAreaRef.value = '';

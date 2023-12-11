@@ -43,7 +43,7 @@ function MakeRetweet() {
             const postRes = await(await getFromTo('Posts',postIndex,postIndex))[0];
             postRes.schema.repost = postRes.schema.repost ? postRes.schema.repost++ : 1;
             const updateRes = await update(`Posts!A${postIndex}`,postRes);
-            const resBody = { type: 'repost', schema: repostSchema(user, context.repostContent, postRes) };
+            const resBody = { type: 'repost', schema: repostSchema(user, context.repostContent, postRes.schema) };
             const appendRes = await append('Posts', resBody);
             console.log(updateRes , appendRes);
             setTimeout(() => { navigate('/') }, 1000)

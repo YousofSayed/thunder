@@ -55,8 +55,9 @@ export async function getFromTo(sheetName , from , to) {
         const jsonRes = await res.json()
         const data = jsonRes.values;
         if (res.status == 200) {
-           const rangedData = data.map((item)=>{
-            item = parse(item);
+            const rangedData = data.map((item)=>{
+                item = parse(item);
+                console.log(item.schema);
             item.schema.index = from;
             from++
             return item;

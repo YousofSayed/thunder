@@ -9,19 +9,21 @@ import Loader from '../Components/Shared/Loader';
 
 function PostsView() {
     const [posts, setPosts] = useState([]);
+    // const [afterRender, setAfterRender] = useState(false);
     const postSectionRef = useRef();
     useEffect(() => {
         getPosts(2, 100)
     }, []);
 
     useEffect(() => {
-        if (postSectionRef.current) {
-            const scrollTopVal = sessionStorage.getItem('postSectionScroll')
-            postSectionRef.current.scrollTop = scrollTopVal ? +scrollTopVal : 0;
-        }
+        // setAfterRender(true);
+        // if (postSectionRef.current) {
+        //     postSectionRef.current.scrollTop = +scorllTopVal ? +scorllTopVal : 0;
+        // }
+        postSectionRef.current.scrollTo(0, +sessionStorage.getItem('postSectionScroll'));
         postSocket.on('updateReact', updateReact);
         postSocket.on('updateDoubleReact', updateDoubleReact)
-    });
+    }, []);
 
     const getPosts = async (from, to) => {
         try {
@@ -33,6 +35,7 @@ function PostsView() {
     };
 
     const handleScroll = (ev) => {
+        // if (!afterRender) return;
         sessionStorage.setItem('postSectionScroll', ev.target.scrollTop)
     }
 
@@ -46,7 +49,6 @@ function PostsView() {
     }
 
     const getPostFromSocket = (post) => {
-
         postSocket.removeListener('updateReact', updateReact)
         postSocket.removeListener('updateDoubleReact', updateDoubleReact);
     }
@@ -65,15 +67,15 @@ function PostsView() {
 
                 {
                     posts[0] ?
-                    
-                    posts.map((postData, i) => {
-                        if (postData.type != 'post') return;
-                        return (
-                            <Post post={postData.schema} withReacts={true} key={i} />
-                        )
-                    })
-                    :
-                    <Loader/>
+
+                        posts.map((postData, i) => {
+                            if (postData.type != 'post') return;
+                            return (
+                                <Post post={postData.schema} withReacts={true} key={i} />
+                            )
+                        })
+                        :
+                        <Loader />
                 }
             </section>
         </>

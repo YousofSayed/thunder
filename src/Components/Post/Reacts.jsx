@@ -13,7 +13,8 @@ function Reacts({ context , setContext }) {
     const repostRef = useRef();
     const editeIconRef = useRef();
     const navigete = useNavigate();
-    const { showPostEditBtn , reacts , _id , retweets ,index } = context;
+    const { showPostEditBtn , reacts , _id  ,index } = context;
+    const repostNum = context.repost;
     const user = parse(localStorage.getItem('user'));
     const db = new CocktailDB(user.email);
 
@@ -93,7 +94,7 @@ function Reacts({ context , setContext }) {
 
             <button className="flex items-center gap-2" onClick={doRepost}>
                 <i id={`retweet-${_id}`} className="fa-solid fa-retweet cursor-pointer text-xl md:hover:text-cyan-400 transition-all"></i>{" "}
-                <span className="ml-1">{nFormatter(retweets)}</span>
+                <span className="ml-1">{nFormatter(repostNum || 0)}</span>
             </button>
 
             <button onClick={doEdit}>
