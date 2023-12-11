@@ -7,7 +7,7 @@ import PostHeader from "./Post/Header";
 import PostArticle from "./Post/Article";
 import PostDate from "./Post/Date";
 import PostMedia from "./Post/Media";
-// export const PostContext = createContext();
+export const PostContext = createContext();
 
 function Post({ post, className, withReacts }) {
     const { postContent, index } = post
@@ -36,17 +36,17 @@ function Post({ post, className, withReacts }) {
 
     return (
         <section id={`post-${index}`} className={`p-2 my-3 bg-gray-950 rounded-lg rtl ring-1 ${className}`}>
-            {/* <PostContext.Provider value={{ context, setContext }}> */}
-            <PostHeader context={context} setContext={setContext} />
+            <PostContext.Provider value={{ context, setContext }}>
+                <PostHeader context={context} setContext={setContext} />
 
-            <PostDate date={context.date} />
+                <PostDate date={context.date} />
 
-            <PostArticle context={context} setContext={setContext} />
+                <PostArticle  context={context} setContext={setContext}/>
 
-            <PostMedia media={context.media} />
+                <PostMedia media={context.media} />
 
-            {withReacts && <Reacts context={context} setContext={setContext} />}
-            {/* </PostContext.Provider> */}
+                {withReacts && <Reacts context={context} setContext={setContext} />}
+            </PostContext.Provider>
         </section>
     );
 }

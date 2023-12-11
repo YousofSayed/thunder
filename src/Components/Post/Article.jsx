@@ -1,9 +1,9 @@
-import { useContext, useState } from "react"
-// import { PostContext } from "../Post"
+import { useContext, useState } from "react";
+// import { PostContext } from "../Post";
 import Textarea from "../Shared/Textarea";
 
 function PostArticle({context , setContext}) {
-    const [showMore, setShowMore] = useState(false)
+    const [showMore, setShowMore] = useState(false);
     // const {context , setContext} = useContext(PostContext);
     const { showPostEditBtn , editeValue ,postContent} = context;
     const mainContent = postContent.slice(0, 500);
