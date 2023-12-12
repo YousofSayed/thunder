@@ -10,8 +10,8 @@ function PostMedia({ media }) {
                     {
                         images.map((id, i) => {
                             return (
-                                <figure className="snap-start w-fit  flex items-center justify-center bg-gray-900 flex-shrink-0 " key={i}>
-                                    <img id={id} className=" rounded-sm max-w-[300px] max-h-[300px]" loading="lazy" />
+                                <figure className="snap-start w-fit  flex items-center justify-center bg-gray-900 flex-shrink-0 rounded-lg " key={i}>
+                                    <img id={id} className="  max-w-[300px] max-h-[300px]" loading="lazy" />
                                 </figure>
                             )
                         })
@@ -26,8 +26,8 @@ function PostMedia({ media }) {
                     {
                         vid.map((id, i) => {
                             return (
-                                <figure className="snap-start w-fit  flex items-center justify-center flex-shrink-0 bg-gray-900" key={i}>
-                                    <video id={id} className=" rounded-lg w-full h-full " controls />
+                                <figure className="snap-start w-fit  flex items-center justify-center flex-shrink-0 bg-gray-900 rounded-lg" key={i}>
+                                    <video id={id} className=" rounded-lg w-fit h-full " controls />
                                 </figure>
                             )
                         })

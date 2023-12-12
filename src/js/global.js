@@ -56,11 +56,12 @@ export async function getFromTo(sheetName , from , to) {
         const data = jsonRes.values || [];
         if (res.status == 200) {
             const rangedData = data.map((item)=>{
+            if(!item[0]){from++ ; return};
             item = parse(item);
             item.schema.index = from;
             from++
             return item;
-            });
+            }).filter(item => item != undefined);
             return rangedData;
         } 
         return data;

@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 import { $a, $, parse, getLocalDate, stringify } from "../js/cocktail";
 import tb from "../js/tb";
 import { update } from "../js/global";
@@ -9,13 +9,15 @@ import PostDate from "./Post/Date";
 import PostMedia from "./Post/Media";
 export const PostContext = createContext();
 
-function Post({ post, className, withReacts, postSectionRef, repost }) {
+function Post({ post, className, posts, setPosts, withReacts, postSectionRef, repost }) {
     const { postContent, index } = post
+    const postRef = useRef();
     const [context, setContext] = useState({
         showPostEditBtn: false,
         editeValue: postContent,
         content: postContent,
         postSectionRef,
+        postRef:postRef.current,
         repost,
         post,
         ...post
@@ -27,6 +29,10 @@ function Post({ post, className, withReacts, postSectionRef, repost }) {
         getImagesAndVideos();
     });
 
+    useEffect(()=>{
+        setContext({...context , postRef:postRef.current})
+    },[])
+
     const getImagesAndVideos = () => {
         $a(`#post-${index} img`).forEach(async (img) => {
             if (!img.id) return;
@@ -37,7 +43,7 @@ function Post({ post, className, withReacts, postSectionRef, repost }) {
 
 
     return (
-        <section id={`post-${index}`} className={`w-full p-2  ${repost ? 'bg-gray-900' : 'bg-gray-950'} rounded-lg  ring-1 ${className}`}>
+        <section id={`post-${index}`} ref={postRef} className={`w-full p-2  ${repost ? 'bg-gray-900' : 'bg-gray-950'} rounded-lg  ring-1 ${className}`}>
             <PostContext.Provider value={{ context, setContext }}>
                 <PostHeader context={context} setContext={setContext} />
 

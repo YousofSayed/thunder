@@ -1,26 +1,24 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { $, CocktailDB, addClickClass, copyToClipboard, getLocalDate, isNumber, nFormatter, parse } from "../../js/cocktail";
-import { getFromTo, update } from "../../js/global";
+import { clear, getFromTo, update } from "../../js/global";
 import { postSocket } from "../../js/initSockets";
 import { useNavigate } from "react-router-dom";
-// import { PostContext } from "../Post";
-// reacts, retweets, _id, index, userID 
 
 function PostReacts({ context, setContext }) {
     const [react, setReact] = useState('');
     const [isRepost, setIsRepost] = useState(false);
+    const [isSaved, setIsSaved] = useState(false);
+    const navigete = useNavigate();
     const reactIconRef = useRef();
     const reacCounterRef = useRef();
-    const repostRef = useRef();
     const editeIconRef = useRef();
-    const navigete = useNavigate();
-    const { showPostEditBtn, postSectionRef, _id, userID, reacts, index, reposts, repost } = context;
+    const { showPostEditBtn, postSectionRef, postRef,_id, userID, reacts, index, reposts, post, repost } = context;
     const user = parse(localStorage.getItem('user'));
-    console.log(userID , user.id);
     const db = new CocktailDB(user.email);
     useEffect(() => {
         checkReact();
         checkRepost();
+        checkSavedPost();
     }, []);
 
 
@@ -33,8 +31,12 @@ function PostReacts({ context, setContext }) {
     const checkRepost = async () => {
         const repostIDB = await (await db.openCollection('Reposts')).findOne({ _id });
         repostIDB ? setIsRepost(repostIDB) : setIsRepost(false);
-    }
+    };
 
+    const checkSavedPost = async () => {
+        const IDBRes = await (await db.openCollection('Bookmarks')).findOne({ _id: repost ? repost._id : post._id });
+        IDBRes ? setIsSaved(true) : setIsSaved(false);
+    }
 
     const doReact = async (ev, nameOfReact) => {
         const btn = ev.currentTarget;
@@ -95,17 +97,47 @@ function PostReacts({ context, setContext }) {
         showPostEditBtn ? setContext({ ...context, showPostEditBtn: false }) : setContext({ ...context, showPostEditBtn: true, editeIconRef: editeIconRef.current })
     };
 
-    const doReport = async (ev) => {
-        const btn = ev.current.target;
+    // const doReport = async (ev) => {
+    //     const btn = ev.current.target;
 
-    };
+    // };
 
     const doSave = async (ev) => {
-
+        const btn = ev.currentTarget;
+        addClickClass(btn, 'click')
+        btn.disabled = true;
+        try {
+            if (!isSaved) {
+                const IDBRes = await (await db.openCollection('Bookmarks')).set(repost ? repost : post);
+                setIsSaved(true);
+            }
+            else {
+                const IDBRes = await (await db.openCollection('Bookmarks')).deleteOne({ _id: repost ? repost._id : post._id });
+                setIsSaved(false);
+            }
+        }
+        catch (error) {
+            throw new Error(error.message);
+        }
+        finally {
+            btn.disabled = false;
+        }
     };
 
     const doDelete = async (ev) => {
-
+        const btn = ev.currentTarget;
+        addClickClass(btn, 'click')
+        try {
+            btn.disabled = true;
+            const res = await clear(`Posts!A${repost ? repost.index : index}`);
+            postRef.remove();
+        }
+        catch (error) {
+            throw new Error(error.message);
+        }
+        finally {
+            btn.disabled = false;
+        }
     }
 
 
@@ -124,23 +156,23 @@ function PostReacts({ context, setContext }) {
             </button>
 
             {
-                !+reposts || user.id != userID
+                (repost?._id || user.id != userID)
                 &&
                 <button onClick={(ev) => { doEdit(ev) }}>
                     <i ref={editeIconRef} className="fa-solid fa-pen-to-square text-lg "></i>
                 </button>
             }
 
-            {
+            {/* {
                 !+reposts
                 &&
                 < button onClick={doReport}>
                     <i className="fa-regular fa-flag text-lg "></i>
                 </button>
-            }
+            } */}
 
             <button onClick={doSave}>
-                <i className="fa-regular fa-bookmark text-lg "></i>
+                <i className={`fa-regular fa-bookmark text-lg ${isSaved && `fa-solid text-cyan-400`}`}></i>
             </button>
 
             {
