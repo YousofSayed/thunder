@@ -68,7 +68,7 @@ function Signup() {
     return (
         <section className='w-full h-full'>
             <Logo />
-            <section className='h-[calc(100%-56px)] grid items-center'>
+            <section className='h-[calc(100%-56px)] grid items-center '>
                 <form className={styles.form} onSubmit={signup} >
                     <marquee className="w-full h-[2px] scale-0" id="marq" direction="right" scrollamount="50"><div className='h-[2px] w-[150px] bg-cyan-400'></div></marquee>
                     <h1 className={styles.title}>Signup</h1>
