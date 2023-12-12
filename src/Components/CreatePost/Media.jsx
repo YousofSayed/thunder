@@ -20,11 +20,11 @@ function CreatePostMedia() {
     return (
         <>
             {imagesMedia.length || video.length || iframeSrc.length ?
-                <section className='w-full p-4 flex  flex-wrap justify-between gap-2 items-center bg-gray-900 mt-3 rounded-lg' id='media'>
+                <section className={`snap-x snap-mandatory ${(imagesMedia[0] || video[0] || iframeSrc[0]) && `h-[300px]`} overflow-x-auto gap-4 flex mt-3 py-3`} id='media'>
                     {imagesMedia.map((srcs, i) => {
                         return (
-                            <figure className='w-[100px] h-[100px] flex justify-center items-center  rounded-lg relative' key={i}>
-                                <img src={srcs.blobURL} className='rounded-lg p-2 bg-gray-950' />
+                            <figure className='snap-start w-fit relative flex items-center justify-center bg-gray-900 flex-shrink-0' key={i}>
+                                <img src={srcs.blobURL} className='rounded-lg p-2 max-w-[300px] max-h-[300px] bg-gray-950' />
                                 <i
                                     className='fa-solid fa-x w-[25px] h-[25px] rounded-full cursor-pointer text-cyan-300 bg-gray-950 text-[14px] flex justify-center items-center absolute right-[-10px] top-[-10px]'
                                     onClick={() => { deleteImg(srcs) }}
@@ -33,36 +33,34 @@ function CreatePostMedia() {
                         )
                     })}
 
-                    <section className='flex gap-3 sm:flex-row flex-col'>
-                        {
-                            video.map((vid, i) => {
-                                return (
-                                    <figure className='relative w-full' key={i} >
-                                        <video className='rounded-lg m-auto bg-gray-950 p-2 max-h-[500px] w-full' src={vid.blobURL} controls />
-                                        <i
-                                            className='fa-solid fa-x w-[25px] h-[25px] rounded-full cursor-pointer text-cyan-300 bg-gray-950 text-[14px] flex justify-center items-center absolute right-[-10px] top-[-10px]'
-                                            onClick={deleteVideo}
-                                        ></i>
-                                    </figure>
-                                )
-                            })
-                        }
-
-
-                        {iframeSrc.map((src, i) => {
+                    {
+                        video.map((vid, i) => {
                             return (
-                                <figure key={i} className='relative w-full'>
-                                    <iframe src={src} className='rounded-lg m-auto bg-gray-950 p-2 h-full max-h-[500px] w-full'></iframe>
+                                <figure className='relative snap-start w-[95%]  flex items-center justify-center flex-shrink-0 bg-gray-900' key={i} >
+                                    <video className='rounded-lg w-full h-full' src={vid.blobURL} controls />
                                     <i
                                         className='fa-solid fa-x w-[25px] h-[25px] rounded-full cursor-pointer text-cyan-300 bg-gray-950 text-[14px] flex justify-center items-center absolute right-[-10px] top-[-10px]'
-                                        onClick={deleteIframe}
+                                        onClick={deleteVideo}
                                     ></i>
                                 </figure>
                             )
-                        })}
-                    </section>
+                        })
+                    }
 
+
+                    {iframeSrc.map((src, i) => {
+                        return (
+                            <figure key={i} className='relative snap-start flex items-center justify-center w-[95%] flex-shrink-0'>
+                                <iframe src={src} className='rounded-lg w-full h-full'></iframe>
+                                <i
+                                    className='fa-solid fa-x w-[25px] h-[25px] rounded-full cursor-pointer text-cyan-300 bg-gray-950 text-[14px] flex justify-center items-center absolute right-[-10px] top-[-10px]'
+                                    onClick={deleteIframe}
+                                ></i>
+                            </figure>
+                        )
+                    })}
                 </section>
+
                 :
                 null
             }
