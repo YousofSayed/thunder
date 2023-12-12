@@ -4,6 +4,6 @@ import { io } from "socket.io-client";
 
 // export {wss}
 
-const postSocket = io(`ws://localhost:3000`);
+const postSocket = io(`https://thunder-socket.deno.dev/`);
 
 export {postSocket}

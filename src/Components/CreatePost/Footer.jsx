@@ -4,6 +4,7 @@ import { CreatePostContext } from "../CreatePost";
 import { append, showMarquee } from "../../js/global";
 import tb from "../../js/tb";
 import { addClickClass, stringify } from "../../js/cocktail";
+import { postSocket } from "../../js/initSockets";
 
 function CreatePostFooter() {
     const imagesInputRef = useRef();
@@ -63,7 +64,8 @@ function CreatePostFooter() {
                 imagesMedia: [],
                 video: [],
                 iframeSrc: [],
-            })
+            });
+            postSocket.emit('msg',postData);
             showMarquee(false);
             btn.disabled = false;
         }

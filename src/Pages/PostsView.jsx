@@ -20,11 +20,17 @@ function PostsView() {
         getPosts(2, 100)
     }, []);
 
-    // useEffect(() => {
-    //     postSectionRef.current.scrollTop = +sessionStorage.getItem('postSectionScroll');
-    //     postSocket.on('updateReact', updateReact);
-    //     postSocket.on('updateDoubleReact', updateDoubleReact)
-    // });
+    useEffect(() => {
+        postSectionRef.current.scrollTop = +sessionStorage.getItem('postSectionScroll');
+        postSocket.on('msg', getSocketData);
+    });
+
+    const getSocketData = (post)=>{
+        setStates({...states , posts:[...states.posts , post]});
+        postSocket.removeListener('msg',getSocketData)
+    };
+
+
 
     const getPosts = async (from, to) => {
         try {

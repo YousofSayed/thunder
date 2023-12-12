@@ -1,7 +1,6 @@
 import { createContext, useEffect, useRef, useState } from "react";
 import { $a, $, parse, getLocalDate, stringify } from "../js/cocktail";
 import tb from "../js/tb";
-import { update } from "../js/global";
 import Reacts from "./Post/Reacts";
 import PostHeader from "./Post/Header";
 import PostArticle from "./Post/Article";

@@ -7,6 +7,7 @@ import Post from "../Components/Post";
 import Button from "../Components/Shared/Button";
 import Loader from '../Components/Shared/Loader'
 import repostSchema from "../Schemas/repostSchema";
+import { postSocket } from "../js/initSockets";
 
 function MakeRetweet() {
     const [context, setContext] = useState({
@@ -48,6 +49,7 @@ function MakeRetweet() {
             const resBody = { type: 'repost', schema };
             const appendRes = await append('Posts', resBody);
             await (await db.openCollection('Reposts')).set({ _id: postRes.schema._id, date: getLocalDate() });
+            postSocket.emit('msg',resBody);
             setTimeout(() => { navigate('/') }, 1000)
         }
         catch (error) {
