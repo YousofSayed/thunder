@@ -28,7 +28,8 @@ function PostsView() {
 
     const getPosts = async (from, to) => {
         try {
-            const postsData = await getFromTo('Posts', from, to)
+            const postsData = await getFromTo('Posts', from, to);
+            console.log(postsData);
             postsData[0] ? setStates({
                 posts: [...states.posts, ...postsData.reverse()],
                 showLoader:false

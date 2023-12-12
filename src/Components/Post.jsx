@@ -37,7 +37,7 @@ function Post({ post, className, withReacts, postSectionRef, repost }) {
 
 
     return (
-        <section id={`post-${index}`} className={`w-full p-2  bg-gray-950 rounded-lg  ring-1 ${className}`}>
+        <section id={`post-${index}`} className={`w-full p-2  ${repost ? 'bg-gray-900' : 'bg-gray-950'} rounded-lg  ring-1 ${className}`}>
             <PostContext.Provider value={{ context, setContext }}>
                 <PostHeader context={context} setContext={setContext} />
 

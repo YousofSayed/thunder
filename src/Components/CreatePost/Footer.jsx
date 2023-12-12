@@ -66,10 +66,13 @@ function CreatePostFooter() {
             })
             showMarquee(false);
             btn.disabled = false;
-        } catch (error) {
-            btn.disabled = false;
+        }
+        catch (error) {
             setTimeout(async () => await postThePost(), 1000)
             throw new Error(error.message);
+        }
+        finally {
+            btn.disabled = false;
         }
     };
 

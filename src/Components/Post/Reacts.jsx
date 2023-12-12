@@ -6,16 +6,17 @@ import { useNavigate } from "react-router-dom";
 // import { PostContext } from "../Post";
 // reacts, retweets, _id, index, userID 
 
-function PostReacts({ context, setContext}) {
+function PostReacts({ context, setContext }) {
     const [react, setReact] = useState('');
-    const [repost, setRepost] = useState(false);
+    const [isRepost, setIsRepost] = useState(false);
     const reactIconRef = useRef();
     const reacCounterRef = useRef();
     const repostRef = useRef();
     const editeIconRef = useRef();
     const navigete = useNavigate();
-    const { showPostEditBtn, postSectionRef, _id, date, reacts, index, reposts } = context;
+    const { showPostEditBtn, postSectionRef, _id, userID, reacts, index, reposts, repost } = context;
     const user = parse(localStorage.getItem('user'));
+    console.log(userID , user.id);
     const db = new CocktailDB(user.email);
     useEffect(() => {
         checkReact();
@@ -26,12 +27,12 @@ function PostReacts({ context, setContext}) {
     //Methods
     const checkReact = async () => {
         const reactFromIDB = await (await db.openCollection('Reacts')).findOne({ _id });
-        reactFromIDB?  setReact(reactFromIDB.type) : setReact('');
+        reactFromIDB ? setReact(reactFromIDB.type) : setReact('');
     };
 
-    const checkRepost = async()=>{
+    const checkRepost = async () => {
         const repostIDB = await (await db.openCollection('Reposts')).findOne({ _id });
-        repostIDB ? setRepost(repostIDB) : setRepost(false);
+        repostIDB ? setIsRepost(repostIDB) : setIsRepost(false);
     }
 
 
@@ -49,7 +50,7 @@ function PostReacts({ context, setContext}) {
                 if (post[0] && post[0].type == 'post') {
                     post[0].schema.reacts[nameOfReact]++;
                     const updateRespone = await update(`Posts!A${index}`, post[0]);
-                    await (await db.openCollection('Reacts')).set({_id , type:nameOfReact})
+                    await (await db.openCollection('Reacts')).set({ _id, type: nameOfReact })
                     postSocket.emit('updateReact', { elementRoot: `#${nameOfReact}N-${_id}`, num: post[0].schema.reacts[nameOfReact] })
                 }
             }
@@ -75,11 +76,11 @@ function PostReacts({ context, setContext}) {
     };
 
     const doRepost = async (ev) => {
-        if (repost) {
+        if (isRepost) {
             const currentDate = getLocalDate();
-            const repostDate = new Date(repost.date).toLocaleDateString('en-US');
-            if(currentDate == repostDate) {
-                alert('You Reposted this post today you should to wait for tomorrow!') ;
+            const repostDate = new Date(isRepost.date).toLocaleDateString('en-US');
+            if (currentDate == repostDate) {
+                alert('You Reposted this post today you should to wait for tomorrow!');
                 return
             }
         }
@@ -109,7 +110,7 @@ function PostReacts({ context, setContext}) {
 
 
     return (
-        <ul className="mt-2  w-[100%] p-2 bg-gray-900 flex items-center justify-between ring-1 rounded-lg">
+        <ul className={`mt-2  w-[100%] p-2 bg-gray-900 flex items-center justify-between ring-1 rounded-lg ${repost ? 'bg-gray-950' : 'bg-gray-900'}`}>
             <button onClick={(ev) => { doReact(ev, `love`); }} className="flex items-center gap-2">
                 <i ref={reactIconRef} className={`fa-regular fa-heart cursor-pointer text-xl ${react ? `fa-solid text-red-600 text-2xl` : null} md:hover:text-cyan-400 transition-all`}></i>
                 <span ref={reacCounterRef} className="ml-1 text-cyan-400 font-semibold">
@@ -118,28 +119,38 @@ function PostReacts({ context, setContext}) {
             </button>
 
             <button className="flex items-center gap-2" onClick={doRepost}>
-                <i className={`fa-solid fa-retweet cursor-pointer text-xl md:hover:text-cyan-400 ${repost ? `fa-solid text-cyan-400 text-2xl` : null} transition-all`}></i>{" "}
+                <i className={`fa-solid fa-retweet cursor-pointer text-xl md:hover:text-cyan-400 ${isRepost ? `fa-solid text-cyan-400 text-2xl` : null} transition-all`}></i>{" "}
                 <span className="ml-1">{nFormatter(reposts)}</span>
             </button>
 
-            <button onClick={(ev) => { doEdit(ev) }}>
-                <i ref={editeIconRef} className="fa-solid fa-pen-to-square text-lg "></i>
-            </button>
+            {
+                !+reposts || user.id != userID
+                &&
+                <button onClick={(ev) => { doEdit(ev) }}>
+                    <i ref={editeIconRef} className="fa-solid fa-pen-to-square text-lg "></i>
+                </button>
+            }
 
-            <button onClick={doReport}>
-                <i className="fa-regular fa-flag text-lg "></i>
-            </button>
+            {
+                !+reposts
+                &&
+                < button onClick={doReport}>
+                    <i className="fa-regular fa-flag text-lg "></i>
+                </button>
+            }
 
             <button onClick={doSave}>
                 <i className="fa-regular fa-bookmark text-lg "></i>
             </button>
 
             {
+                user.id == userID
+                &&
                 <button onClick={doDelete}>
                     <i className="fa-solid fa-trash text-red-600 text-lg"></i>
                 </button>
             }
-        </ul>
+        </ul >
     );
 }
 

@@ -46,8 +46,8 @@ function PostHeader({ context, setContext }) {
         }
     }
     return (
-        <header className="relative flex justify-between items-center">
-            <figure className="w-fit flex gap-2 rounded-lg items-center px-2 py-1  bg-gray-900 ring-1">
+        <header className={`relative flex justify-between items-center `}>
+            <figure className={`w-fit flex gap-2 rounded-lg items-center px-2 py-1  bg-gray-900 ring-1 ${repost ? 'bg-gray-950' : 'bg-gray-900'}`}>
                 <img ref={profImgRef} src={userAvatar} className="w-9 h-9 rounded-full cursor-pointer" />
                 <p className="font-bold">{userName}</p>
             </figure>
