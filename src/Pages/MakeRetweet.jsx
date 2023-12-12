@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Textarea from "../Components/Shared/Textarea";
 import { append, getFromTo, showMarquee, update } from "../js/global";
-import { addClickClass, parse } from "../js/cocktail";
+import { CocktailDB, addClickClass, getLocalDate, parse } from "../js/cocktail";
 import Post from "../Components/Post";
 import Button from "../Components/Shared/Button";
 import Loader from '../Components/Shared/Loader'
@@ -18,6 +18,7 @@ function MakeRetweet() {
     const { postIndex } = useParams();
     const navigate = useNavigate();
     const user = parse(localStorage.getItem('user'));
+    const db = new CocktailDB(user.email);
 
     useEffect(() => {
         getPost();
@@ -40,12 +41,13 @@ function MakeRetweet() {
         addClickClass(btn, 'click');
         showMarquee(true);
         try {
-            const postRes = await(await getFromTo('Posts',postIndex,postIndex))[0];
-            postRes.schema.repost = postRes.schema.repost ? postRes.schema.repost++ : 1;
-            const updateRes = await update(`Posts!A${postIndex}`,postRes);
-            const resBody = { type: 'repost', schema: repostSchema(user, context.repostContent, postRes.schema) };
+            const postRes = await (await getFromTo('Posts', postIndex, postIndex))[0];
+            postRes.schema.reposts = postRes.schema.reposts ? postRes.schema.reposts++ : 1;
+            const updateRes = await update(`Posts!A${postIndex}`, postRes);
+            const schema = repostSchema(user, context.repostContent, postRes.schema);
+            const resBody = { type: 'repost', schema };
             const appendRes = await append('Posts', resBody);
-            console.log(updateRes , appendRes);
+            await (await db.openCollection('Reposts')).set({ _id: postRes.schema._id, date: getLocalDate() });
             setTimeout(() => { navigate('/') }, 1000)
         }
         catch (error) {
@@ -65,7 +67,7 @@ function MakeRetweet() {
                 context.post ?
                     <section className="p-2 container max-h-[100%] overflow-x-auto dark:bg-gray-900 rounded-lg ring-1">
                         <Textarea lengthLimit={100} context={context} setContext={setContext} overwriteValue={'repostContent'} />
-                        <Post post={post} className={'h-fit max-h-[400px] overflow-y-auto hide-scrollbar'} />
+                        <Post post={post} className={'h-fit max-h-[400px] overflow-y-auto hide-scrollbar mb-3'} />
                         <Button clickCallback={repost}>Retweet</Button>
                     </section>
                     :

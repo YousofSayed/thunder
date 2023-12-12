@@ -20,7 +20,7 @@ export default function postSchema({ user, postContent, images, vid, iframeSrc }
             sad: 0,
             angry: 0,
         },
-        retweets: 0,
+        reposts: 0,
         watches: 0
     }
 }

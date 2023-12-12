@@ -53,18 +53,17 @@ export async function getFromTo(sheetName , from , to) {
         const url = `https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${sheetName}!A${from}:Z${to}?key=${env('VITE_SHEET_AKEY')}`;
         const res = await (await GET({ url, headers: await headers() }));
         const jsonRes = await res.json()
-        const data = jsonRes.values;
+        const data = jsonRes.values || [];
         if (res.status == 200) {
             const rangedData = data.map((item)=>{
-                item = parse(item);
-                console.log(item.schema);
+            item = parse(item);
             item.schema.index = from;
             from++
             return item;
             });
             return rangedData;
         } 
-        return [];
+        return data;
     } catch (error) {
         throw new Error(error.message)
     }

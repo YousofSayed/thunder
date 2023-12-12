@@ -1,11 +1,12 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { $, CocktailDB, addClickClass, copyToClipboard, isNumber, nFormatter, parse } from "../../js/cocktail";
+import { $, CocktailDB, addClickClass, copyToClipboard, getLocalDate, isNumber, nFormatter, parse } from "../../js/cocktail";
 import { getFromTo, update } from "../../js/global";
 import { postSocket } from "../../js/initSockets";
 import { useNavigate } from "react-router-dom";
 // import { PostContext } from "../Post";
 // reacts, retweets, _id, index, userID 
-function Reacts({ context , setContext }) {
+
+function PostReacts({ context, setContext}) {
     const [react, setReact] = useState('');
     const [repost, setRepost] = useState(false);
     const reactIconRef = useRef();
@@ -13,33 +14,33 @@ function Reacts({ context , setContext }) {
     const repostRef = useRef();
     const editeIconRef = useRef();
     const navigete = useNavigate();
-    const { showPostEditBtn , reacts , _id  ,index } = context;
-    const repostNum = context.repost;
+    const { showPostEditBtn, postSectionRef, _id, date, reacts, index, reposts } = context;
     const user = parse(localStorage.getItem('user'));
     const db = new CocktailDB(user.email);
-
     useEffect(() => {
         checkReact();
-    }, [])
+        checkRepost();
+    }, []);
+
 
     //Methods
     const checkReact = async () => {
         const reactFromIDB = await (await db.openCollection('Reacts')).findOne({ _id });
-        if (reactFromIDB) {
-            reactIconRef.current.classList.add('text-red-700', 'fa-solid', 'text-2xl');
-            setReact(reactFromIDB.type);
-        }
+        reactFromIDB?  setReact(reactFromIDB.type) : setReact('');
     };
 
-    // const checkRe
+    const checkRepost = async()=>{
+        const repostIDB = await (await db.openCollection('Reposts')).findOne({ _id });
+        repostIDB ? setRepost(repostIDB) : setRepost(false);
+    }
+
 
     const doReact = async (ev, nameOfReact) => {
         const btn = ev.currentTarget;
-        addClickClass(btn, 'click')
+        addClickClass(btn, 'click');
+
         try {
             btn.disabled = true;
-
-
             if (!react) {
                 reactIconRef.current.classList.add('text-red-700', 'fa-solid', 'text-2xl');
                 isNumber(reacCounterRef.current.textContent) ? reacCounterRef.current.textContent++ : null;
@@ -48,7 +49,7 @@ function Reacts({ context , setContext }) {
                 if (post[0] && post[0].type == 'post') {
                     post[0].schema.reacts[nameOfReact]++;
                     const updateRespone = await update(`Posts!A${index}`, post[0]);
-                    await ((await db.openCollection('Reacts')).set({ _id, type: nameOfReact }));
+                    await (await db.openCollection('Reacts')).set({_id , type:nameOfReact})
                     postSocket.emit('updateReact', { elementRoot: `#${nameOfReact}N-${_id}`, num: post[0].schema.reacts[nameOfReact] })
                 }
             }
@@ -57,7 +58,7 @@ function Reacts({ context , setContext }) {
                 isNumber(reacCounterRef.current.textContent) && reacCounterRef.current.textContent > 0 ? reacCounterRef.current.textContent-- : null;
                 const post = await getFromTo('Posts', index, index);
                 setReact('');
-                if (post[0]) {
+                if (post[0] && post[0].type == 'post') {
                     +post[0].schema.reacts[nameOfReact] > 0 ? +post[0].schema.reacts[nameOfReact]-- : null;
                     const updateRespone = await update(`Posts!A${index}`, post[0]);
                     await ((await db.openCollection('Reacts')).deleteOne({ _id }))
@@ -65,52 +66,76 @@ function Reacts({ context , setContext }) {
                 }
             }
 
-            btn.disabled = false;
         } catch (error) {
-            btn.disabled = false;
             throw new Error(error.message);
+        }
+        finally {
+            btn.disabled = false;
         }
     };
 
     const doRepost = async (ev) => {
-       navigete(`/repost/${index}`);
+        if (repost) {
+            const currentDate = getLocalDate();
+            const repostDate = new Date(repost.date).toLocaleDateString('en-US');
+            if(currentDate == repostDate) {
+                alert('You Reposted this post today you should to wait for tomorrow!') ;
+                return
+            }
+        }
+        sessionStorage.setItem('postSectionScroll', postSectionRef.scrollTop)
+        navigete(`/repost/${index}`);
     };
 
     const doEdit = (ev) => {
         const btn = ev.currentTarget;
         addClickClass(btn, 'click');
         editeIconRef.current.classList.toggle('text-cyan-400');
-        showPostEditBtn ? setContext({...context , showPostEditBtn:false }) : setContext({...context , showPostEditBtn:true , editeIconRef:editeIconRef.current})
+        showPostEditBtn ? setContext({ ...context, showPostEditBtn: false }) : setContext({ ...context, showPostEditBtn: true, editeIconRef: editeIconRef.current })
+    };
+
+    const doReport = async (ev) => {
+        const btn = ev.current.target;
+
+    };
+
+    const doSave = async (ev) => {
+
+    };
+
+    const doDelete = async (ev) => {
+
     }
+
 
     return (
         <ul className="mt-2  w-[100%] p-2 bg-gray-900 flex items-center justify-between ring-1 rounded-lg">
             <button onClick={(ev) => { doReact(ev, `love`); }} className="flex items-center gap-2">
-                <i ref={reactIconRef} className={`fa-regular  fa-heart cursor-pointer text-xl md:hover:text-cyan-400 transition-all`}></i>
+                <i ref={reactIconRef} className={`fa-regular fa-heart cursor-pointer text-xl ${react ? `fa-solid text-red-600 text-2xl` : null} md:hover:text-cyan-400 transition-all`}></i>
                 <span ref={reacCounterRef} className="ml-1 text-cyan-400 font-semibold">
                     {nFormatter(reacts.love)}
                 </span>
             </button>
 
             <button className="flex items-center gap-2" onClick={doRepost}>
-                <i id={`retweet-${_id}`} className="fa-solid fa-retweet cursor-pointer text-xl md:hover:text-cyan-400 transition-all"></i>{" "}
-                <span className="ml-1">{nFormatter(repostNum || 0)}</span>
+                <i className={`fa-solid fa-retweet cursor-pointer text-xl md:hover:text-cyan-400 ${repost ? `fa-solid text-cyan-400 text-2xl` : null} transition-all`}></i>{" "}
+                <span className="ml-1">{nFormatter(reposts)}</span>
             </button>
 
-            <button onClick={doEdit}>
+            <button onClick={(ev) => { doEdit(ev) }}>
                 <i ref={editeIconRef} className="fa-solid fa-pen-to-square text-lg "></i>
             </button>
 
-            <button>
+            <button onClick={doReport}>
                 <i className="fa-regular fa-flag text-lg "></i>
             </button>
 
-            <button>
+            <button onClick={doSave}>
                 <i className="fa-regular fa-bookmark text-lg "></i>
             </button>
 
             {
-                <button>
+                <button onClick={doDelete}>
                     <i className="fa-solid fa-trash text-red-600 text-lg"></i>
                 </button>
             }
@@ -118,4 +143,4 @@ function Reacts({ context , setContext }) {
     );
 }
 
-export default Reacts;
+export default PostReacts;

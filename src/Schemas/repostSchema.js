@@ -1,3 +1,5 @@
+import { getCurrentTime, uniqueID } from "../js/cocktail";
+
 /**
  * Returns repost schema
  * @param {object} user 
@@ -5,11 +7,13 @@
  * @param {object} post 
  * @returns 
  */
-export default function repostSchema(user ,repostContent, post){
+export default function repostSchema(user, repostContent, post) {
     return {
-        userName:user.name,
-        profImgId:user.profImgId,
+        _id: uniqueID(),
+        userName: user.name,
+        profImgId: user.profImgId,
         repostContent,
-        post:post
+        date: getCurrentTime(),
+        post: post
     }
 }

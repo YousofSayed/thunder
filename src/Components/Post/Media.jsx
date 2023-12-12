@@ -1,4 +1,8 @@
-function PostMedia({media}) {
+import { useEffect, useRef, useState } from "react";
+import tb from "../../js/tb";
+
+function PostMedia({ media }) {
+
     return (
         <>
             {
@@ -6,10 +10,10 @@ function PostMedia({media}) {
                 &&
                 <section id="images" className={`bg-gray-900 p-2 rounded-sm flex items-center gap-2`}>
                     {
-                        media.images.map((imgId, i) => {
+                        media.images.map((id, i) => {
                             return (
                                 <figure className="w-full flex items-center justify-center" key={i}>
-                                    <img id={imgId} className=" rounded-sm" loading="lazy" />
+                                    <img id={id} className=" rounded-sm" loading="lazy" />
                                 </figure>
                             )
                         })
@@ -22,10 +26,10 @@ function PostMedia({media}) {
                 &&
                 <section id="video" className={`bg-gray-900 p-2 rounded-sm flex items-center gap-2`}>
                     {
-                        media.vid.map((vidId, i) => {
+                        media.vid.map((id, i) => {
                             return (
                                 <figure className="w-full flex items-center justify-center" key={i}>
-                                    <video id={vidId} className=" rounded-lg" controls />
+                                    <video id={id} className=" rounded-lg" controls />
                                 </figure>
                             )
                         })
