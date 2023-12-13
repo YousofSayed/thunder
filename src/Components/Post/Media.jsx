@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { $, $a, uniqueID } from "../../js/cocktail";
 import tb from "../../js/tb";
 import vidLoader from '../../Assets/images/vidLoader.gif'
-console.log(vidLoader);
+
 function PostMedia({ media , repost}) {
     const { images, vid, iframeSrc } = media;
     const mediaSecId = uniqueID();
