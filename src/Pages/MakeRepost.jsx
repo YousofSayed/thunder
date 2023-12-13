@@ -48,6 +48,8 @@ function MakeRetweet() {
             const schema = repostSchema(user, context.repostContent, postRes.schema);
             const resBody = { type: 'repost', schema };
             const appendRes = await append('Posts', resBody);
+            const index = appendRes.updates.updatedRange?.match(/\d+/ig)[0];
+            resBody.schema.index = index;
             await (await db.openCollection('Reposts')).set({ _id: postRes.schema._id, date: getLocalDate() });
             postSocket.emit('msg',resBody);
             setTimeout(() => { navigate('/') }, 1000)
@@ -64,13 +66,13 @@ function MakeRetweet() {
     }
 
     return (
-        <section className="absolute w-full h-full p-2 dark:bg-gray-950  flex justify-center items-center">
+        <section className=" w-full h-full bg-white dark:bg-gray-950  flex justify-center items-center">
             {
                 context.post ?
-                    <section className="p-2 container max-h-[100%] overflow-x-auto dark:bg-gray-900 rounded-lg ring-1">
+                    <section className="p-2 container  max-h-[100%] overflow-x-auto bg-white dark:bg-gray-900 rounded-lg ring-1">
                         <Textarea lengthLimit={100} context={context} setContext={setContext} overwriteValue={'repostContent'} />
-                        <Post post={post} className={'h-fit max-h-[400px] overflow-y-auto hide-scrollbar mb-3'} />
-                        <Button clickCallback={repost}>Retweet</Button>
+                        <Post post={post} className={'h-fit max-h-[400px] overflow-y-auto hide-scrollbar my-3'} />
+                        <Button clickCallback={repost}>Repost</Button>
                     </section>
                     :
                     <Loader />

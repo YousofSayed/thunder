@@ -8,18 +8,13 @@ function LogOrSign() {
     const navigate = useNavigate();
 
     useEffect(()=>{
-        user ? navigate('/') : console.log(false);;
-    },[])
-
-    //Methods
-    const hide = () => {
-        $('#logOrSign').classList.add('hidden');
-    }
+        // user ? navigate('/') : console.log(false);;
+    },[]);
 
     return (
-        <section id="logOrSign" className="h-full container absolute flex justify-center items-center ">
+        <section className="h-full container flex justify-center items-center ">
             {/* <button className="fixed right-9 top-7 w-8 h-8 rounded-full bg-gray-950 hover:text-cyan-400 transition" onClick={hide}><i className="fa-solid fa-x"></i></button> */}
-            <article className="p-4 bg-gray-900 rounded-lg">
+            <article className="p-4 bg-[#eee] dark:bg-gray-900 text-black dark:text-white rounded-lg">
                 <p className="p-4 font-bold">You Should Login Or Signup</p>
                 <div className="flex justify-evenly items-center"><Link className={styles.btn} to={`/login`}>Login</Link> | <Link className={styles.btn} to={`/signup`}>Signup</Link></div>
             </article>

@@ -3,6 +3,7 @@ import Logo from "../Components/Shared/Logo";
 import { $, hash, stringify } from "../js/cocktail";
 import { showMarquee, success, warn } from "../js/global";
 import styles from "../js/styles";
+import PasswordInput from "../Components/Shared/PasswordInput";
 
 function Login() {
     const navigate = useNavigate();
@@ -12,22 +13,8 @@ function Login() {
         try {
             e.preventDefault();
             showMarquee(true);
+            if (!$('#email').value || !$('#pass').value) { $('#warn').textContent = `Fill all inputs`; return }
             const data = { email: $('#email').value.toLowerCase(), password: hash($('#pass').value) };
-            if (!data.email || !data.password) { $('#warn').textContent = `Fill all inputs`; return }
-
-            // const isUser = await filterData({
-            //     dbName: 'Users',
-            //     value: $('#email').value,
-            //     boolean: true
-            // });
-
-            // console.log(isUser);
-
-            // const res = await getReqFromGs({
-            //     type: 'login',
-            //     sheetName: 'Users',
-            //     dataJson: encodeURIComponent(stringify(data))
-            // })
 
             showMarquee(false);
             if (res.ok) {
@@ -45,17 +32,6 @@ function Login() {
 
     }
 
-    const showAndHidePass = (e, inputRoot) => {
-        if (e.target.classList.contains('fa-eye-slash')) {
-            e.target.classList.replace('fa-eye-slash', 'fa-eye');
-            $(inputRoot).type = 'text';
-        }
-        else {
-            e.target.classList.replace('fa-eye', 'fa-eye-slash');
-            $(inputRoot).type = 'password';
-        }
-
-    }
 
     return (
         <section className='w-full h-full'>
@@ -66,7 +42,7 @@ function Login() {
                     <h1 className={styles.title}>Login</h1>
                     <p id="warn" className={styles.warn}></p>
                     <input id="email" type="email" className={styles.input} autoComplete="true" placeholder="Email" title="Email input" />
-                    <div className="w-full relative"><input id="pass" type="password" className={styles.input} autoComplete='true' placeholder="Password" title="Password input" /><i className={styles.eyeHidePass} onClick={(e) => { showAndHidePass(e, '#pass') }}></i></div>
+                    <PasswordInput/>
                     <button className={styles.btn} type="submit" title="Login button">Login</button>
                 </form>
             </section>

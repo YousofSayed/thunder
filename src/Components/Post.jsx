@@ -34,15 +34,18 @@ function Post({ post, className, posts, setPosts, withReacts, postSectionRef, re
 
     const getImagesAndVideos = () => {
         $a(`#post-${index} img`).forEach(async (img) => {
-            if (!img.id) return;
+            if (!img.id || img.src) return;
             img.src = await tb.getFileFromBot(img.id)
         })
-        $a(`#post-${index} video`).forEach(async (vid) => vid.src = await tb.getFileFromBot(vid.id))
+        $a(`#post-${index} video`).forEach(async (vid) => {
+            if (!vid.id || vid.src) return;
+            vid.src = await tb.getFileFromBot(vid.id)
+        })
     }
 
 
     return (
-        <section id={`post-${index}`} ref={postRef} className={`w-full p-2  ${repost ? 'bg-gray-900' : 'bg-gray-950'} rounded-lg  ring-1 ${className}`}>
+        <section id={`post-${index}`} ref={postRef} className={`w-full p-2  ${repost ? '' :  'bg-white dark:bg-gray-950'} rounded-lg  ring-1 ${className}`}>
             <PostContext.Provider value={{ context, setContext }}>
                 <PostHeader context={context} setContext={setContext} />
 
@@ -50,7 +53,7 @@ function Post({ post, className, posts, setPosts, withReacts, postSectionRef, re
 
                 <PostArticle context={context} setContext={setContext} />
 
-                <PostMedia media={context.media} />
+                <PostMedia media={context.media} repost={context.repost} />
 
                 {withReacts && <Reacts context={context} setContext={setContext} type={'post'} />}
             </PostContext.Provider>

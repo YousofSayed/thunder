@@ -35,7 +35,6 @@ function PostsView() {
     const getPosts = async (from, to) => {
         try {
             const postsData = await getFromTo('Posts', from, to);
-            console.log(postsData);
             postsData[0] ? setStates({
                 posts: [...states.posts, ...postsData.reverse()],
                 showLoader:false
@@ -49,11 +48,11 @@ function PostsView() {
 
     return (
         <>
-            <section ref={postSectionRef} className='h-full relative container flex flex-col gap-3 items-center bg-gray-900 rounded-lg p-2 overflow-auto hide-scrollbar' >
+            <section ref={postSectionRef} className='h-full relative container flex flex-col gap-3 items-center bg-[#eee] dark:bg-gray-900 rounded-lg p-2 overflow-auto hide-scrollbar' >
 
-                <header className="w-full items-center  bg-gray-950 p-2 rounded-lg flex ring-1">
-                    <input type="search" className=" w-full bg-transparent font-bold outline-none" placeholder="Search" title="search input" />
-                    <i className="fa-solid  fa-search text-1xl text-white" title='search icon'></i>
+                <header className="w-full items-center bg-[#fff] dark:bg-gray-950 p-2 rounded-lg flex ring-1">
+                    <input type="search" className=" w-full bg-transparent  text-black dark:text-white font-bold outline-none" placeholder="Search" title="search input" />
+                    <i className="fa-solid  fa-search text-1xl text-cyan-400 dark:text-white" title='search icon'></i>
                 </header>
 
                 <CreatePost />

@@ -20,7 +20,7 @@ function CreatePost() {
     });
 
     return (
-        <section className='w-full flex ring-1 flex-col bg-gray-950 h-fit rounded-lg p-2'>
+        <section className='w-full flex ring-1 flex-col bg-[#fff] dark:bg-gray-950 h-fit rounded-lg p-2'>
 
             <CreatePostContext.Provider value={{context , setContext}}>
                 <Textarea lengthLimit={5000} context={context} setContext={setContext} overwriteValue={'postContent'}/>

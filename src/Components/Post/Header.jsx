@@ -4,6 +4,7 @@ import Button from "../Shared/Button";
 import { showMarquee, update } from "../../js/global";
 import userAvatar from '../../Assets/images/user-avatar.png';
 import tb from "../../js/tb";
+import User from "../Shared/User";
 
 
 function PostHeader({ context, setContext }) {
@@ -20,11 +21,6 @@ function PostHeader({ context, setContext }) {
         post
     } = context;
 
-    useEffect(() => {
-        (async () => {
-            profImgRef.current.src = await (await tb.getFileFromBot(profImgId))
-        })()
-    }, []);
 
     const postEdit = async () => {
         try {
@@ -47,10 +43,7 @@ function PostHeader({ context, setContext }) {
     }
     return (
         <header className={`relative flex justify-between items-center `}>
-            <figure className={`w-fit flex gap-2 rounded-lg items-center px-2 py-1  bg-gray-900 ring-1 ${repost ? 'bg-gray-950' : 'bg-gray-900'}`}>
-                <img ref={profImgRef} src={userAvatar} className="w-9 h-9 rounded-full cursor-pointer" />
-                <p className="font-bold">{userName}</p>
-            </figure>
+           <User userAvatar={userAvatar} profImgId={profImgId} userName={userName} className={repost ? 'bg-white dark:bg-gray-900' : 'bg-[#eee] dark:bg-gray-950'}/>
             {showPostEditBtn && <Button clickCallback={postEdit}>Post</Button>}
         </header>
     );

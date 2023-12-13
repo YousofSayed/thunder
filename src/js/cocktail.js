@@ -125,7 +125,8 @@ export function replaceAndCommit(root, oldComponent, newComponent) {
  * @returns {Document}
  */
 export function parseToHTML(text) {
-  return new DOMParser().parseFromString(text, 'text/html').body.children[0];
+  const el = new DOMParser().parseFromString(text, 'text/html').body.children;
+  return +el.length ? el[0] : undefined;
 }
 
 //set render class 
@@ -655,8 +656,9 @@ export function isValidEmail(emailText) {
  * @returns 
  */
 export function isValidName(text) {
-  const specialCharMatch = text?.trim().match(/[\s+|\W+]/g);
-  if (specialCharMatch || text?.trim() === "" || !text) {
+  // const specialCharMatch = text?.trim().match(/\w+/ig);
+  // console.log(specialCharMatch);
+  if (text?.trim().length > 15 || text?.trim() === "" || !text) {
     return { valid: false, msg: "Invalid name" };
   }
   else { return { valid: true, msg: "Valid name" }; }

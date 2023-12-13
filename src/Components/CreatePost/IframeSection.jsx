@@ -10,9 +10,11 @@ function IframeSectionHandler() {
     context.iframeInputRef = inputRef.current;
 
     const uploadIframe = (ev) => {
-        addClickClass(ev.currentTarget , 'click');
-        const parsedIframeSrc = parseToHTML(iframeInputValue).src;
-        setContext({...context , iframeSrc:[parsedIframeSrc]})
+        // addClickClass(ev.currentTarget , 'click');
+        // setIframeInputValue()
+        const parsedIframeSrc = parseToHTML(ev.target.value)?.src;
+        parsedIframeSrc ? setContext({...context , iframeSrc:[parsedIframeSrc]}) : null;
+        
     };
 
     return (
@@ -20,9 +22,9 @@ function IframeSectionHandler() {
             {
                 showIframeSection
                 &&
-                <section id='iframeSection' className='flex  items-center gap-2 h-full'>
-                    <input ref={inputRef} className='w-full p-2 outline-none bg-gray-900 my-2 rounded-lg text-cyan-400 underline' type="text" placeholder='Enter Iframe' onInput={(e) => { setIframeInputValue(e.target.value) }} />
-                    <button className='w-[50px] h-full bg-cyan-600 rounded-lg p-2 font-bold' onClick={uploadIframe}>OK</button>
+                <section id='iframeSection' className='flex  items-center'>
+                    <input ref={inputRef} className='w-full p-3 outline-none bg-[#eee] dark:bg-gray-900 my-2 font-bold rounded-lg text-cyan-400 underline' type="text" placeholder='Enter Iframe' onInput={(e) => { uploadIframe(e) }} />
+                    {/* <button className='w-[50px] h-full bg-cyan-600 rounded-lg font-bold' onClick={uploadIframe}>OK</button> */}
                 </section>
             }
         </>

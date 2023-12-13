@@ -1,6 +1,4 @@
 import Header from "../Components/Shared/Header";
-import PostsView from "./PostsView";
-import LogOrSign from "./LogOrSign"
 import { parse } from "../js/cocktail";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useEffect } from "react";

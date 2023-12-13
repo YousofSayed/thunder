@@ -1,4 +1,4 @@
-import { $,  copyToClipboard,  GET, parse, POST, PUT, stringify } from "./cocktail";
+import { $, GET,POST, PUT, parse, stringify } from "./cocktail";
 
 export function success(msg) {
     $('#warn').classList.replace('text-red-600', 'text-green-400')
@@ -25,7 +25,7 @@ export async function headers() {
 
 export async function getAllSheetValues(sheetName) {
     try {
-        const url = `https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${sheetName}?key=${env('VITE_SHEET_AKEY')}`;
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_DB_ID}/values/${sheetName}?key=${import.meta.env.VITE_SHEET_AKEY}`;
         const res = await (await GET({ url, headers: await headers() }));
         const jsonRes = await res.json()
         if (res.status == 200) {
@@ -50,7 +50,7 @@ export async function getAllSheetValues(sheetName) {
 
 export async function getFromTo(sheetName , from , to) {
     try {
-        const url = `https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${sheetName}!A${from}:Z${to}?key=${env('VITE_SHEET_AKEY')}`;
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_DB_ID}/values/${sheetName}!A${from}:Z${to}?key=${import.meta.env.VITE_SHEET_AKEY}`;
         const res = await (await GET({ url, headers: await headers() }));
         const jsonRes = await res.json()
         const data = jsonRes.values || [];
@@ -73,7 +73,7 @@ export async function getFromTo(sheetName , from , to) {
 
 export async function append(range, values) {
     const res = await POST({
-        url: `https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${range}:append?valueInputOption=RAW&key=${env('VITE_SHEET_AKEY')}`,
+        url: `https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_DB_ID}/values/${range}:append?valueInputOption=RAW&key=${import.meta.env.VITE_SHEET_AKEY}`,
         headers: await headers(),
         data: {
             values: [[stringify(values)]]
@@ -81,13 +81,13 @@ export async function append(range, values) {
         json: true,
     })
 
-    console.log(res);
+   return res;
 }
 
 export async function update(range , values) {
    try {
     const res = await PUT({
-        url:`https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${range}?valueInputOption=RAW&key=${env('VITE_SHEET_AKEY')}`,
+        url:`https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_DB_ID}/values/${range}?valueInputOption=RAW&key=${import.meta.env.VITE_SHEET_AKEY}`,
         headers:await headers(),
         data:{
             values:[[stringify(values)]]
@@ -106,7 +106,7 @@ export async function clear(range) {
 
    try {
     const res = await POST({
-        url:`https://sheets.googleapis.com/v4/spreadsheets/${env('VITE_DB_ID')}/values/${range}:clear?alt=json&key=${env('VITE_SHEET_AKEY')}`,
+        url:`https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_DB_ID}/values/${range}:clear?alt=json&key=${import.meta.env.VITE_SHEET_AKEY}`,
         headers:await headers(),
     })
 
@@ -160,58 +160,10 @@ async function getAToken() {
     return await (await POST({
         url: `https://www.googleapis.com/oauth2/v4/token`,
         data: {
-            client_id: env('VITE_CLIENT_ID'),
-            client_secret: env('VITE_CLIENT_SECRET'),
-            refresh_token: env('VITE_REFRESH_TOKEN'),
+            client_id: import.meta.env.VITE_CLIENT_ID,
+            client_secret: import.meta.env.VITE_CLIENT_SECRET,
+            refresh_token: import.meta.env.VITE_REFRESH_TOKEN,
             grant_type: `refresh_token`
         }
     })).access_token
 }
-
-
-
-// const POSTtDb = JSON.stringify({
-//     name: 'Thunder sayed',
-//     ImageId: 'https://api.telegram.org/file/bot6183481793:AAGFNrrvs6FgATrNhtG5P1j9SAQ0AHxCsyQ/documents/file_952.jpg',
-//     textContent: `y`.repeat(45000),
-// })
-
-// const cell = [POSTtDb];
-
-
-// const baseRowAuth = `OWp20xuYhcEkrUBFNYM5S5jbUnaG5dav`
-
-// // console.log(await (await GET({
-// //     url: "https://api.baserow.io/api/database/rows/table/223500/?user_field_names=true&search='o'",
-// //     headers: {
-// //         Authorization: "Token OWp20xuYhcEkrUBFNYM5S5jbUnaG5dav"
-// //     }
-// // })).json());
-
-
-// const POSTtC = JSON.stringify({
-
-// })
-
-
-// console.log(await GETAToken());
-// console.log(await append('Users', cell));
-// setInterval(async () => {
-//     // console.log(await(await GETAllSheetValues('Users')).filter('name','sayed'));
-//     console.log(
-
-//         await POSTt({
-//             url: "https://api.baserow.io/api/database/rows/table/223500/?user_field_names=true",
-//             headers: {
-//                 Authorization: `Token ${baseRowAuth}`,
-//                 "Content-Type": "application/json"
-//             },
-//             data: {
-//                 "user": "haha",
-//                 "POSTtContent": 'yousef sayed ahmed',
-//             }
-//         })
-    
-//     );
-// }, 50)
-// console.log(await compress(`yousef `.repeat(45000) ));

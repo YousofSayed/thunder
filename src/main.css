@@ -26,6 +26,10 @@
     width: unset;
 }
 
+.text-shadow{
+    text-shadow: rgb(34 211 238) 1px 1px 20px;
+}
+
 .ltrD{
     direction: ltr;
 }

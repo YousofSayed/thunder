@@ -22,11 +22,43 @@ function CreatePostFooter() {
         user
     } = context;
 
+
+    const uploadImages = async (e) => {
+        try {
+            const { files } = e.target;
+            addClickClass(e.target, 'click');
+            textAreaRef.classList.remove('min-h-[300px]')
+            if (files.length > 4) { alert(`Max image number is 4`); return }
+            const urls = [];
+            for (const file of files) {
+                urls.push({ blobURL: URL.createObjectURL(file), file })
+            }
+            setContext({ ...context, imagesMedia: urls })
+        } catch (error) {
+            throw new Error(error.message)
+        }
+    };
+
+    const uploadVideo = async (e) => {
+        try {
+            const file = e.target.files[0];
+            addClickClass(e.target, 'click');
+            if ((file.size / 1000000) >= 50) { alert(`Maximum size is 50MB`); return }
+            textAreaRef.classList.remove('min-h-[300px]')
+            setContext({ ...context, video: [{ blobURL: URL.createObjectURL(file), file }] })
+        } catch (error) {
+            throw new Error(error.message)
+        }
+    };
+
+    const showAndHideIframeSection = () => {
+        showIframeSection ? setContext({ ...context, showIframeSection: false }) : setContext({ ...context, showIframeSection: true });
+    };
+
     const postThePost = async (ev) => {
         const btn = ev.currentTarget;
         btn.disabled = true;
         addClickClass(btn, 'click');
-        console.log(btn, textAreaRef);
         try {
             if (!postContent) {
                 alert(`Enter content to post`);
@@ -65,7 +97,7 @@ function CreatePostFooter() {
                 video: [],
                 iframeSrc: [],
             });
-            postSocket.emit('msg',postData);
+            postSocket.emit('msg', postData);
             showMarquee(false);
             btn.disabled = false;
         }
@@ -77,28 +109,6 @@ function CreatePostFooter() {
             btn.disabled = false;
         }
     };
-
-    const uploadImages = async (e) => {
-        const { files } = e.target;
-        textAreaRef.classList.remove('min-h-[300px]')
-        if (files.length > 4) { alert(`Max image number is 4`); return }
-        const urls = [];
-        for (const file of files) {
-            urls.push({ blobURL: URL.createObjectURL(file), file })
-        }
-        setContext({ ...context, imagesMedia: urls })
-    };
-
-    const uploadVideo = async (e) => {
-        const file = e.target.files[0];
-        if ((file.size / 1000000) >= 50) { alert(`Maximum size is 50MB`); return }
-        textAreaRef.classList.remove('min-h-[300px]')
-        setContext({ ...context, video: [{ blobURL: URL.createObjectURL(file), file }] })
-    };
-
-    const showAndHideIframeSection = () => {
-        showIframeSection ? setContext({ ...context, showIframeSection: false }) : setContext({ ...context, showIframeSection: true });
-    }
 
     return (
         <>
