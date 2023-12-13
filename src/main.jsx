@@ -38,4 +38,4 @@ root.render(
     </BrowserRouter>
 )
 
-// makeAppResponsive('#root')
+makeAppResponsive('#root')

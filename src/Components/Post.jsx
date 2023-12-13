@@ -22,8 +22,6 @@ function Post({ post, className, posts, setPosts, withReacts, postSectionRef, re
         ...post
     });
 
-    const user = parse(localStorage.getItem('user'));
-
     useEffect(() => {
         getImagesAndVideos();
     });
@@ -33,14 +31,14 @@ function Post({ post, className, posts, setPosts, withReacts, postSectionRef, re
     },[])
 
     const getImagesAndVideos = () => {
-        $a(`#post-${index} img`).forEach(async (img) => {
-            if (!img.id || img.src) return;
-            img.src = await tb.getFileFromBot(img.id)
-        })
-        $a(`#post-${index} video`).forEach(async (vid) => {
-            if (!vid.id || vid.src) return;
-            vid.src = await tb.getFileFromBot(vid.id)
-        })
+        // $a(`#post-${index} img`).forEach(async (img) => {
+        //     if (!img.id || img.src) return;
+        //     img.src = await tb.getFileFromBot(img.id)
+        // })
+        // $a(`#post-${index} video`).forEach(async (vid) => {
+        //     if (!vid.id || vid.src) return;
+        //     vid.src = await tb.getFileFromBot(vid.id)
+        // })
     }
 
 

@@ -3,12 +3,12 @@ import styles from "../js/styles";
 import { $, parse } from "../js/cocktail";
 import { useEffect } from "react";
 
-function LogOrSign() {
+function Auth() {
     const user = parse(localStorage.getItem('user'));
     const navigate = useNavigate();
 
     useEffect(()=>{
-        // user ? navigate('/') : console.log(false);;
+        user ? navigate('/') : console.log(false);;
     },[]);
 
     return (
@@ -22,4 +22,4 @@ function LogOrSign() {
     );
 }
 
-export default LogOrSign;
+export default Auth;

@@ -43,7 +43,7 @@ function PostHeader({ context, setContext }) {
     }
     return (
         <header className={`relative flex justify-between items-center `}>
-           <User userAvatar={userAvatar} profImgId={profImgId} userName={userName} className={repost ? 'bg-white dark:bg-gray-900' : 'bg-[#eee] dark:bg-gray-950'}/>
+           <User userAvatar={userAvatar} profImgId={profImgId} userName={userName} className={repost ? 'bg-white dark:bg-gray-950' : 'bg-[#eee] dark:bg-gray-900'}/>
             {showPostEditBtn && <Button clickCallback={postEdit}>Post</Button>}
         </header>
     );

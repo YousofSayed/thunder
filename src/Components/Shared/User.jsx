@@ -11,7 +11,7 @@ function User({profImgId , userAvatar , userName , className}) {
 
     return (
         <figure className={`w-fit flex gap-2 rounded-lg items-center px-2 py-1ring-1 text-black dark:text-white ${className}`}>
-            <img ref={profImgRef} src={userAvatar} className="w-9 h-9 rounded-full cursor-pointer" />
+            <img ref={profImgRef} src={userAvatar} className="w-9 h-9 rounded-full cursor-pointer ring-4" />
             <p className="font-bold">{userName}</p>
         </figure>
     );
