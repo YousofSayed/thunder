@@ -1,4 +1,5 @@
 export default {
+    form:`flex flex-col items-center gap-3 p-2 rounded-lg bg-gray-900 w-11/12 m-auto ring-1  md:w-96`,
     title:`text-2xl text-cyan-500 font-bold`,
     warn:`text-red-600 font-bold text-l text-center`,
     input:`w-full p-2  bg-transparent border-b-2 border-b-cyan-600 backdrop:blur backdrop-blur-lg bg-white/10 text-center rounded outline-none transition rounded focus:border-2 border-cyan-600`,
