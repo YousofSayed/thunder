@@ -114,8 +114,8 @@ function CreatePostFooter() {
         <>
             <footer className='p-2 w-full  mt-3 flex justify-between'>
                 <ul className='flex items-center h-full gap-4'>
-                    <i className="fa-regular fa-image cursor-pointer transition-all text-cyan-400 text-lg" onClick={() => { imagesInputRef.current.click() }}><input type="file" className='hidden' ref={imagesInputRef} accept='image/*' onChange={uploadImages} multiple={true} /></i>
-                    <i className="fa-solid fa-film cursor-pointer transition-all text-cyan-400 text-lg" onClick={() => { vidInputRef.current.click() }}><input type="file" className='hidden' ref={vidInputRef} accept='video/*' onChange={uploadVideo} /></i>
+                    <i className="fa-regular fa-image cursor-pointer transition-all text-cyan-400 text-lg" onClick={() => { imagesInputRef.current.click() }}><input type="file" className='hidden' ref={imagesInputRef} accept='image/png,image/jpg,image/jpeg' onChange={uploadImages} multiple={true} /></i>
+                    <i className="fa-solid fa-film cursor-pointer transition-all text-cyan-400 text-lg" onClick={() => { vidInputRef.current.click() }}><input type="file" className='hidden' ref={vidInputRef} accept='video/mp4, video/mp3' onChange={uploadVideo} /></i>
                     <i className='fa-solid fa-link cursor-pointer transition-all text-cyan-400 text-lg' onClick={showAndHideIframeSection}></i>
                     <span className='p-2 bg-cyan-500 font-bold rounded-lg '>{charLength}/5000</span>
                 </ul>

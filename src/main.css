@@ -4,7 +4,7 @@
 
 * {
     margin: 0;
-    padding: 0;
+    padding: unset;
     box-sizing: border-box;
     outline: none;
 }
@@ -19,11 +19,15 @@
 }
 
 .hide-scrollbar{
-    scrollbar-width: none;
+    scrollbar-width: 0px;
 }
 
 .hide-scrollbar::-webkit-scrollbar{
-    width: unset;
+    width: 0px;
+}
+
+.p-unset{
+    padding: unset;
 }
 
 .text-shadow{

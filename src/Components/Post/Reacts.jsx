@@ -151,7 +151,7 @@ function PostReacts({ context, setContext }) {
             </button>
 
             <button className="flex items-center gap-2" onClick={doRepost}>
-                <i className={`fa-solid fa-retweet cursor-pointer text-xl text-black dark:text-white md:hover:text-cyan-400 ${isRepost ? `fa-solid text-cyan-400 text-2xl` : null} transition-all`}></i>{" "}
+                <i className={`fa-solid fa-retweet cursor-pointer text-xl  md:hover:text-cyan-400 ${isRepost ? `fa-solid text-cyan-400 text-2xl` : 'text-black dark:text-white'} transition-all`}></i>{" "}
                 <span className="ml-1  text-cyan-400 font-semibold">{nFormatter(reposts)}</span>
             </button>
 

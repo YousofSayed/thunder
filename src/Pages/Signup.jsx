@@ -90,7 +90,7 @@ function Signup() {
 
                     <button type="submit" ref={submitBtnRef} className={styles.btn}>Signup</button>
 
-                    <input type="file" onChange={uploadProfImg} id="inpFile" className="hidden" />
+                    <input type="file" onChange={uploadProfImg} id="inpFile" className="hidden" accept='image/png,image/jpg,image/jpeg' />
                 </form>
             </section>
         </section>
