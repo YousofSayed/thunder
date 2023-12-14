@@ -12,7 +12,9 @@ function PostReacts({ context, setContext }) {
     const reactIconRef = useRef();
     const reacCounterRef = useRef();
     const editeIconRef = useRef();
-    const { showPostEditBtn, postSectionRef, postRef,_id, userID, reacts, index, reposts, post, repost } = context;
+    const { showPostEditBtn, postSectionRef, postRef, userID, reacts,  reposts, post, repost } = context;
+    const index = repost ? repost.index : post.index;
+    const _id = repost ? repost._id : post._id;
     const user = parse(localStorage.getItem('user'));
     const db = new CocktailDB(user.email);
     useEffect(() => {
@@ -45,28 +47,32 @@ function PostReacts({ context, setContext }) {
         try {
             btn.disabled = true;
             if (!react) {
-                // reactIconRef.current.classList.add('text-red-700', 'fa-solid', 'text-2xl');
                 isNumber(reacCounterRef.current.textContent) ? reacCounterRef.current.textContent++ : null;
                 setReact(nameOfReact);
-                const post = await getFromTo('Posts', index, index);
-                if (post[0] && post[0].type == 'post') {
-                    post[0].schema.reacts[nameOfReact]++;
-                    const updateRespone = await update(`Posts!A${index}`, post[0]);
-                    await (await db.openCollection('Reacts')).set({ _id, type: nameOfReact })
-                    postSocket.emit('updateReact', { elementRoot: `#${nameOfReact}N-${_id}`, num: post[0].schema.reacts[nameOfReact] })
+                const postOrRepost = await getFromTo('Posts', index, index);
+                if (postOrRepost[0] && postOrRepost[0].type == 'post') {
+                    postOrRepost[0].schema.reacts[nameOfReact]++;
                 }
+                else if(postOrRepost[0] && postOrRepost[0].type == 'repost'){
+                    postOrRepost[0].schema.post.reacts[nameOfReact]++;
+                }
+                const updateRespone = await update(`Posts!A${index}`, postOrRepost[0]);
+                await (await db.openCollection('Reacts')).set({ _id, type: nameOfReact })
+                // postSocket.emit('updateReact', { elementRoot: `#${nameOfReact}N-${_id}`, num: postOrRepost[0].schema.reacts[nameOfReact] })
             }
             else {
-                // reactIconRef.current.classList.remove('text-red-700', 'fa-solid', 'text-2xl');
                 isNumber(reacCounterRef.current.textContent) && reacCounterRef.current.textContent > 0 ? reacCounterRef.current.textContent-- : null;
                 setReact('');
-                const post = await getFromTo('Posts', index, index);
-                if (post[0] && post[0].type == 'post') {
-                    +post[0].schema.reacts[nameOfReact] > 0 ? +post[0].schema.reacts[nameOfReact]-- : null;
-                    const updateRespone = await update(`Posts!A${index}`, post[0]);
-                    await ((await db.openCollection('Reacts')).deleteOne({ _id }))
-                    postSocket.emit('updateReact', { elementRoot: `#${nameOfReact}N-${_id}`, num: post[0].schema.reacts[nameOfReact] })
+                const postOrRepost = await getFromTo('Posts', index, index);
+                if (postOrRepost[0] && postOrRepost[0].type == 'post') {
+                    +postOrRepost[0].schema.reacts[nameOfReact] > 0 ? +postOrRepost[0].schema.reacts[nameOfReact]-- : null;
                 }
+                else if(postOrRepost[0] && postOrRepost[0].type == 'repost'){
+                    postOrRepost[0].schema.post.reacts[nameOfReact] > 0 ? postOrRepost[0].schema.post.reacts[nameOfReact]-- : null;
+                }
+                const updateRespone = await update(`Posts!A${index}`, postOrRepost[0]);
+                await ((await db.openCollection('Reacts')).deleteOne({ _id }))
+                // postSocket.emit('updateReact', { elementRoot: `#${nameOfReact}N-${_id}`, num: postOrRepost[0].schema.reacts[nameOfReact] })
             }
 
         } catch (error) {
@@ -87,7 +93,7 @@ function PostReacts({ context, setContext }) {
             }
         }
         sessionStorage.setItem('postSectionScroll', postSectionRef.scrollTop)
-        navigete(`/repost/${index}`);
+        navigete(`/repost/${post.index}`);
     };
 
     const doEdit = (ev) => {

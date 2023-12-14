@@ -8,7 +8,7 @@ import PostDate from "./Post/Date";
 import PostMedia from "./Post/Media";
 export const PostContext = createContext();
 
-function Post({ post, className, posts, setPosts, withReacts, postSectionRef, repost , observer }) {
+function Post({ post, className, withReacts, postSectionRef, repost }) {
     const { postContent, index } = post
     const postRef = useRef();
     const [context, setContext] = useState({
@@ -25,7 +25,7 @@ function Post({ post, className, posts, setPosts, withReacts, postSectionRef, re
 
     useEffect(() => {
         getImagesAndVideos();
-        observer.observe(postRef.current)
+        // observer.observe(postRef.current)
         // observer.observe(postRef.current)
     });
 
@@ -46,7 +46,7 @@ function Post({ post, className, posts, setPosts, withReacts, postSectionRef, re
 
 
     return (
-        <section id={`post-${unId}`} ref={postRef} className={`w-full p-2  ${repost ? '' :  'bg-white dark:bg-gray-950'} rounded-lg   ${className}`}>
+        <section id={`post-${unId}`} index={context.index} ref={postRef} className={`w-full p-2  ${repost ? '' :  'bg-white dark:bg-gray-950'} rounded-lg   ${className}`}>
             {/* <PostContext.Provider value={{ context, setContext }}> */}
                 <PostHeader context={context} setContext={setContext} />
 

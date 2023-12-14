@@ -19,7 +19,7 @@
 }
 
 .hide-scrollbar{
-    scrollbar-width: 0px;
+    scrollbar-width: none;
 }
 
 .hide-scrollbar::-webkit-scrollbar{

@@ -1,10 +1,19 @@
+import { useEffect, useRef } from 'react';
 import vidLoader from '../../Assets/images/vidLoader.gif'
+import { uniqueID } from '../../js/cocktail';
+import { mediaObserver } from '../../js/mediaObserver';
 
 function PostMedia({ media, repost }) {
+    const mediaRef = useRef();
     const { images, vid, iframeSrc } = media;
+    const unId = uniqueID();
+
+    useEffect(() => {
+        mediaObserver.observe(mediaRef.current);
+    });
 
     return (
-        <section id='media'  className={`snap-x ${(images[0] || vid[0] || iframeSrc[0]) && `h-[300px]`} hide-scrollbar  snap-mandatory overflow-x-auto gap-4 flex`} dir="ltr">
+        <section id={`media-${unId}`} ref={mediaRef} className={`snap-x ${(images[0] || vid[0] || iframeSrc[0]) && `h-[300px]`} hide-scrollbar  snap-mandatory overflow-x-auto gap-4 flex`} dir="ltr">
             {
                 images[0]
                 &&
@@ -30,7 +39,7 @@ function PostMedia({ media, repost }) {
 
                             return (
                                 <figure className={`snap-center w-full  flex items-center justify-center flex-shrink-0 ${repost ? 'bg-white dark:bg-gray-950' : 'bg-[#eee] dark:bg-gray-900'} rounded-lg`} key={i}>
-                                    <video tbid={tbid} className=" rounded-lg w-full h-full " poster={vidLoader} />
+                                    <video tbid={tbid} className=" rounded-lg w-full h-full " autoPlay={true} muted={true} poster={vidLoader} />
                                 </figure>
                             )
                         })

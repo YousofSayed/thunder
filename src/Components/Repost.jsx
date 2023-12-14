@@ -19,7 +19,7 @@ function Repost({ repost, postSectionRef , observer}) {
             <PostHeader context={context} setContext={setContext} />
             <PostDate date={context.date} />
             <PostArticle context={context} setContext={setContext} />
-            {context.post && <Post post={context.post} className={`bg-[#eee] dark:bg-gray-900 ring-1`} postSectionRef={postSectionRef} withReacts={true} repost={repost} observer={observer}/>}
+            {context.post && <Post post={context.post} className={`bg-[#eee] dark:bg-gray-900 ring-1`} postSectionRef={postSectionRef} withReacts={true} repost={repost} />}
         </section>
     );
 }

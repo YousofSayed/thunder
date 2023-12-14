@@ -728,6 +728,22 @@ export function isValidRePassword(mainPassword, rePassword) {
   return rePassword == mainPassword ? { valid: true, msg: "valid" } : { valid: false, msg: "Re password does not match" };
 }
 
+/**
+ * Returns true if text language is english
+ * @param {string} text 
+ * @returns 
+ */
+export function isEnglishLang(text) {
+  const rgx = /[a-zA-Z]/ig;
+  return rgx.test(text);
+}
+
+export function isSpecialChars(text) {
+  const rgx = /\W+/ig;
+  return rgx.test(text);
+}
+
+
 //encode & decode
 /**
  * Returns hashed text 

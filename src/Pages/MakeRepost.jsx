@@ -8,7 +8,6 @@ import Button from "../Components/Shared/Button";
 import Loader from '../Components/Shared/Loader'
 import repostSchema from "../Schemas/repostSchema";
 import { postSocket } from "../js/initSockets";
-import { observer } from "./PostsView";
 
 function MakeRetweet() {
     const [context, setContext] = useState({
@@ -72,7 +71,7 @@ function MakeRetweet() {
                 context.post ?
                     <section className="p-2 container  max-h-[100%] overflow-x-auto bg-white dark:bg-gray-900 rounded-lg ring-1">
                         <Textarea lengthLimit={100} context={context} setContext={setContext} overwriteValue={'repostContent'} />
-                        <Post post={post} className={'h-fit max-h-[400px] overflow-y-auto hide-scrollbar my-3'} observer={observer}/>
+                        <Post post={post} className={'h-fit max-h-[400px] overflow-y-auto hide-scrollbar my-3'} />
                         <Button clickCallback={repost}>Repost</Button>
                     </section>
                     :
