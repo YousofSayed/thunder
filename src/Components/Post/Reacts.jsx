@@ -45,10 +45,10 @@ function PostReacts({ context, setContext }) {
         try {
             btn.disabled = true;
             if (!react) {
-                reactIconRef.current.classList.add('text-red-700', 'fa-solid', 'text-2xl');
+                // reactIconRef.current.classList.add('text-red-700', 'fa-solid', 'text-2xl');
                 isNumber(reacCounterRef.current.textContent) ? reacCounterRef.current.textContent++ : null;
-                const post = await getFromTo('Posts', index, index);
                 setReact(nameOfReact);
+                const post = await getFromTo('Posts', index, index);
                 if (post[0] && post[0].type == 'post') {
                     post[0].schema.reacts[nameOfReact]++;
                     const updateRespone = await update(`Posts!A${index}`, post[0]);
@@ -59,8 +59,8 @@ function PostReacts({ context, setContext }) {
             else {
                 reactIconRef.current.classList.remove('text-red-700', 'fa-solid', 'text-2xl');
                 isNumber(reacCounterRef.current.textContent) && reacCounterRef.current.textContent > 0 ? reacCounterRef.current.textContent-- : null;
-                const post = await getFromTo('Posts', index, index);
                 setReact('');
+                const post = await getFromTo('Posts', index, index);
                 if (post[0] && post[0].type == 'post') {
                     +post[0].schema.reacts[nameOfReact] > 0 ? +post[0].schema.reacts[nameOfReact]-- : null;
                     const updateRespone = await update(`Posts!A${index}`, post[0]);
@@ -144,7 +144,7 @@ function PostReacts({ context, setContext }) {
     return (
         <ul className={`mt-2  w-[100%] p-2 flex items-center justify-between ring-1 rounded-lg ${repost ? 'bg-white dark:bg-gray-950' : 'bg-[#eee] dark:bg-gray-900'}`}>
             <button onClick={(ev) => { doReact(ev, `love`); }} className="flex items-center gap-2">
-                <i ref={reactIconRef} className={`fa-regular fa-heart cursor-pointer text-xl  ${react ? `fa-solid text-red-600 text-2xl` : `text-black dark:text-white`} md:hover:text-cyan-400 transition-all`}></i>
+                <i ref={reactIconRef} className={`fa-regular fa-heart cursor-pointer text-xl   ${react ? `fa-solid text-red-600 text-2xl` : `text-black dark:text-white`} md:hover:text-cyan-400 transition-all`}></i>
                 <span ref={reacCounterRef} className="ml-1 text-cyan-400 font-semibold">
                     {nFormatter(reacts.love)}
                 </span>
