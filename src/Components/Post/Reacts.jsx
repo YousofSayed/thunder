@@ -57,7 +57,7 @@ function PostReacts({ context, setContext }) {
                 }
             }
             else {
-                reactIconRef.current.classList.remove('text-red-700', 'fa-solid', 'text-2xl');
+                // reactIconRef.current.classList.remove('text-red-700', 'fa-solid', 'text-2xl');
                 isNumber(reacCounterRef.current.textContent) && reacCounterRef.current.textContent > 0 ? reacCounterRef.current.textContent-- : null;
                 setReact('');
                 const post = await getFromTo('Posts', index, index);
