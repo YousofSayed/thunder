@@ -1,16 +1,67 @@
 import { useEffect, useRef } from 'react';
 import vidLoader from '../../Assets/images/vidLoader.gif'
-import { uniqueID } from '../../js/cocktail';
+import {  uniqueID } from '../../js/cocktail';
 import { mediaObserver } from '../../js/mediaObserver';
 
 function PostMedia({ media, repost }) {
     const mediaRef = useRef();
     const { images, vid, iframeSrc } = media;
+    const videoRef = useRef();
+    const vidConrolsRef = useRef();
+    const figureRef = useRef();
+    const playIconRef = useRef();
+    const muteIconRef = useRef();
     const unId = uniqueID();
 
     useEffect(() => {
         mediaObserver.observe(mediaRef.current);
     });
+
+    const playAndPauseVideo = (ev) => {
+        ev.stopPropagation();
+        togglePlayAndPauseIcon(ev);
+        videoRef.current.paused ? videoRef.current.play() : videoRef.current.pause();
+    };
+
+    const toggleControlsRef = (ev) => {
+        vidConrolsRef.current.classList.toggle('hidden');
+    };
+
+    const togglePlayAndPauseIcon = (ev) => {
+        ev.stopPropagation();
+        playIconRef.current.classList.toggle('fa-play');
+    };
+
+    const muteAndUnmute = (ev) => {
+        ev.stopPropagation();
+        muteIconRef.current.classList.toggle('fa-volume-xmark')
+        console.log(true);
+        videoRef.current.muted = videoRef.current.muted ? false : true;
+    };
+
+    const goFullScreen = (ev) => {
+        ev.stopPropagation();
+        videoRef.current.requestFullscreen();
+        videoRef.current.setAttribute('fscreen', 'true');
+        document.addEventListener('fullscreenchange', handleFsChange);
+        toggleControls();
+    };
+
+    const toggleControls = () => {
+        videoRef.current.controls = videoRef.current.controls ? false : true;
+    };
+
+    const handleFsChange = () => {
+        if (!document.fullscreenElement) {
+            toggleControls();
+            document.removeEventListener('fullscreenchange', handleFsChange)
+        }
+    };
+
+    const handleEndOfVideo = () => {
+        videoRef.current.currentTime = 0;
+        playIconRef.current.classList.toggle('fa-play');
+    };
 
     return (
         <section id={`media-${unId}`} ref={mediaRef} className={`snap-x ${(images[0] || vid[0] || iframeSrc[0]) && `h-[300px]`} hide-scrollbar  snap-mandatory overflow-x-auto gap-4 flex`} dir="ltr">
@@ -22,7 +73,7 @@ function PostMedia({ media, repost }) {
                         images.map((tbid, i) => {
                             return (
                                 <figure className={`snap-center ${images.length > 1 ? 'w-[90%] sm:w-[40%]' : 'w-full'} h-[300px] flex items-center justify-center ${repost ? 'bg-white dark:bg-gray-950' : 'bg-[#eee] dark:bg-gray-900'} flex-shrink-0 rounded-lg `} key={i}>
-                                    <img tbid={tbid} className="max-w-full h-full max-h-[300px]" loading="lazy" />
+                                    <img tbid={tbid} className="max-w-full h-full max-h-[300px]" />
                                 </figure>
                             )
                         })
@@ -38,8 +89,13 @@ function PostMedia({ media, repost }) {
                         vid.map((tbid, i) => {
 
                             return (
-                                <figure className={`snap-center w-full  flex items-center justify-center flex-shrink-0 ${repost ? 'bg-white dark:bg-gray-950' : 'bg-[#eee] dark:bg-gray-900'} rounded-lg`} key={i}>
-                                    <video tbid={tbid} className=" rounded-lg w-full h-full " autoPlay={true} muted={true} poster={vidLoader} />
+                                <figure ref={figureRef} onClick={toggleControlsRef} className={`relative snap-center w-full group  flex items-center justify-center flex-shrink-0  ${repost ? 'bg-white dark:bg-gray-950' : 'bg-[#eee] dark:bg-gray-900'} rounded-lg`} key={i}>
+                                    <video tbid={tbid} ref={videoRef} onPlay={() => { toggleControlsRef() }} onEnded={handleEndOfVideo} className=" rounded-lg w-full h-full " poster={vidLoader} />
+                                    <ul ref={vidConrolsRef} className='absolute bottom-[5px] left-[5px] rounded-3xl w-fit p-2 bg-[#eee] dark:bg-gray-800 items-center gap-4 flex transition-all'>
+                                        <i ref={playIconRef} onClick={playAndPauseVideo} className='fa-solid fa-pause fa-play  text-[11px] font-bold cursor-pointer flex items-center justify-center w-[24px] h-[24px] rounded-full bg-gray-950'></i>
+                                        <i ref={muteIconRef} onClick={muteAndUnmute} className="fa-solid fa-volume-high text-[11px] font-bold cursor-pointer flex items-center justify-center w-[24px] h-[24px] rounded-full bg-gray-950"></i>
+                                        <i onClick={goFullScreen} className="fa-solid fa-expand  text-[11px] font-bold cursor-pointer flex items-center justify-center w-[24px] h-[24px] rounded-full bg-gray-900"></i>
+                                    </ul>
                                 </figure>
                             )
                         })

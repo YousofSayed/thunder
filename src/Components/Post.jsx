@@ -24,7 +24,7 @@ function Post({ post, className, withReacts, postSectionRef, repost }) {
     const unId = uniqueID();
 
     useEffect(() => {
-        getImagesAndVideos();
+        // getImagesAndVideos();
         // observer.observe(postRef.current)
         // observer.observe(postRef.current)
     });
@@ -34,13 +34,13 @@ function Post({ post, className, withReacts, postSectionRef, repost }) {
     },[])
 
     const getImagesAndVideos = () => {
-        // $a(`#post-${index} img`).forEach(async (img) => {
-        //     if (!img.id || img.src) return;
-        //     img.src = await tb.getFileFromBot(img.id)
+        // $a(`#post-${unId}  img`).forEach(async (img) => {
+        //     // if (!img.id || img.src) return;
+        //     img.src = await tb.getFileFromBot(img.getAttribute('tbid'))
         // })
-        // $a(`#post-${index} video`).forEach(async (vid) => {
-        //     if (!vid.id || vid.src) return;
-        //     vid.src = await tb.getFileFromBot(vid.id)
+        // $a(`#post-${unId} video`).forEach(async (vid) => {
+        //     // if (!vid.id || vid.src) return;
+        //     vid.src = await tb.getFileFromBot(vid.getAttribute('tbid'))
         // })
     }
 

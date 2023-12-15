@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../js/styles";
-import { $, parse } from "../js/cocktail";
+import {  parse } from "../js/cocktail";
 import { useEffect } from "react";
 
 function Auth() {
@@ -8,7 +8,7 @@ function Auth() {
     const navigate = useNavigate();
 
     useEffect(()=>{
-        user ? navigate('/') : console.log(false);;
+        user ? navigate('/') : console.log(false);
     },[]);
 
     return (

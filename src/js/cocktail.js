@@ -404,6 +404,8 @@ export function transformToNumInput(inputElement) {
   inputElement.value = inputElement.value.split(/\D+/ig).join('');
 }
 
+
+
 /**
  * It make your specific element responsive with window height and width
  * @advice If you wanna use it so use it with "body" element and make your render element like "#app" | "#root" whatever take all width and hight by css.
@@ -445,12 +447,12 @@ export function nFormatter(num) {
  * @param {number} duration 
  * @param {void} method 
  */
-export function forInterval(start , end , duration, method) {
-  const interval = setInterval(()=>{
-    if(start >= end ){clearInterval(interval); return};
+export function forInterval(start, end, duration, method) {
+  const interval = setInterval(() => {
+    if (start >= end) { clearInterval(interval); return };
     method(start);
     start++;
-  },duration)
+  }, duration)
 }
 
 /**
