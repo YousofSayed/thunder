@@ -28,7 +28,7 @@ function PostsView() {
     const getSocketData = (post) => {
         console.log(post);
         const newData = [...[post], ...states.posts];
-        setStates({ ...states, posts: [post , ...states.posts] });
+        setStates({ ...states, posts: [...states.posts , post] });
         postSocket.removeListener('msg', getSocketData)
     };
 
