@@ -11,7 +11,7 @@ export const mediaObserver = new IntersectionObserver((entries) => {
                 if (vid.src) return;
                 vid.src = await tb.getFileFromBot(vid.getAttribute('tbid'));
                 vid.poster = '';
-                // vid.load();
+                vid.load();
                 // vid.controls = true;
             }
 
@@ -24,5 +24,5 @@ export const mediaObserver = new IntersectionObserver((entries) => {
         }
     })
 },{
-    rootMargin:`100000px`
+    rootMargin:`1000000px`
 })

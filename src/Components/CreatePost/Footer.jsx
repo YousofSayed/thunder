@@ -79,11 +79,6 @@ function CreatePostFooter() {
                 for (const item of video) {
                     vid.push(await (await tb.sendVideo(item.file)).id)
                 }
-            }
-
-            const postData = {
-                type: 'post',
-                schema: postSchema({ user, postContent, images, vid, iframeSrc })
             };
 
             if (video.length && !vid.length || imagesMedia.length && !images.length) {
@@ -91,7 +86,14 @@ function CreatePostFooter() {
                 await postThePost(ev);
                 return;
             }
+            const postData = {
+                type: 'post',
+                schema: postSchema({ user, postContent, images, vid, iframeSrc })
+            };
             const res = await append('Posts', postData);
+            const index = res.updates.updatedRange?.match(/\d+/ig)[0];
+            postData.schema.index = index;
+            console.log(postData);
             textAreaRef.value = '';
             iframeInputRef ? iframeInputRef.value = '' : null;
             setContext({
