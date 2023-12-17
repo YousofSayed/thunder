@@ -14,7 +14,7 @@ function PostArticle({ context, setContext }) {
         <>
             {!showPostEditBtn ?
 
-                <article id="postContent" dir={isEnglishLang(content) ? 'ltr' : 'rtl'} className={`my-2 pb-2 font-bold rounded-lg text-black dark:text-white text-justify whitespace-pre-line break-words `} >
+                <article id="postContent" dir={isEnglishLang(content) ? 'ltr' : 'rtl'} className={`my-2 pb-2 font-light rounded-lg text-black dark:text-white  whitespace-pre-line break-words `} >
                     {mainContent}
                     {!showMore && content.length > 500 && <span className="text-cyan-400 cursor-pointer" onClick={() => { setShowMore(true) }}> ...showmore</span>}
                     {showMore && content.length > 500 && <span onClick={() => { setShowMore(false) }}>{moreContent}</span>}

@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import App from './Pages/App';
-import { getLocalDate, makeAppResponsive } from './js/cocktail';
+import { makeAppResponsive } from './js/cocktail';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Signup from './Pages/Signup';
 import Login from './Pages/Login';
@@ -9,6 +9,7 @@ import './main.css';
 import PostsView from './Pages/PostsView';
 import Auth from './Pages/Auth';
 import MakeRetweet from './Pages/MakeRepost';
+
 
 const handleDarkMode = ()=>{
     if (window.matchMedia('(prefers-color-scheme: dark)').matches && !localStorage.getItem('theme')) {

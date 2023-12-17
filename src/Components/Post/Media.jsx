@@ -90,7 +90,7 @@ function PostMedia({ media, repost }) {
 
                             return (
                                 <figure ref={figureRef} onClick={toggleControlsRef} className={`relative snap-center w-full group  flex items-center justify-center flex-shrink-0  ${repost ? 'bg-white dark:bg-gray-950' : 'bg-[#eee] dark:bg-gray-900'} rounded-lg`} key={i}>
-                                    <video tbid={tbid} ref={videoRef} onPlay={() => { toggleControlsRef() }} onEnded={handleEndOfVideo} className=" rounded-lg w-full h-full " poster={vidLoader} />
+                                    <video tbid={tbid} ref={videoRef} onError={()=>{videoRef.current.load();}} onPlay={() => { toggleControlsRef() }} onEnded={handleEndOfVideo} className=" rounded-lg w-full h-full " poster={vidLoader} />
                                     <ul ref={vidConrolsRef} className='absolute bottom-[5px] left-[5px] rounded-3xl w-fit p-2 bg-[#eee] dark:bg-gray-800 items-center gap-4 flex transition-all'>
                                         <i ref={playIconRef} onClick={playAndPauseVideo} className='fa-solid fa-pause fa-play  text-[11px] font-bold cursor-pointer flex items-center justify-center w-[24px] h-[24px] rounded-full bg-gray-950'></i>
                                         <i ref={muteIconRef} onClick={muteAndUnmute} className="fa-solid fa-volume-high text-[11px] font-bold cursor-pointer flex items-center justify-center w-[24px] h-[24px] rounded-full bg-gray-950"></i>

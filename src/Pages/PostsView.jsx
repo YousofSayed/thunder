@@ -7,6 +7,7 @@ import { postSocket } from '../js/initSockets';
 import Loader from '../Components/Shared/Loader';
 import Repost from '../Components/Repost';
 import NoDataHere from '../Components/Shared/NoDataHere';
+import Search from '../Components/Shared/Search';
 
 
 function PostsView() {
@@ -26,8 +27,6 @@ function PostsView() {
     });
 
     const getSocketData = (post) => {
-        console.log(post);
-        const newData = [...[post], ...states.posts];
         setStates({ ...states, posts: [...states.posts , post] });
         postSocket.removeListener('msg', getSocketData)
     };
@@ -54,10 +53,7 @@ function PostsView() {
         <>
             <section ref={postSectionRef} className='container h-full relative  flex flex-col   items-center gap-3 bg-[#eee] dark:bg-gray-900 rounded-lg p-2 overflow-x-auto hide-scrollbar' >
 
-                <header className="w-full items-center bg-[#fff] dark:bg-gray-950 p-2 rounded-lg flex ring-1">
-                    <input type="search" className=" w-full bg-transparent  text-black dark:text-white font-bold outline-none" placeholder="Search" title="search input" onInput={(ev) => { console.log(ev) }} />
-                    <i className="fa-solid  fa-search text-1xl text-cyan-400 dark:text-white" title='search icon'></i>
-                </header>
+               <Search postViewStates={[states , setStates]}/>
 
                 <CreatePost />
 

@@ -1,5 +1,5 @@
 import { createContext, useEffect, useRef, useState } from "react";
-import { $a, $, parse, getLocalDate, stringify, uniqueID } from "../js/cocktail";
+import {  uniqueID } from "../js/cocktail";
 import tb from "../js/tb";
 import Reacts from "./Post/Reacts";
 import PostHeader from "./Post/Header";
@@ -23,26 +23,9 @@ function Post({ post, className, withReacts, postSectionRef, repost }) {
     });
     const unId = uniqueID();
 
-    useEffect(() => {
-        // getImagesAndVideos();
-        // observer.observe(postRef.current)
-        // observer.observe(postRef.current)
-    });
-
     useEffect(()=>{
         setContext({...context , postRef:postRef.current})
     },[])
-
-    const getImagesAndVideos = () => {
-        // $a(`#post-${unId}  img`).forEach(async (img) => {
-        //     // if (!img.id || img.src) return;
-        //     img.src = await tb.getFileFromBot(img.getAttribute('tbid'))
-        // })
-        // $a(`#post-${unId} video`).forEach(async (vid) => {
-        //     // if (!vid.id || vid.src) return;
-        //     vid.src = await tb.getFileFromBot(vid.getAttribute('tbid'))
-        // })
-    }
 
 
     return (
@@ -50,7 +33,7 @@ function Post({ post, className, withReacts, postSectionRef, repost }) {
             {/* <PostContext.Provider value={{ context, setContext }}> */}
                 <PostHeader context={context} setContext={setContext} />
 
-                <PostDate date={context.date} />
+                <PostDate date={context.date}/>
 
                 <PostArticle context={context} setContext={setContext} />
 

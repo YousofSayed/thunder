@@ -1,4 +1,4 @@
-import { $, GET,POST, PUT, parse, stringify } from "./cocktail";
+import { $, GET, POST, PUT, parse, stringify } from "./cocktail";
 
 export function success(msg) {
     $('#warn').classList.replace('text-red-600', 'text-green-400')
@@ -23,47 +23,47 @@ export async function headers() {
     return headers
 }
 
-export async function getAllSheetValues(sheetName) {
+export async function getAllSheetValues(range) {
     try {
-        const url = `https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_DB_ID}/values/${sheetName}?key=${import.meta.env.VITE_SHEET_AKEY}`;
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_DB_ID}/values/${range}?key=${import.meta.env.VITE_SHEET_AKEY}`;
         const res = await (await GET({ url, headers: await headers() }));
         const jsonRes = await res.json()
+        console.log(jsonRes);
         if (res.status == 200) {
-            const data = handleValues(jsonRes.values);
             return {
-                data,
-                filter: async (key, value) => {
+                filter: async (value) => {
                     const result = [];
-                    for (const val of data) { //I used for insted of filter method because of fast performance
-                        if (val[key].includes(value)) {
+                    const keyWords = new RegExp(value?.match(/\w+|[\u0600-\u06FF\u0750-\u077F]+/ig)?.join('|'));
+                    for (const val of jsonRes.values) { //I used for insted of filter method because of fast performance
+                        if (keyWords.test(val)) {
                             result.push(val)
                         }
                     }
-                    return result[0] ? result : null;
+                    return result.length ? result : null;
                 }
             }
-        } 
+        }
     } catch (error) {
         throw new Error(error.message)
     }
 }
 
-export async function getFromTo(sheetName , from , to) {
+export async function getFromTo(sheetName, from, to) {
     try {
         const url = `https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_DB_ID}/values/${sheetName}!A${from}:Z${to}?key=${import.meta.env.VITE_SHEET_AKEY}`;
         const res = await (await GET({ url, headers: await headers() }));
         const jsonRes = await res.json()
         const data = jsonRes.values || [];
         if (res.status == 200) {
-            const rangedData = data.map((item)=>{
-            if(!item[0]){from++ ; return};
-            item = parse(item);
-            item.schema.index = from;
-            from++
-            return item;
+            const rangedData = data.map((item) => {
+                if (!item[0]) { from++; return };
+                item = parse(item);
+                item.schema.index = from;
+                from++
+                return item;
             }).filter(item => item != undefined);
             return rangedData;
-        } 
+        }
         return data;
     } catch (error) {
         throw new Error(error.message)
@@ -81,41 +81,41 @@ export async function append(range, values) {
         json: true,
     })
 
-   return res;
+    return res;
 }
 
-export async function update(range , values) {
-   try {
-    const res = await PUT({
-        url:`https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_DB_ID}/values/${range}?valueInputOption=RAW&key=${import.meta.env.VITE_SHEET_AKEY}`,
-        headers:await headers(),
-        data:{
-            values:[[stringify(values)]]
-        }
-    }); 
-    
-    // console.log(res);
-    return res;
-   } catch (error) {
-    update(range ,value);
-    throw new Error(error.message);
-   }
+export async function update(range, values) {
+    try {
+        const res = await PUT({
+            url: `https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_DB_ID}/values/${range}?valueInputOption=RAW&key=${import.meta.env.VITE_SHEET_AKEY}`,
+            headers: await headers(),
+            data: {
+                values: [[stringify(values)]]
+            }
+        });
+
+        // console.log(res);
+        return res;
+    } catch (error) {
+        update(range, value);
+        throw new Error(error.message);
+    }
 }
 
 export async function clear(range) {
 
-   try {
-    const res = await POST({
-        url:`https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_DB_ID}/values/${range}:clear?alt=json&key=${import.meta.env.VITE_SHEET_AKEY}`,
-        headers:await headers(),
-    })
+    try {
+        const res = await POST({
+            url: `https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_DB_ID}/values/${range}:clear?alt=json&key=${import.meta.env.VITE_SHEET_AKEY}`,
+            headers: await headers(),
+        })
 
-    console.log(res);
-    return res
-   } catch (error) {
-    clear(range);
-    throw new Error(error.message);
-   }
+        console.log(res);
+        return res
+    } catch (error) {
+        clear(range);
+        throw new Error(error.message);
+    }
 }
 
 /**
