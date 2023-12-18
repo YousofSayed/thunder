@@ -12,9 +12,7 @@ function PostReacts({ context, setContext }) {
     const reactIconRef = useRef();
     const reacCounterRef = useRef();
     const editeIconRef = useRef();
-    const { showPostEditBtn, postSectionRef, postRef, userID, reacts,  reposts, post, repost } = context;
-    const index = repost ? repost.index : post.index;
-    const _id = repost ? repost._id : post._id;
+    const { showPostEditBtn, postSectionRef, postRef, userID, reacts, reposts, _id ,index, post, repost } = context;
     const user = parse(localStorage.getItem('user'));
     const db = new CocktailDB(user.email);
     useEffect(() => {
@@ -43,18 +41,16 @@ function PostReacts({ context, setContext }) {
     const doReact = async (ev, nameOfReact) => {
         const btn = ev.currentTarget;
         addClickClass(btn, 'click');
-        console.log(index);
         try {
             btn.disabled = true;
             if (!react) {
                 isNumber(reacCounterRef.current.textContent) ? reacCounterRef.current.textContent++ : null;
                 setReact(nameOfReact);
                 const postOrRepost = await getFromTo('Posts', index, index);
-                console.log(postOrRepost);
                 if (postOrRepost[0] && postOrRepost[0].type == 'post') {
                     postOrRepost[0].schema.reacts[nameOfReact]++;
                 }
-                else if(postOrRepost[0] && postOrRepost[0].type == 'repost'){
+                else if (postOrRepost[0] && postOrRepost[0].type == 'repost') {
                     postOrRepost[0].schema.post.reacts[nameOfReact]++;
                 }
                 const updateRespone = await update(`Posts!A${index}`, postOrRepost[0]);
@@ -68,7 +64,7 @@ function PostReacts({ context, setContext }) {
                 if (postOrRepost[0] && postOrRepost[0].type == 'post') {
                     +postOrRepost[0].schema.reacts[nameOfReact] > 0 ? +postOrRepost[0].schema.reacts[nameOfReact]-- : null;
                 }
-                else if(postOrRepost[0] && postOrRepost[0].type == 'repost'){
+                else if (postOrRepost[0] && postOrRepost[0].type == 'repost') {
                     postOrRepost[0].schema.post.reacts[nameOfReact] > 0 ? postOrRepost[0].schema.post.reacts[nameOfReact]-- : null;
                 }
                 const updateRespone = await update(`Posts!A${index}`, postOrRepost[0]);
@@ -115,11 +111,11 @@ function PostReacts({ context, setContext }) {
         btn.disabled = true;
         try {
             if (!isSaved) {
-                const IDBRes = await (await db.openCollection('Bookmarks')).set(repost ? repost : post);
+                const IDBRes = await (await db.openCollection('Bookmarks')).set({ type: 'post', _id, schema: post });
                 setIsSaved(true);
             }
             else {
-                const IDBRes = await (await db.openCollection('Bookmarks')).deleteOne({ _id: repost ? repost._id : post._id });
+                const IDBRes = await (await db.openCollection('Bookmarks')).deleteOne({ _id });
                 setIsSaved(false);
             }
         }
@@ -136,7 +132,7 @@ function PostReacts({ context, setContext }) {
         addClickClass(btn, 'click')
         try {
             btn.disabled = true;
-            const res = await clear(`Posts!A${repost ? repost.index : index}`);
+            const res = await clear(`Posts!A${index}`);
             postRef.remove();
         }
         catch (error) {

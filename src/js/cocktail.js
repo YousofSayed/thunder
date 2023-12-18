@@ -916,7 +916,7 @@ export class CocktailDB {
         */
         find: async (query) => {
           try {
-            if (query && typeof query !== typeof {}) { throw new Error(`Query type must be an object like that => {Query}`) };
+            if (query && typeof query !== typeof {}) { throw new TypeError(`Query type must be an object like that => {Query}`) };
             return await this.handlers.findHandler(name, query, matches => matches)
           } catch (error) {
             throw new Error(error.message);

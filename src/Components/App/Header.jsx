@@ -46,13 +46,13 @@ function Header() {
 
 
     return (
-        <header className="w-full h-[60px] px-2 mt-[10px] " title='header'>
+        <header className="w-full h-[50px] px-2 mt-[10px] " title='header'>
 
             <section dir='ltr' className="relative h-[100%] m-auto container flex  items-center p-2 bg-[#eee] dark:bg-gray-900 justify-between rounded-lg" title='container'>
 
                 <figure className="flex items-center gap-2">
                     {/* <i className="fa-solid fa-bolt text-3xl text-cyan-400" title='thunder logo'></i> */}
-                    <img src={textLogo} alt="thunder" className='w-[110px]' title='thunder text logo' loading='lazy' />
+                    <img src={textLogo} alt="thunder" className='w-[95px]' title='thunder text logo' loading='lazy' />
                 </figure>
 
                 <section className='flex items-center gap-5'>
@@ -63,7 +63,7 @@ function Header() {
 
                     <figure className={`flex items-center gap-2 px-2 rounded h-full ${user && 'sm:bg-[#fff]'} sm:dark:bg-gray-950`} onClick={showLogOrSignComp}>
                         <p className="font-bold text-xl hidden sm:block text-black dark:text-white" title='name of user'>{user?.name}</p>
-                        <img className="w-9 h-9 rounded-full cursor-pointer ring-4" src={profImg} id="profImgId" alt='' loading='lazy' title='profile image' />
+                        <img className="w-[30px] h-[30px] rounded-full cursor-pointer ring-4" src={profImg} id="profImgId" alt='' loading='lazy' title='profile image' />
                     </figure>
                 </section>
 

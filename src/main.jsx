@@ -10,6 +10,7 @@ import PostsView from './Pages/PostsView';
 import Auth from './Pages/Auth';
 import MakeRetweet from './Pages/MakeRepost';
 import Search from './Pages/Search';
+import Bookmarks from './Pages/Bookmarks';
 
 
 const handleDarkMode = () => {
@@ -34,6 +35,7 @@ root.render(
                 <Route path='/auth' element={<Auth />} />
                 <Route path='/repost/:postIndex' element={<MakeRetweet />} />
                 <Route path='/search' element={<Search />} />
+                <Route path='/bookmarks' element={<Bookmarks />} />
             </Route>
             <Route path='/signup' element={<Signup />} />
             <Route path='/login' element={<Login />} />
