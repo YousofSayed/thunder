@@ -9,9 +9,10 @@ import './main.css';
 import PostsView from './Pages/PostsView';
 import Auth from './Pages/Auth';
 import MakeRetweet from './Pages/MakeRepost';
+import Search from './Pages/Search';
 
 
-const handleDarkMode = ()=>{
+const handleDarkMode = () => {
     if (window.matchMedia('(prefers-color-scheme: dark)').matches && !localStorage.getItem('theme')) {
         localStorage.setItem('theme', 'dark')
         document.documentElement.classList.add('dark');
@@ -32,6 +33,7 @@ root.render(
                 <Route path='/' element={<PostsView />} />
                 <Route path='/auth' element={<Auth />} />
                 <Route path='/repost/:postIndex' element={<MakeRetweet />} />
+                <Route path='/search' element={<Search />} />
             </Route>
             <Route path='/signup' element={<Signup />} />
             <Route path='/login' element={<Login />} />

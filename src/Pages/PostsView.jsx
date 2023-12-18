@@ -7,8 +7,6 @@ import { postSocket } from '../js/initSockets';
 import Loader from '../Components/Shared/Loader';
 import Repost from '../Components/Repost';
 import NoDataHere from '../Components/Shared/NoDataHere';
-import Search from '../Components/Shared/Search';
-
 
 function PostsView() {
     const [states, setStates] = useState({
@@ -53,7 +51,6 @@ function PostsView() {
         <>
             <section ref={postSectionRef} className='container h-full relative  flex flex-col   items-center gap-3 bg-[#eee] dark:bg-gray-900 rounded-lg p-2 overflow-x-auto hide-scrollbar' >
 
-               <Search postViewStates={[states , setStates]}/>
 
                 <CreatePost />
 

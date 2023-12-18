@@ -22,20 +22,22 @@ export async function headers() {
     }
     return headers
 }
-
+// 1u66NoFwvKj4aV3hUbv44qB8R_Mnie5r5042ozCEoBLk
 export async function getAllSheetValues(range) {
     try {
         const url = `https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_DB_ID}/values/${range}?key=${import.meta.env.VITE_SHEET_AKEY}`;
         const res = await (await GET({ url, headers: await headers() }));
         const jsonRes = await res.json()
-        console.log(jsonRes);
         if (res.status == 200) {
             return {
                 filter: async (value) => {
                     const result = [];
-                    const keyWords = new RegExp(value?.match(/\w+|[\u0600-\u06FF\u0750-\u077F]+/ig)?.join('|'));
-                    for (const val of jsonRes.values) { //I used for insted of filter method because of fast performance
-                        if (keyWords.test(val)) {
+                    const keyWords = new RegExp(value?.toLowerCase().match(/\w+|[\u0600-\u06FF\u0750-\u077F]+/ig)?.join('|'));
+                    for (let [i, val] of jsonRes.values.entries()) { //I used for insted of filter method because of fast performance
+                        if (!val[0]) continue;
+                        if (keyWords.test(val[0].toLowerCase())) {
+                            val = parse(val);
+                            val.schema.index = i+1
                             result.push(val)
                         }
                     }

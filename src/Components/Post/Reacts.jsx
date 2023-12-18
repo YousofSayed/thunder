@@ -43,13 +43,14 @@ function PostReacts({ context, setContext }) {
     const doReact = async (ev, nameOfReact) => {
         const btn = ev.currentTarget;
         addClickClass(btn, 'click');
-
+        console.log(index);
         try {
             btn.disabled = true;
             if (!react) {
                 isNumber(reacCounterRef.current.textContent) ? reacCounterRef.current.textContent++ : null;
                 setReact(nameOfReact);
                 const postOrRepost = await getFromTo('Posts', index, index);
+                console.log(postOrRepost);
                 if (postOrRepost[0] && postOrRepost[0].type == 'post') {
                     postOrRepost[0].schema.reacts[nameOfReact]++;
                 }
