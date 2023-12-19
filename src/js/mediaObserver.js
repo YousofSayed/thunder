@@ -8,17 +8,17 @@ export const mediaObserver = new IntersectionObserver((entries) => {
             const vid = $(`#${id} video`);
             const imgs = $a(`#${id} img`);
             if (vid) {
-                if (vid.src) return;
-                vid.src = await tb.getFileFromBot(vid.getAttribute('tbid'));
+                // if (vid.src) return;
+                // vid.src = await tb.getFileFromBot(vid.getAttribute('tbid'));
                 vid.autoplay = true;
-                vid.muted = true;
+                // vid.muted = true;
             }
 
-            if (imgs.length) {
-                imgs.forEach(async img => {
-                    img.src = await tb.getFileFromBot(img.getAttribute('tbid'))
-                })
-            }
+            // if (imgs.length) {
+            //     imgs.forEach(async img => {
+            //         img.src = await tb.getFileFromBot(img.getAttribute('tbid'))
+            //     })
+            // }
             mediaObserver.unobserve(entry.target);
         }
     })

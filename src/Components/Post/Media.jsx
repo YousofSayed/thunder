@@ -1,12 +1,14 @@
 import { useEffect, useRef } from 'react';
 import vidLoader from '../../Assets/images/vidLoader.gif'
-import {  uniqueID } from '../../js/cocktail';
+import { $, $a, uniqueID } from '../../js/cocktail';
 import { mediaObserver } from '../../js/mediaObserver';
+import tb from '../../js/tb';
 
 function PostMedia({ media, repost }) {
     const mediaRef = useRef();
     const { images, vid, iframeSrc } = media;
     const videoRef = useRef();
+    const imgRef = useRef();
     const vidConrolsRef = useRef();
     const figureRef = useRef();
     const playIconRef = useRef();
@@ -15,7 +17,31 @@ function PostMedia({ media, repost }) {
 
     useEffect(() => {
         mediaObserver.observe(mediaRef.current);
-    },[]);
+        if (videoRef.current && !videoRef.current.src ) {
+            setTimeout(async () => {
+                videoRef.current.src = await tb.getFileFromBot(videoRef.current.getAttribute('tbid'));
+            }, 1500)
+        }
+
+        // if(imgRef.current){
+        //     setTimeout(async()=>{
+        //         imgRef.current.src = await tb.getFileFromBot(imgRef.current.getAttribute('tbid'));
+        //     },1500)
+        // }
+
+        // setTimeout(async () => {
+        //     if ($(`#media-${unId} video`).src) return;
+        //     console.log(true);
+        //     $(`#media-${unId} video`).src = await tb.getFileFromBot($(`#media-${unId} video`).getAttribute('tbid'));
+        // }, 1500)
+
+        $a(`#media-${unId} img`).forEach(img => {
+            if (img.src) return;
+            setTimeout(async () => {
+                img.src = await tb.getFileFromBot(img.getAttribute('tbid'));
+            }, 1500)
+        })
+    }, []);
 
     const playAndPauseVideo = (ev) => {
         ev.stopPropagation();
@@ -72,7 +98,7 @@ function PostMedia({ media, repost }) {
                         images.map((tbid, i) => {
                             return (
                                 <figure className={`snap-center ${images.length > 1 ? 'w-[90%] sm:w-[40%]' : 'w-full'} h-[300px] flex items-center justify-center ${repost ? 'bg-white dark:bg-gray-950' : 'bg-[#eee] dark:bg-gray-900'} flex-shrink-0 rounded-lg `} key={i}>
-                                    <img tbid={tbid} className="max-w-full h-full max-h-[300px]" />
+                                    <img ref={imgRef} tbid={tbid} className="max-w-full h-full max-h-[300px]" />
                                 </figure>
                             )
                         })
@@ -89,7 +115,7 @@ function PostMedia({ media, repost }) {
 
                             return (
                                 <figure ref={figureRef} onClick={toggleControlsRef} className={`relative snap-center w-full group  flex items-center justify-center flex-shrink-0  ${repost ? 'bg-white dark:bg-gray-950' : 'bg-[#eee] dark:bg-gray-900'} rounded-lg`} key={i}>
-                                    <video tbid={tbid} ref={videoRef} onError={()=>{videoRef.current.load();}} onPlay={() => { toggleControlsRef() }} onEnded={handleEndOfVideo} className=" rounded-lg w-full h-full " poster={vidLoader} />
+                                    <video tbid={tbid} ref={videoRef} muted={true} preload='metadata' onError={() => { videoRef.current.load(); }} onPlay={() => { toggleControlsRef() }} onEnded={handleEndOfVideo} className=" rounded-lg w-full h-full " poster={vidLoader} />
                                     <ul ref={vidConrolsRef} className='absolute bottom-[5px] left-[5px] rounded-3xl w-fit p-2 bg-[#eee] dark:bg-gray-800 items-center gap-4 flex transition-all'>
                                         <i ref={playIconRef} onClick={playAndPauseVideo} className='fa-solid fa-pause  text-[11px] font-bold cursor-pointer flex items-center justify-center w-[24px] h-[24px] rounded-full bg-gray-950'></i>
                                         <i ref={muteIconRef} onClick={muteAndUnmute} className="fa-solid fa-volume-high fa-volume-xmark text-[11px] font-bold cursor-pointer flex items-center justify-center w-[24px] h-[24px] rounded-full bg-gray-950"></i>
