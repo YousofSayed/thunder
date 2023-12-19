@@ -20,7 +20,7 @@ function App() {
             <main className="w-full h-[calc(100%-100px)] flex justify-center p-2  relative">
                 <Outlet />
             </main>
-            <Footer/>
+            {user && <Footer/>}
         </section>
     );
 }

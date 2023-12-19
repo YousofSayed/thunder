@@ -58,11 +58,10 @@ function Header() {
                 <section className='flex items-center gap-5'>
                     <figure className='cursor-pointer' onClick={handledDarkMode}>
                         <i className={`fa-solid ${theme == 'dark' ? 'fa-moon' : 'fa-sun'} text-2xl text-shadow text-cyan-400`} title={theme=='dark' ? 'Switch to light mode' : 'Switch to dark mode'}></i>
-                        
                     </figure>
 
-                    <figure className={`flex items-center gap-2 px-2 rounded h-full ${user && 'sm:bg-[#fff]'} sm:dark:bg-gray-950`} onClick={showLogOrSignComp}>
-                        <p className="font-bold text-xl hidden sm:block text-black dark:text-white" title='name of user'>{user?.name}</p>
+                    <figure className={`flex items-center gap-2  rounded h-full ${user && 'px-2'} sm:bg-[#fff] sm:dark:bg-gray-950`} onClick={showLogOrSignComp}>
+                        {user && <p className="font-bold text-xl hidden sm:block text-black dark:text-white" title='name of user'>{user.name}</p>}
                         <img className="w-[30px] h-[30px] rounded-full cursor-pointer ring-4" src={profImg} id="profImgId" alt='' loading='lazy' title='profile image' />
                     </figure>
                 </section>
