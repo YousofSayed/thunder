@@ -10,9 +10,8 @@ export const mediaObserver = new IntersectionObserver((entries) => {
             if (vid) {
                 if (vid.src) return;
                 vid.src = await tb.getFileFromBot(vid.getAttribute('tbid'));
-                vid.poster = '';
-                vid.load();
-                // vid.controls = true;
+                vid.autoplay = true;
+                vid.muted = true;
             }
 
             if (imgs.length) {
@@ -23,6 +22,6 @@ export const mediaObserver = new IntersectionObserver((entries) => {
             mediaObserver.unobserve(entry.target);
         }
     })
-},{
-    rootMargin:`1000000px`
+}, {
+    rootMargin: `1000000px`
 })

@@ -404,7 +404,29 @@ export function transformToNumInput(inputElement) {
   inputElement.value = inputElement.value.split(/\D+/ig).join('');
 }
 
+/**
+ * 
+ * @param {{blob:Blob , videoEl:HTMLVideoElement , width:number , height:number}} param0 
+ * @returns 
+ */
+export function generateThumnail({ blob, videoEl, width, height }) {
+  if (blob && videoEl) throw new Error(`Just pass one argument videoEl or blob object`)
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  const video = videoEl || document.createElement('video');
+  canvas.width = width; canvas.height = height;
+  !videoEl && (video.src = URL.createObjectURL(blob));
+  ctx.drawImage(video, 0, 0, width, height)
+  
+  return {
+    dataURL: canvas.toDataURL('image/png'),
+    async blob() {
+      canvas.toBlob
+    }
+  }
 
+
+}
 
 /**
  * It make your specific element responsive with window height and width

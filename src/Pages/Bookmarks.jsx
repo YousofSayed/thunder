@@ -11,7 +11,7 @@ function Bookmarks() {
 
     useEffect(() => {
         getPostsFromIDB();
-    })
+    },[])
 
     const getPostsFromIDB = async () => {
         const db = new CocktailDB(user.email);
