@@ -10,7 +10,8 @@ export const mediaObserver = new IntersectionObserver((entries) => {
             if (vid) {
                 // if (vid.src) return;
                 // vid.src = await tb.getFileFromBot(vid.getAttribute('tbid'));
-                vid.autoplay = true;
+                // vid.autoplay = true;
+                vid.play();
                 // vid.muted = true;
             }
 
@@ -21,6 +22,9 @@ export const mediaObserver = new IntersectionObserver((entries) => {
             // }
             mediaObserver.unobserve(entry.target);
         }
+        // else{
+        //     vid.pause();
+        // }
     })
 }, {
     rootMargin: `1000000px`
