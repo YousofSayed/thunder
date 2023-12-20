@@ -1,12 +1,14 @@
 import { useEffect, useRef } from "react";
 import tb from "../../js/tb";
 
-function User({profImgId , userAvatar , userName , className}) {
+function User({ profImgId, userAvatar, userName, className }) {
     const profImgRef = useRef();
     useEffect(() => {
-        (async () => {
-            profImgRef.current.src = await (await tb.getFileFromBot(profImgId))
-        })()
+        if (profImgRef.current) {
+            setTimeout(async () => {
+                profImgRef.current.src = await (await tb.getFileFromBot(profImgId))
+            }, 1000)
+        }
     }, []);
 
     return (

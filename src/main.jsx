@@ -11,6 +11,7 @@ import Auth from './Pages/Auth';
 import MakeRetweet from './Pages/MakeRepost';
 import Search from './Pages/Search';
 import Bookmarks from './Pages/Bookmarks';
+import Profile from './Pages/Profile';
 
 
 const handleDarkMode = () => {
@@ -36,6 +37,7 @@ root.render(
                 <Route path='/repost/:postIndex' element={<MakeRetweet />} />
                 <Route path='/search' element={<Search />} />
                 <Route path='/bookmarks' element={<Bookmarks />} />
+                <Route path='/profile' element={<Profile />} />
             </Route>
             <Route path='/signup' element={<Signup />} />
             <Route path='/login' element={<Login />} />

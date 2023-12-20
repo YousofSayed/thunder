@@ -4,6 +4,7 @@ import { $, $a, uniqueID } from '../../js/cocktail';
 import { mediaObserver } from '../../js/mediaObserver';
 import tb from '../../js/tb';
 
+
 function PostMedia({ media, repost }) {
     const mediaRef = useRef();
     const { images, vid, iframeSrc } = media;
@@ -17,28 +18,20 @@ function PostMedia({ media, repost }) {
 
     useEffect(() => {
         mediaObserver.observe(mediaRef.current);
-        if (videoRef.current && !videoRef.current.src ) {
+        if (videoRef.current && !videoRef.current.src) {
             setTimeout(async () => {
                 videoRef.current.src = await tb.getFileFromBot(videoRef.current.getAttribute('tbid'));
             }, 1500)
         }
 
-        // if(imgRef.current){
-        //     setTimeout(async()=>{
-        //         imgRef.current.src = await tb.getFileFromBot(imgRef.current.getAttribute('tbid'));
-        //     },1500)
-        // }
-
-        // setTimeout(async () => {
-        //     if ($(`#media-${unId} video`).src) return;
-        //     console.log(true);
-        //     $(`#media-${unId} video`).src = await tb.getFileFromBot($(`#media-${unId} video`).getAttribute('tbid'));
-        // }, 1500)
-
         $a(`#media-${unId} img`).forEach(img => {
             if (img.src) return;
             setTimeout(async () => {
                 img.src = await tb.getFileFromBot(img.getAttribute('tbid'));
+                const reloadImg = (ev) => {
+                    ev.target.src = ev.target.src;
+                }
+                img.addEventListener('error', reloadImg)
             }, 1500)
         })
     }, []);
@@ -115,8 +108,8 @@ function PostMedia({ media, repost }) {
 
                             return (
                                 <figure ref={figureRef} onClick={toggleControlsRef} className={`relative snap-center w-full group  flex items-center justify-center flex-shrink-0  ${repost ? 'bg-white dark:bg-gray-950' : 'bg-[#eee] dark:bg-gray-900'} rounded-lg`} key={i}>
-                                    <video tbid={tbid} ref={videoRef} muted={true} preload='metadata' onError={() => { videoRef.current.load(); }} onPlay={() => { toggleControlsRef() }} onEnded={handleEndOfVideo} className=" rounded-lg w-full h-full " poster={vidLoader} />
-                                    <ul ref={vidConrolsRef} className='absolute bottom-[5px] left-[5px] rounded-3xl w-fit p-2 bg-[#eee] dark:bg-gray-800 items-center gap-4 flex transition-all'>
+                                    <video tbid={tbid} ref={videoRef} muted={true} preload='auto' onError={() => { videoRef.current.load(); }} onPlay={() => { toggleControlsRef() }} onEnded={handleEndOfVideo} className=" rounded-lg w-full h-full " poster={vidLoader} />
+                                    <ul ref={vidConrolsRef} className='absolute bottom-[5px] left-[5px] rounded-3xl w-fit p-2 bg-[#eee] dark:bg-gray-800 items-center gap-4 flex hidden transition-all'>
                                         <i ref={playIconRef} onClick={playAndPauseVideo} className='fa-solid fa-pause  text-[11px] font-bold cursor-pointer flex items-center justify-center w-[24px] h-[24px] rounded-full bg-gray-950'></i>
                                         <i ref={muteIconRef} onClick={muteAndUnmute} className="fa-solid fa-volume-high fa-volume-xmark text-[11px] font-bold cursor-pointer flex items-center justify-center w-[24px] h-[24px] rounded-full bg-gray-950"></i>
                                         <i onClick={goFullScreen} className="fa-solid fa-expand  text-[11px] font-bold cursor-pointer flex items-center justify-center w-[24px] h-[24px] rounded-full bg-gray-900"></i>
