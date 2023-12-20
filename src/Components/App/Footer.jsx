@@ -8,17 +8,17 @@ function Footer() {
         const route = location.pathname.replace('/', '')
         if (!route) {
             // $(`#routes #home`).classList.remove('text-shadow','text-black','dark:text-white');
-            $(`#routes #home`).classList.add('text-[12px]', 'ring-2' ,'bg-gray-950')
+            $(`#routes #home`).classList.add('text-[12px]', 'ring-2' ,'dark:bg-gray-950','bg-[#fff]')
             return;
         };
-        $a('#routes a').forEach(a => a.classList.remove('text-shadow','text-[12px]', 'ring-2' ,'bg-gray-950'));
-        $(`#routes #${route}`).classList.add('text-shadow','text-[12px]', 'ring-2' ,'bg-gray-950')
+        $a('#routes a').forEach(a => a.classList.remove('text-shadow','text-[12px]', 'ring-2' ,'dark:bg-gray-950','bg-[#fff]'));
+        $(`#routes #${route}`).classList.add('text-shadow','text-[12px]', 'ring-2' ,'dark:bg-gray-950','bg-[#fff]')
     })
 
     const handleRoutes = (ev) => {
         $a('#routes a').forEach(a => {
-            a.classList.remove('text-shadow','text-[12px]', 'ring-2' ,'bg-gray-950')
-            ev.currentTarget.classList.add('text-shadow','text-[12px]', 'ring-2' ,'bg-gray-950')
+            a.classList.remove('text-shadow','text-[12px]', 'ring-2' ,'dark:bg-gray-950','bg-[#fff]')
+            ev.currentTarget.classList.add('text-shadow','text-[12px]', 'ring-2' ,'dark:bg-gray-950','bg-[#fff]')
         });
     };
 
