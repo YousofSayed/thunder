@@ -50,7 +50,7 @@ progress::-webkit-progress-bar{
     background-color: rgb(34 211 238);
 }
 
-i, button , input , a{
+i, button , input , a , figure , span{
     -webkit-tap-highlight-color: transparent;
     user-select: none;
 }

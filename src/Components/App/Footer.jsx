@@ -25,7 +25,7 @@ function Footer() {
     return (
         <footer className="w-full h-[45px] flex mb-2 justify-center px-2">
             <ul id="routes" className="container bg-[#eee] dark:bg-gray-900 rounded-lg p-2 flex items-center justify-between">
-                <Link id="profile" className="text-cyan-400np w-[25px] h-[25px] flex items-center justify-center  rounded-full" to={'/profile'} onClick={handleRoutes}><i className="fa-solid fa-user cursor-pointer"></i></Link>
+                <Link id="profile" className="text-cyan-400 w-[25px] h-[25px] flex items-center justify-center  rounded-full" to={'/profile'} onClick={handleRoutes}><i className="fa-solid fa-user cursor-pointer"></i></Link>
                 <Link id="bookmarks" className="text-cyan-400 w-[25px] h-[25px] flex items-center justify-center  rounded-full" to={'/bookmarks'} onClick={handleRoutes}><i className="fa-solid fa-bookmark cursor-pointer"></i></Link>
                 <Link id="home" className="text-cyan-400 w-[25px] h-[25px] flex items-center justify-center  rounded-full" to={'/'} onClick={handleRoutes}><i className="fa-solid  fa-home cursor-pointer "></i></Link>
                 <Link id="settings" className="text-cyan-400 w-[25px] h-[25px] flex items-center justify-center  rounded-full" to={'/settings'} onClick={handleRoutes}><i className="fa-solid fa-gear cursor-pointer"></i></Link>

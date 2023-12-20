@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import textLogo from '../../Assets/images/textLogo.png';
 import userAvatar from '../../Assets/images/user-avatar.png';
 import tb from '../../js/tb';
-import { parse } from "../../js/cocktail";
+import { addClickClass, parse } from "../../js/cocktail";
 
 
 function Header() {
@@ -31,7 +31,8 @@ function Header() {
         $('#logOrSign').classList.remove('hidden');
     };
 
-    const handledDarkMode = ()=>{
+    const handledDarkMode = (ev)=>{
+        addClickClass(ev.currentTarget , 'click');
         if(theme == 'dark'){
             setTheme('light');
             localStorage.setItem('theme','light');
