@@ -3,10 +3,10 @@
 /**
  * Shortcut for querySelector
  * @param {string} root 
- * @returns {HTMLElement | HTMLInputElement}
+ * @returns {HTMLElement | HTMLInputElement | Element}
  */
 export function $(root) {
-  return document.querySelector(root);
+  return document.querySelector(root) ? document.querySelector(root) : null;
 }
 
 /**

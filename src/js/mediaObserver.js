@@ -11,6 +11,7 @@ export const mediaObserver = new IntersectionObserver((entries) => {
                 // if (vid.src) return;
                 // vid.src = await tb.getFileFromBot(vid.getAttribute('tbid'));
                 // vid.autoplay = true;
+                // vid.load();
                 vid.play();
                 // vid.muted = true;
             }
@@ -20,12 +21,11 @@ export const mediaObserver = new IntersectionObserver((entries) => {
             //         img.src = await tb.getFileFromBot(img.getAttribute('tbid'))
             //     })
             // }
-            mediaObserver.unobserve(entry.target);
+            // mediaObserver.unobserve(entry.target);
         }
-        // else{
-        //     vid.pause();
-        // }
+        else{
+            const vid = $(`#${entry.target.id} video`);
+            vid && $(`#${entry.target.id} video`).pause();
+        }
     })
-}, {
-    rootMargin: `1000000px`
 })

@@ -17,7 +17,7 @@ function App() {
     return (
         <section className="flex flex-col justify-between h-full">
             <Header />
-            <main className="w-full h-[calc(100%-100px)] flex justify-center p-2  relative">
+            <main className="w-full h-[calc(100%-110px)] flex justify-center p-2  relative">
                 <Outlet />
             </main>
             {user && <Footer/>}
