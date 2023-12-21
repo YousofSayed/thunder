@@ -8,14 +8,6 @@ export const mediaObserver = new IntersectionObserver((entries) => {
             const vid = $(`#${id} video`);
             const imgs = $a(`#${id} img`);
             if (vid) {
-                // if (vid.src) return;
-                // vid.src = await tb.getFileFromBot(vid.getAttribute('tbid'));
-                // vid.autoplay = true;
-                // vid.load();
-                // vid.addEventListener('loadeddata',()=>{
-                //     console.log(true);
-                // })
-                vid.pause();
                 vid.play();
                 // vid.muted = true;
             }
