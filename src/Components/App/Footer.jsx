@@ -5,14 +5,14 @@ import { Link } from "react-router-dom";
 function Footer() {
 
     useEffect(() => {
-        const route = location.pathname.replace('/', '')
+        const route = location.pathname.replaceAll('/', '')
         if (!route) {
             // $(`#routes #home`).classList.remove('text-shadow','text-black','dark:text-white');
-            $(`#routes #home`).classList.add('text-[12px]', 'ring-2' ,'dark:bg-gray-950','bg-[#fff]')
+            $(`#routes #home`)?.classList.add('text-[12px]', 'ring-2' ,'dark:bg-gray-950','bg-[#fff]')
             return;
         };
-        $a('#routes a').forEach(a => a.classList.remove('text-shadow','text-[12px]', 'ring-2' ,'dark:bg-gray-950','bg-[#fff]'));
-        $(`#routes #${route}`).classList.add('text-shadow','text-[12px]', 'ring-2' ,'dark:bg-gray-950','bg-[#fff]')
+        $a('#routes a')?.forEach(a => a.classList.remove('text-shadow','text-[12px]', 'ring-2' ,'dark:bg-gray-950','bg-[#fff]'));
+        $(`#routes #${route}`)?.classList.add('text-shadow','text-[12px]', 'ring-2' ,'dark:bg-gray-950','bg-[#fff]')
     })
 
     const handleRoutes = (ev) => {
