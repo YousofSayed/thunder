@@ -12,6 +12,9 @@ export const mediaObserver = new IntersectionObserver((entries) => {
                 // vid.src = await tb.getFileFromBot(vid.getAttribute('tbid'));
                 // vid.autoplay = true;
                 // vid.load();
+                // vid.addEventListener('loadeddata',()=>{
+                //     console.log(true);
+                // })
                 vid.play();
                 // vid.muted = true;
             }

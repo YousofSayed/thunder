@@ -7,7 +7,7 @@ function User({ profImgId, userAvatar, userName, className }) {
         if (profImgRef.current) {
             setTimeout(async () => {
                 profImgRef.current.src = await (await tb.getFileFromBot(profImgId))
-            }, 1000)
+            }, 100)
         }
     }, []);
 

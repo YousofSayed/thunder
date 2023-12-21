@@ -3,6 +3,7 @@ import vidLoader from '../../Assets/images/vidLoader.gif'
 import { $, $a, uniqueID } from '../../js/cocktail';
 import { mediaObserver } from '../../js/mediaObserver';
 import tb from '../../js/tb';
+import { urlsMap } from '../../js/urlsMap';
 
 
 function PostMedia({ media, repost }) {
@@ -15,24 +16,25 @@ function PostMedia({ media, repost }) {
     const playIconRef = useRef();
     const muteIconRef = useRef();
     const unId = uniqueID();
-
+    const urlsById = new Map();
     useEffect(() => {
+   
         mediaObserver.observe(mediaRef.current);
         if (videoRef.current && !videoRef.current.src) {
-            setTimeout(async () => {
-                videoRef.current.src = await tb.getFileFromBot(videoRef.current.getAttribute('tbid'));
-            }, 100)
+            // setTimeout(async () => {
+                (async()=>videoRef.current.src = await tb.getFileFromBot(videoRef.current.getAttribute('tbid')))()
+                // videoRef.current.src = urlsMap.get(videoRef.current.getAttribute('tbid'));
+            // }, 50)
         }
 
         $a(`#media-${unId} img`).forEach(img => {
             if (img.src) return;
-            setTimeout(async () => {
-                img.src = await tb.getFileFromBot(img.getAttribute('tbid'));
-                const reloadImg = (ev) => {
-                    ev.target.src = ev.target.src;
-                }
-                img.addEventListener('error', reloadImg)
-            }, 300)
+            // setTimeout(async () => {
+                (async()=>img.src = await tb.getFileFromBot(img.getAttribute('tbid')))();
+                // img.src = urlsMap.get(img.getAttribute('tbid'));
+
+            
+            // }, 100)
         })
     }, []);
 
@@ -113,10 +115,11 @@ function PostMedia({ media, repost }) {
                                         tbid={tbid}
                                         ref={videoRef}
                                         muted={true}
-                                        preload='metadata'
-                                        onError={() => { videoRef.current.load(); console.log('vid error'); }}
+                                        preload='none'
+                                        onLoad={()=>{videoRef.current.play();}}
+                                        onError={() => { videoRef.current.load();  console.log('vid error'); }}
                                         onPause={(ev) => { togglePlayAndPauseIcon(ev); }}
-                                        onEndedCapture={(ev) => { togglePlayAndPauseIcon(ev);}}
+                                        onEndedCapture={(ev) => { togglePlayAndPauseIcon(ev); }}
                                         onPlay={(ev) => { toggleControlsRef(); togglePlayAndPauseIcon(ev); }}
                                         onEnded={handleEndOfVideo}
                                         className=" rounded-lg w-full h-full "
