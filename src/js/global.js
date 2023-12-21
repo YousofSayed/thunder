@@ -30,18 +30,44 @@ export async function getAllSheetValues(range) {
         const jsonRes = await res.json()
         if (res.status == 200) {
             return {
-                filter: async (value) => {
+                async filter(value) {
                     const result = [];
                     const keyWords = new RegExp(value?.toLowerCase().match(/\w+|[\u0600-\u06FF\u0750-\u077F]+/ig)?.join('|'));
                     for (let [i, val] of jsonRes.values.entries()) { //I used for insted of filter method because of fast performance
                         if (!val[0]) continue;
                         if (keyWords.test(val[0].toLowerCase())) {
                             val = parse(val);
-                            val.schema.index = i+1
+                            val.schema.index = i + 1
                             result.push(val)
                         }
                     }
                     return result.length ? result : null;
+                },
+                async replaceAllAndUpdate(value, newValue) {
+                    const data = stringify(jsonRes.values);
+                    const newData = data.replaceAll(value, newValue);
+                    const res = await PUT({
+                        url: `https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_DB_ID}/values/${range}?valueInputOption=RAW&key=${import.meta.env.VITE_SHEET_AKEY}`,
+                        headers: await headers(),
+                        data: {
+                            values: [...parse(newData)]
+                        }
+                    });
+                    return await (await res.json()).updatedRange ? 'Successfully updates' : 'Failed to update';
+                },
+                async users() {
+                    const data = jsonRes.values;
+                    const users = [];
+                    for (const val of data) {
+                        if (!val[0]) continue;
+                        const { userName, profImgId, email } = parse(val[0]).schema;
+                        users.push(stringify({
+                            userName,
+                            profImgId,
+                            email,
+                        }));
+                    }
+                    return Array.from(new Set(users)).map(user => parse(user));
                 }
             }
         }
@@ -49,6 +75,7 @@ export async function getAllSheetValues(range) {
         throw new Error(error.message)
     }
 }
+console.log(await (await getAllSheetValues('Posts')).users());
 
 export async function getFromTo(sheetName, from, to) {
     try {
