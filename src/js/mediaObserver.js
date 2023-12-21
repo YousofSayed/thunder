@@ -15,6 +15,7 @@ export const mediaObserver = new IntersectionObserver((entries) => {
                 // vid.addEventListener('loadeddata',()=>{
                 //     console.log(true);
                 // })
+                vid.pause();
                 vid.play();
                 // vid.muted = true;
             }
