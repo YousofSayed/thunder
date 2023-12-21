@@ -105,8 +105,7 @@ function PostMedia({ media, repost }) {
                                     <video
                                         tbid={tbid}
                                         ref={videoRef}
-                                        muted={true}
-                                        preload='none'
+                                        muted={true} 
                                         onLoad={() => { videoRef.current.play(); }}
                                         onError={() => { videoRef.current.load(); console.log('vid error'); }}
                                         onPause={(ev) => { togglePlayAndPauseIcon(ev); }}
