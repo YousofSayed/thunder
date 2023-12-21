@@ -105,6 +105,8 @@ function PostMedia({ media, repost }) {
                                     <video
                                         tbid={tbid}
                                         ref={videoRef}
+
+    autoplay={true} 
                                         muted={true} 
                                         onLoad={() => { videoRef.current.play(); }}
                                         onError={() => { videoRef.current.load(); console.log('vid error'); }}
