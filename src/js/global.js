@@ -75,7 +75,6 @@ export async function getAllSheetValues(range) {
         throw new Error(error.message)
     }
 }
-console.log(await (await getAllSheetValues('Posts')).users());
 
 export async function getFromTo(sheetName, from, to) {
     try {
