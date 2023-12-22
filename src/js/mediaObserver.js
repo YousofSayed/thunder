@@ -21,7 +21,7 @@ export const mediaObserver = new IntersectionObserver((entries) => {
         }
         else{
             const vid = $(`#${entry.target.id} video`);
-            vid && $(`#${entry.target.id} video`).pause();
+            vid && vid.pause();
         }
     })
 })
