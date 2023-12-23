@@ -106,6 +106,8 @@ function PostMedia({ media, repost }) {
                                         tbid={tbid}
                                         ref={videoRef}
                                         autoplay={true}
+                                        preload='metadata'
+                                        playsInline={true}
                                         muted={true}
                                         onLoad={() => { videoRef.current.play(); }}
                                         onError={() => { videoRef.current.load(); console.log('vid error'); }}
