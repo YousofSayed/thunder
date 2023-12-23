@@ -65,31 +65,31 @@ function CreatePostFooter() {
                 return;
             }
             showMarquee(true);
-            const images = [], vid = [];
+            const postData = {
+                type: 'post',
+                schema: postSchema({ user, postContent, iframeSrc })
+            };
 
             if (imagesMedia[0]) {
-
                 for (const item of imagesMedia) {
-                    const res = await (await tb.sendImage(item.file)).id
-                    images.push(res)
+                    const res = await (await tb.sendImage(item.file));
+                    res.ok && (postData.schema.media.images = [{ url: res.url, id: res.id }]);
                 }
             }
 
             if (video[0]) {
                 for (const item of video) {
-                    vid.push(await (await tb.sendVideo(item.file)).id)
+                    const res = await tb.sendVideo(item.file);
+                    res.ok && (postData.schema.media.vid = [{ url: res.url, id: res.id }]);
                 }
             };
 
-            if (video.length && !vid.length || imagesMedia.length && !images.length) {
+            if (video.length && !postData.schema.media.vid.length || imagesMedia.length && !postData.schema.media.images.length) {
                 console.warn(`Error while uploading media...`);
-                await postThePost(ev);
+                setTimeout(async () => await postThePost(ev), 100)
                 return;
             }
-            const postData = {
-                type: 'post',
-                schema: postSchema({ user, postContent, images, vid, iframeSrc })
-            };
+
             const res = await append('Posts', postData);
             const index = res.updates.updatedRange?.match(/\d+/ig)[0];
             postData.schema.index = index;
@@ -109,7 +109,6 @@ function CreatePostFooter() {
             btn.disabled = false;
         }
         catch (error) {
-            setTimeout(async () => await postThePost(), 1000)
             throw new Error(error.message);
         }
         finally {

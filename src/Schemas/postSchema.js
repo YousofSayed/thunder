@@ -1,8 +1,8 @@
 import { getCurrentTime, uniqueID } from "../js/cocktail"
 
-export default function postSchema({ user, postContent, images, vid, iframeSrc }) {
+export default function postSchema({ user, postContent,  iframeSrc }) {
     return {
-        _id:uniqueID(),
+        _id: uniqueID(),
         userName: user.name,
         userID: user.id,
         date: getCurrentTime(),
@@ -10,9 +10,9 @@ export default function postSchema({ user, postContent, images, vid, iframeSrc }
         profImgId: user.profImgId,
         postContent,
         media: {
-            images,
-            vid,
-            iframeSrc
+            images: [],
+            vid: [],
+            iframeSrc: iframeSrc ? iframeSrc : []
         },
         reacts: {
             love: 0,

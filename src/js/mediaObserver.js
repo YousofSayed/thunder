@@ -7,19 +7,29 @@ export const mediaObserver = new IntersectionObserver((entries) => {
             const id = entry.target.id;
             const vid = $(`#${id} video`);
             const imgs = $a(`#${id} img`);
-            if (vid) {
+            // if (vid && !vid.src) {
+            //     vid.src = await tb.getFileFromBot(vid.getAttribute('tbid'))
+            //     vid.load();
+            //     vid.addEventListener('loadeddata', () => {
+            //         console.log('load');
+            //         vid.play();
+            //     })
+
+            // }
+             if (vid && vid.src) {
                 vid.play();
-                // vid.muted = true;
+                
             }
 
             // if (imgs.length) {
             //     imgs.forEach(async img => {
+            //         if (img.src) return;
             //         img.src = await tb.getFileFromBot(img.getAttribute('tbid'))
             //     })
             // }
             // mediaObserver.unobserve(entry.target);
         }
-        else{
+        else {
             const vid = $(`#${entry.target.id} video`);
             vid && vid.pause();
         }

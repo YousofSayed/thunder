@@ -19,14 +19,14 @@ function PostMedia({ media, repost }) {
     useEffect(() => {
 
         mediaObserver.observe(mediaRef.current);
-        if (videoRef.current && !videoRef.current.src) {
-            (async () => videoRef.current.src = await tb.getFileFromBot(videoRef.current.getAttribute('tbid')))()
-        }
+        // if (videoRef.current && !videoRef.current.src) {
+        //     (async () => videoRef.current.src = await tb.getFileFromBot(videoRef.current.getAttribute('tbid')))()
+        // }
 
-        $a(`#media-${unId} img`).forEach(img => {
-            if (img.src) return;
-            (async () => img.src = await tb.getFileFromBot(img.getAttribute('tbid')))();
-        })
+        // $a(`#media-${unId} img`).forEach(img => {
+        //     if (img.src) return;
+        //     (async () => img.src = await tb.getFileFromBot(img.getAttribute('tbid')))();
+        // })
     }, []);
 
     const playAndPauseVideo = (ev) => {
@@ -82,10 +82,10 @@ function PostMedia({ media, repost }) {
                 &&
                 <>
                     {
-                        images.map((tbid, i) => {
+                        images.map(({url , id}, i) => {
                             return (
                                 <figure className={`snap-center ${images.length > 1 ? 'w-[90%] sm:w-[40%]' : 'w-full'} h-[300px] flex items-center justify-center ${repost ? 'bg-white dark:bg-gray-950' : 'bg-[#eee] dark:bg-gray-900'} flex-shrink-0 rounded-lg `} key={i}>
-                                    <img ref={imgRef} tbid={tbid} className="max-w-full h-full max-h-[300px]" />
+                                    <img ref={imgRef} src={url} tbid={id} className="max-w-full h-full max-h-[300px]" />
                                 </figure>
                             )
                         })
@@ -98,16 +98,17 @@ function PostMedia({ media, repost }) {
                 &&
                 <>
                     {
-                        vid.map((tbid, i) => {
+                        vid.map(({url , id}, i) => {
 
                             return (
                                 <figure ref={figureRef} onClick={toggleControlsRef} className={`relative snap-center w-full group  flex items-center justify-center flex-shrink-0  ${repost ? 'bg-white dark:bg-gray-950' : 'bg-[#eee] dark:bg-gray-900'} rounded-lg`} key={i}>
                                     <video
-                                        tbid={tbid}
+                                        tbid={id}
                                         ref={videoRef}
-                                        autoplay={true}
+                                        // autoplay={true}
                                         preload='metadata'
-                                        playsInline={true}
+                                        src={url}
+                                        // playsInline={true}
                                         muted={true}
                                         onLoad={() => { videoRef.current.play(); }}
                                         onError={() => { videoRef.current.load(); console.log('vid error'); }}

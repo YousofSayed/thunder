@@ -417,7 +417,7 @@ export function generateThumnail({ blob, videoEl, width, height }) {
   canvas.width = width; canvas.height = height;
   !videoEl && (video.src = URL.createObjectURL(blob));
   ctx.drawImage(video, 0, 0, width, height)
-  
+
   return {
     dataURL: canvas.toDataURL('image/png'),
     async blob() {
@@ -1117,7 +1117,7 @@ export class TelegramBot {
       const sendVideoURL = `https://api.telegram.org/bot${this.token}/sendVideo?chat_id=${this.chatId}`;
       const response = await (await fetch(sendVideoURL, { method: "POST", body: formData })).json();
       const fileId = response.result.video.file_id;
-      return { ok: true, id: fileId, url: await this.getFileFromBot(fileId) };
+      return { ok: true, msg: `Successfully uploaded`, id: fileId, url: await this.getFileFromBot(fileId) };
     } catch (error) {
       return { ok: false, msg: `Faild to upload  : ${error.message}`, url: null }
     }
