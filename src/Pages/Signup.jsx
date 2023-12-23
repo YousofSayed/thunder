@@ -81,7 +81,7 @@ function Signup() {
                 <form className={styles.form} onSubmit={signup} >
                     <marquee className="w-full h-[2px] scale-0" id="marq" direction="right" scrollamount="50"><div className='h-[2px] w-[150px] bg-cyan-400'></div></marquee>
                     <h1 className={styles.title}>Signup</h1>
-                    <img src={userAvater} ref={profImgRef} className="w-32 h-32 cursor-pointer rounded-full" onClick={() => { $('#inpFile').click() }} alt="user avatar" />
+                    <img src={userAvater} ref={profImgRef} className="w-32 h-32 cursor-pointer rounded-full" onClick={(ev) => {addClickClass(ev.currentTarget); $('#inpFile').click() }} alt="user avatar" />
                     <div id="warn" className={styles.warn}></div>
                     <input type="text" id="name" placeholder="Enter Your Name" className={styles.input} />
                     <input type="email" id="email" placeholder="Enter Your Email" className={styles.input} />

@@ -15,7 +15,7 @@ function PostMedia({ media, repost }) {
     const playIconRef = useRef();
     const muteIconRef = useRef();
     const unId = uniqueID();
-    
+
     useEffect(() => {
 
         mediaObserver.observe(mediaRef.current);
@@ -105,9 +105,8 @@ function PostMedia({ media, repost }) {
                                     <video
                                         tbid={tbid}
                                         ref={videoRef}
-
-    autoplay={true} 
-                                        muted={true} 
+                                        autoplay={true}
+                                        muted={true}
                                         onLoad={() => { videoRef.current.play(); }}
                                         onError={() => { videoRef.current.load(); console.log('vid error'); }}
                                         onPause={(ev) => { togglePlayAndPauseIcon(ev); }}

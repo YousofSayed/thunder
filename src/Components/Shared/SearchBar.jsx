@@ -13,7 +13,7 @@ function SearchBar({ searchCompCtx }) {
     const handleSreach = async (ev) => {
         setInpVal(ev.target.value)
         if (ev.key == 'Enter' || ev.key == 'enter') {
-            let start = 0, end = 5;
+            ev.target.blur();
             setSearchCtx({ posts: [], showLoader: true, isNoDataHere: false });
             const res = await (await getAllSheetValues(`Posts`)).filter(inpVal);
             if (res) {
