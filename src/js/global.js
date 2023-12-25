@@ -125,7 +125,7 @@ export async function update(range, values) {
         // console.log(res);
         return res;
     } catch (error) {
-        update(range, value);
+        setTimeout(async () => await update(range, values),1000)
         throw new Error(error.message);
     }
 }

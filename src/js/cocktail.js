@@ -150,6 +150,14 @@ export function render(root, component) {
   excuteEvents(`${root} *`);
 }
 
+/**
+ * 
+ * @param {{
+ *  el: keyof HTMLElementTagNameMap,
+ *  props:Element | HTMLVideoElement | HTMLImageElement | HTMLAudioElement | HTMLInputElement ,
+ *  content:string
+ * }} param0 
+ */
 
 let _CocktailRoutes_, _cocktailRoot;
 /**

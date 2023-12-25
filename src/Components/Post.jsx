@@ -37,7 +37,7 @@ function Post({ post, className, withReacts, postSectionRef, repost }) {
 
                 <PostArticle context={context} setContext={setContext} />
 
-                <PostMedia media={context.media} repost={context.repost} />
+                <PostMedia media={context.media} post={context.post} repost={context.repost} />
 
                 {withReacts && <Reacts context={context} setContext={setContext} type={'post'} />}
             {/* </PostContext.Provider> */}

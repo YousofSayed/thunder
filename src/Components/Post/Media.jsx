@@ -3,9 +3,10 @@ import vidLoader from '../../Assets/images/vidLoader.gif'
 import { $, $a, uniqueID } from '../../js/cocktail';
 import { mediaObserver } from '../../js/mediaObserver';
 import tb from '../../js/tb';
+import { getFromTo, update } from '../../js/global';
 
 
-function PostMedia({ media, repost }) {
+function PostMedia({ media, post, repost }) {
     const mediaRef = useRef();
     const { images, vid, iframeSrc } = media;
     const videoRef = useRef();
@@ -27,6 +28,11 @@ function PostMedia({ media, repost }) {
         //     if (img.src) return;
         //     (async () => img.src = await tb.getFileFromBot(img.getAttribute('tbid')))();
         // })
+        // (async()=>{
+        //     const res = await tb.getFileFromBot('BAACAgQAAxkDAAIDAmWHJXs-bz_BWR9Q9kML0NZCxTybAAL9EQACV6g5UJZVPkJ2B4HIMwQ')
+        //     console.log(res);
+        //     // https://api.telegram.org/file/bot6183481793:AAGFNrrvs6FgATrNhtG5P1j9SAQ0AHxCsyQ/videos/file_1477.mp4
+        // })()
     }, []);
 
     const playAndPauseVideo = (ev) => {
@@ -75,6 +81,23 @@ function PostMedia({ media, repost }) {
         playIconRef.current.classList.toggle('fa-play');
     };
 
+    const handleVidError = async () => {
+        const tbid = videoRef.current.getAttribute('tbid');
+        const newURL = await tb.getFileFromBot(tbid);
+        videoRef.current.src = newURL;
+        videoRef.current.load();
+        const index = repost?.index ? repost.index : post.index;
+        const currentPostFromDB = await getFromTo('Posts', index, index);
+        if (currentPostFromDB[0].type == 'repost') {
+            currentPostFromDB[0].schema.post.media.vid = [{ url: newURL, id: tbid }];
+        }
+        else if (currentPostFromDB[0].type == 'post') {
+            currentPostFromDB[0].schema.media.vid = [{ url: newURL, id: tbid }];
+        }
+        const updateRes = await update(`Posts!A${index}`,currentPostFromDB[0]);
+        console.log('update res is done');
+    }
+
     return (
         <section id={`media-${unId}`} ref={mediaRef} className={`snap-x ${(images[0] || vid[0] || iframeSrc[0]) && `h-[300px]`} hide-scrollbar  snap-mandatory overflow-x-auto gap-4 flex`} dir="ltr">
             {
@@ -82,7 +105,7 @@ function PostMedia({ media, repost }) {
                 &&
                 <>
                     {
-                        images.map(({url , id}, i) => {
+                        images.map(({ url, id }, i) => {
                             return (
                                 <figure className={`snap-center ${images.length > 1 ? 'w-[90%] sm:w-[40%]' : 'w-full'} h-[300px] flex items-center justify-center ${repost ? 'bg-white dark:bg-gray-950' : 'bg-[#eee] dark:bg-gray-900'} flex-shrink-0 rounded-lg `} key={i}>
                                     <img ref={imgRef} src={url} tbid={id} className="max-w-full h-full max-h-[300px]" />
@@ -98,7 +121,7 @@ function PostMedia({ media, repost }) {
                 &&
                 <>
                     {
-                        vid.map(({url , id}, i) => {
+                        vid.map(({ url, id }, i) => {
 
                             return (
                                 <figure ref={figureRef} onClick={toggleControlsRef} className={`relative snap-center w-full group  flex items-center justify-center flex-shrink-0  ${repost ? 'bg-white dark:bg-gray-950' : 'bg-[#eee] dark:bg-gray-900'} rounded-lg`} key={i}>
@@ -111,7 +134,7 @@ function PostMedia({ media, repost }) {
                                         // playsInline={true}
                                         muted={true}
                                         onLoad={() => { videoRef.current.play(); }}
-                                        onError={() => { videoRef.current.load(); console.log('vid error'); }}
+                                        onError={handleVidError}
                                         onPause={(ev) => { togglePlayAndPauseIcon(ev); }}
                                         onEndedCapture={(ev) => { togglePlayAndPauseIcon(ev); }}
                                         onPlay={(ev) => { toggleControlsRef(); togglePlayAndPauseIcon(ev); }}
