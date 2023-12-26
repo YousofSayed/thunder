@@ -125,7 +125,7 @@ function CreatePostFooter() {
                     <i className='fa-solid fa-link cursor-pointer transition-all text-cyan-400 text-lg' onClick={showAndHideIframeSection}></i>
                     <span className='p-2 bg-cyan-500 font-bold rounded-lg '>{charLength}/5000</span>
                 </ul>
-                <button className='px-2 py-1 bg-cyan-600 rounded-md font-bold' onClick={postThePost}>POST</button>
+                <button className='px-2 py-1 bg-cyan-400 rounded-md font-bold' onClick={postThePost}>POST</button>
             </footer>
         </>
     );

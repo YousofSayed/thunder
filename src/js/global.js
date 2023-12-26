@@ -30,6 +30,7 @@ export async function getAllSheetValues(range) {
         const jsonRes = await res.json()
         if (res.status == 200) {
             return {
+                data:jsonRes,
                 async filter(value) {
                     const result = [];
                     const keyWords = new RegExp(value?.toLowerCase().match(/\w+|[\u0600-\u06FF\u0750-\u077F]+/ig)?.join('|'));
@@ -125,7 +126,7 @@ export async function update(range, values) {
         // console.log(res);
         return res;
     } catch (error) {
-        setTimeout(async () => await update(range, values),1000)
+        setTimeout(async () => await update(range, values), 1000)
         throw new Error(error.message);
     }
 }
