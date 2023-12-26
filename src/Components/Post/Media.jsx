@@ -89,7 +89,7 @@ function PostMedia({ media, post, repost }) {
                         images.map(({ url, id }, i) => {
                             return (
                                 <figure className={`snap-center ${images.length > 1 ? 'w-[90%] sm:w-[40%]' : 'w-full'} h-[300px] flex items-center justify-center ${repost ? 'bg-white dark:bg-gray-950' : 'bg-[#eee] dark:bg-gray-900'} flex-shrink-0 rounded-lg `} key={i}>
-                                    <img src={url} onClick={handelImagesError} data-tbid={id}  className="max-w-full h-full max-h-[300px]" />
+                                    <img src={url} onError={handelImagesError} data-tbid={id}  className="max-w-full h-full max-h-[300px]" />
                                 </figure>
                             )
                         })

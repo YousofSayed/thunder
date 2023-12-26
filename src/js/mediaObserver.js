@@ -33,6 +33,7 @@ export const mediaObserver = new IntersectionObserver((entries) => {
             if (imgs.length) {
                 let isOneImgNotLoaded, index;
                 const newMediaImages = [];
+                
                 imgs.forEach(async img => {
                     const { tbid } = img.dataset;
                     const newItem = { url: img.src, id: tbid };

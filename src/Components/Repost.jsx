@@ -4,7 +4,7 @@ import PostDate from "./Post/Date";
 import PostArticle from "./Post/Article";
 import Post from "./Post";
 
-function Repost({ repost, postSectionRef , observer}) {
+function Repost({ repost, postSectionRef}) {
     const [context, setContext] = useState({
         ...repost,
         showPostEditBtn: false,

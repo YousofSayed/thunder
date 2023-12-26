@@ -13,7 +13,6 @@ export function showMarquee(isShow) {
     isShow ? $('#marq').classList.remove('scale-0') : $('#marq').classList.add('scale-0');
 }
 
-
 export async function headers() {
     const headers = {
         Authorization: `Bearer ${await getAToken()}`,
