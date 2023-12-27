@@ -39,12 +39,12 @@ export const mediaObserver = new IntersectionObserver((entries) => {
                     const newItem = { url: img.src, id: tbid };
                     if (img.getAttribute('loaded') == 'false') {
                         isOneImgNotLoaded = true;
+                        index = +img.getAttribute('index');
                         const newURL = await tb.getFileFromBot(tbid)
                         img.src = newURL;
                         newItem.url = newURL;
                     }
                     newMediaImages.push(newItem)
-                    index = +img.getAttribute('index');
                     img.removeAttribute('loaded');
                 });
 

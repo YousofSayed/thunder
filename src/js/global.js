@@ -82,6 +82,7 @@ export async function getFromTo(sheetName, from, to) {
         const res = await (await GET({ url, headers: await headers() }));
         const jsonRes = await res.json()
         const data = jsonRes.values || [];
+        // console.log(jsonRes);
         if (res.status == 200) {
             const rangedData = data.map((item) => {
                 if (!item[0]) { from++; return };
