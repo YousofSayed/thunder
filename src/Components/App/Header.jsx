@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import textLogo from '../../Assets/images/textLogo.png';
 import userAvatar from '../../Assets/images/user-avatar.png';
 import tb from '../../js/tb';
@@ -7,7 +7,7 @@ import { addClickClass, parse } from "../../js/cocktail";
 
 function Header() {
     const [profImg, setProfImg] = useState('');
-    const [theme , setTheme] = useState(localStorage.getItem('theme'));
+    const [theme, setTheme] = useState(localStorage.getItem('theme'));
     const user = parse(localStorage.getItem('user'));
 
     useEffect(() => {
@@ -31,16 +31,17 @@ function Header() {
         $('#logOrSign').classList.remove('hidden');
     };
 
-    const handledDarkMode = (ev)=>{
-        addClickClass(ev.currentTarget , 'click');
-        if(theme == 'dark'){
+    const handledDarkMode = (ev) => {
+        addClickClass(ev.currentTarget, 'click');
+
+        if (theme == 'dark') {
             setTheme('light');
-            localStorage.setItem('theme','light');
+            localStorage.setItem('theme', 'light');
             document.documentElement.classList.remove('dark');
         }
-        else{
+        else {
             setTheme('dark');
-            localStorage.setItem('theme','dark');
+            localStorage.setItem('theme', 'dark');
             document.documentElement.classList.add('dark');
         }
     }
@@ -58,7 +59,7 @@ function Header() {
 
                 <section className='flex items-center gap-5'>
                     <figure className='cursor-pointer' onClick={handledDarkMode}>
-                        <i className={`fa-solid ${theme == 'dark' ? 'fa-moon' : 'fa-sun'} text-2xl text-shadow text-cyan-400`} title={theme=='dark' ? 'Switch to light mode' : 'Switch to dark mode'}></i>
+                        <i className={`fa-solid ${theme == 'dark' ? 'fa-moon' : 'fa-sun'} text-2xl text-shadow text-cyan-400`} title={theme == 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}></i>
                     </figure>
 
                     <figure className={`flex items-center gap-2  rounded h-full ${user && 'px-2'} sm:bg-[#fff] sm:dark:bg-gray-950`} onClick={showLogOrSignComp}>
