@@ -13,16 +13,15 @@ function App() {
     }, [])
 
 
-
     return (
         <StoreProvider>
-            <section className="flex flex-col justify-between h-full">
-                <Header />
-                <main className="w-full h-[calc(100%-110px)] flex justify-center p-2  relative">
+            {/* <section className="flex flex-col justify-between h-full">
+            </section> */}
+                <main className="w-full h-full flex items-center flex-col justify-between p-2  relative overflow-x-scroll hide-scrollbar">
+                    <Header />
                     <Outlet />
+                    {user && <Footer />}
                 </main>
-                {user && <Footer />}
-            </section>
         </StoreProvider>
     );
 }

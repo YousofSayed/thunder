@@ -9,7 +9,6 @@ import User from "../Shared/User";
 
 function PostHeader({ context, setContext }) {
     // const { context, setContext } = useContext(PostContext)
-    const profImgRef = useRef();
     const {
         showPostEditBtn,
         content,
@@ -43,7 +42,7 @@ function PostHeader({ context, setContext }) {
     }
     return (
         <header className={`relative flex justify-between items-center `}>
-           <User userAvatar={userAvatar} profImgId={profImgId} userName={userName} className={repost ? 'bg-white dark:bg-gray-950' : 'bg-[#eee] dark:bg-gray-900'}/>
+           <User userAvatar={userAvatar} profImgId={profImgId} userName={userName} className={'bg-white dark:bg-[#111]'}/>
             {showPostEditBtn && <Button clickCallback={postEdit}>Post</Button>}
         </header>
     );

@@ -29,7 +29,7 @@ function Post({ post, className, withReacts, postSectionRef, repost }) {
 
 
     return (
-        <section id={`post-${unId}`} index={context.index} ref={postRef} className={`w-full p-2  ${repost ? '' :  'bg-white dark:bg-gray-950'} rounded-lg   ${className}`}>
+        <section id={`post-${unId}`} index={context.index} ref={postRef} className={`w-full p-2  ${repost ? '' :  'bg-white dark:bg-[#080808]'} rounded-lg   ${className}`}>
             {/* <PostContext.Provider value={{ context, setContext }}> */}
                 <PostHeader context={context} setContext={setContext} />
 

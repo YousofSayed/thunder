@@ -49,18 +49,16 @@ function PostsView() {
 
     return (
         <>
-            <section ref={postSectionRef} className='container h-full relative  flex flex-col   items-center gap-3 bg-[#eee] dark:bg-gray-900 rounded-lg p-2 overflow-x-auto hide-scrollbar' >
-
+            <section ref={postSectionRef} className='container mt-[45px] mb-[40px]   relative md:dark:border-l md:dark:border-r md:dark:border-gray-700 flex flex-col items-center gap-3 bg-[#eee] dark:bg-transparent  p-2 ' >
 
                 <CreatePost />
-
 
                 {
                     states.posts[0]
                     &&
                     states.posts.map((postData, i) => {
                         if (postData.type == 'post')
-                            return ( <section className='w-full' key={postData.schema._id}><Post post={postData.schema} withReacts={true} postSectionRef={postSectionRef.current}  /></section>)
+                            return ( <section className='w-full' key={postData.schema._id}><Post post={postData.schema} className={`border-b border-b-gray-700`} withReacts={true} postSectionRef={postSectionRef.current}  /></section>)
                         else
                             return <section className='w-full' key={postData.schema._id}><Repost repost={postData.schema} postSectionRef={postSectionRef.current} /></section>
                     })

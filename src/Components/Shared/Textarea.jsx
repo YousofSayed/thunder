@@ -34,11 +34,11 @@ function Textarea({ value, focus, lengthLimit, setContext, context , overwriteVa
 
     return (
         <section className='relative overflow-y-auto  max-h-[400px] h-fit mt-3'>
-            <i onClick={fitAndShrinkContetntArea} className="fa-solid fa-expand  absolute bg-[#fff] text-black dark:text-white font-bold dark:bg-gray-950 ltr:right-[5px] rtl:left-[5px] top-[5px] cursor-pointer p-2 flex items-center justify-center rounded-full  "></i>
+            <i onClick={fitAndShrinkContetntArea} className="fa-solid fa-expand  absolute bg-[#fff] text-black dark:text-white font-bold dark:bg-[#333] ltr:right-[5px] rtl:left-[5px] top-[5px] cursor-pointer p-2 flex items-center justify-center rounded-full  "></i>
             <textarea
                 ref={textAreaRef}
                 onInput={limitChars}
-                className=' w-full font-medium  outline-none bg-[#eee] dark:bg-gray-900 text-black dark:text-white p-2 ltr:pr-[30px] rtl:pl-[30px] rounded-lg resize-none transition-all'
+                className=' w-full font-medium  outline-none bg-[#eee] dark:bg-[#111] text-black dark:text-white p-2 ltr:pr-[30px] rtl:pl-[30px] rounded-lg resize-none transition-all'
                 placeholder='What is in your mind ?'
                 defaultValue={value}
             ></textarea>

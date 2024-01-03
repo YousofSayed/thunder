@@ -761,18 +761,43 @@ export function isValidRePassword(mainPassword, rePassword) {
 }
 
 /**
- * Returns true if text language is english
+ * Returns true if text language is English
  * @param {string} text 
  * @returns 
  */
 export function isEnglishLang(text) {
   const rgx = /[a-zA-Z]/ig;
-  return rgx.test(text);
+  return {
+    ok: rgx.test(text),
+    length: text.match(rgx)?.length || false
+  };
 }
 
+/**
+ * Returns true if text language is Arabic
+ * @param {string} text 
+ * @returns 
+ */
+export function isArabicLang(text) {
+  const arRgx = /[\u0600-\u06FF\u0750-\u077F]+/ig;
+  return {
+    ok: arRgx.test(text),
+    length: text.match(arRgx)?.length || false
+  };
+}
+
+
+/**
+ * Returns true if text contain special chars
+ * @param {string} text 
+ * @returns 
+ */
 export function isSpecialChars(text) {
   const rgx = /\W+/ig;
-  return rgx.test(text);
+  return {
+    ok: rgx.test(text),
+    length: text.match(rgx)?.length || false
+  };
 }
 
 

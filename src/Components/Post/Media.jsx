@@ -88,7 +88,7 @@ function PostMedia({ media, post, repost }) {
                     {
                         images.map(({ url, id }, i) => {
                             return (
-                                <figure className={`snap-center ${images.length > 1 ? 'w-[90%] sm:w-[40%]' : 'w-full'} h-[300px] flex items-center justify-center ${repost ? 'bg-white dark:bg-gray-950' : 'bg-[#eee] dark:bg-gray-900'} flex-shrink-0 rounded-lg `} key={i}>
+                                <figure className={`snap-center ${images.length > 1 ? 'w-[90%] sm:w-[40%]' : 'w-full'} h-[300px] flex items-center justify-center bg-[#eee] dark:bg-[#111] flex-shrink-0 rounded-lg `} key={i}>
                                     <img src={url} onError={handelImagesError} data-tbid={id}  className="max-w-full h-full max-h-[300px]" />
                                 </figure>
                             )
@@ -105,7 +105,7 @@ function PostMedia({ media, post, repost }) {
                         vid.map(({ url, id }, i) => {
 
                             return (
-                                <figure ref={figureRef} onClick={toggleControlsRef} className={`relative snap-center w-full group  flex items-center justify-center flex-shrink-0  ${repost ? 'bg-white dark:bg-gray-950' : 'bg-[#eee] dark:bg-gray-900'} rounded-lg`} key={i}>
+                                <figure ref={figureRef} onClick={toggleControlsRef} className={`relative snap-center w-full group  flex items-center justify-center flex-shrink-0 bg-[#eee] dark:bg-[#111] rounded-lg`} key={i}>
                                     <video
                                         // tbid={id}
                                         ref={videoRef}
@@ -124,7 +124,7 @@ function PostMedia({ media, post, repost }) {
                                         className=" rounded-lg w-full h-full "
                                         poster={vidLoader}
                                     />
-                                    <ul ref={vidConrolsRef} className='absolute bottom-[5px] left-[5px] rounded-3xl w-fit p-2 bg-[#eee] dark:bg-gray-800 items-center gap-4 flex hidden transition-all'>
+                                    <ul ref={vidConrolsRef} className='absolute bottom-[5px] left-[5px] rounded-3xl w-fit p-2 bg-[#eee] dark:bg-[#111] items-center gap-4 flex hidden transition-all'>
                                         <i ref={playIconRef} onClick={playAndPauseVideo} className='fa-solid fa-pause  text-[11px] font-bold cursor-pointer flex items-center justify-center w-[24px] h-[24px] rounded-full bg-gray-950'></i>
                                         <i ref={muteIconRef} onClick={muteAndUnmute} className="fa-solid fa-volume-high fa-volume-xmark text-[11px] font-bold cursor-pointer flex items-center justify-center w-[24px] h-[24px] rounded-full bg-gray-950"></i>
                                         <i onClick={goFullScreen} className="fa-solid fa-expand  text-[11px] font-bold cursor-pointer flex items-center justify-center w-[24px] h-[24px] rounded-full bg-gray-900"></i>
