@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import textLogo from '../../Assets/images/textLogo.png';
+import logo from '../../Assets/images/logo.svg';
 import userAvatar from '../../Assets/images/user-avatar.png';
 import tb from '../../js/tb';
 import { addClickClass, parse } from "../../js/cocktail";
@@ -48,18 +49,18 @@ function Header() {
 
 
     return (
-        <header className="w-full h-[50px] p-4 z-10 blur-c fixed top-0 dark:border-b  dark:border-b-gray-700" title='header'>
+        <header className="w-full h-[60px] z-10 blur-c dark:border-b  dark:border-b-gray-400" title='header'>
 
-            <section dir='ltr' className="relative h-[100%] m-auto container flex  items-center p-2  justify-between rounded-lg" title='container'>
+            <section dir='ltr' className="relative h-[100%] m-auto container flex  items-center   justify-between rounded-lg" title='container'>
 
                 <figure className="flex items-center gap-2">
                     {/* <i className="fa-solid fa-bolt text-3xl text-cyan-400" title='thunder logo'></i> */}
-                    <img src={textLogo} alt="thunder" className='w-[95px]' title='thunder text logo' loading='lazy' />
+                    <img src={logo} alt="thunder" className='h-[40px] dark:invert-[100%]' title='thunder text logo' loading='lazy' />
                 </figure>
 
                 <section className='flex items-center gap-5'>
                     <figure className='cursor-pointer' onClick={handledDarkMode}>
-                        <i className={`fa-solid ${theme == 'dark' ? 'fa-moon' : 'fa-sun'} text-2xl text-shadow text-cyan-400`} title={theme == 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}></i>
+                        <i className={`fa-solid ${theme == 'dark' ? 'fa-moon' : 'fa-sun'} text-2xl  text-black dark:text-white `} title={theme == 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}></i>
                     </figure>
 
                     <figure className={`flex items-center gap-2  rounded h-full ${user && 'px-2'} sm:bg-[#fff] sm:dark:bg-gray-950`} onClick={showLogOrSignComp}>

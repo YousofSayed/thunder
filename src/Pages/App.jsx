@@ -17,7 +17,7 @@ function App() {
         <StoreProvider>
             {/* <section className="flex flex-col justify-between h-full">
             </section> */}
-                <main className="w-full h-full flex items-center flex-col justify-between p-2  relative overflow-x-scroll hide-scrollbar">
+                <main className="w-full h-full flex items-center flex-col justify-between">
                     <Header />
                     <Outlet />
                     {user && <Footer />}

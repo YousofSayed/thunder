@@ -26,13 +26,13 @@ function Footer() {
     };
 
     return (
-        <footer className="w-full h-[45px] fixed bottom-0 flex blur-c dark:border-t dark:border-t-gray-700  justify-center px-2">
+        <footer className="w-full h-[55px]  flex blur-c dark:border-t dark:border-t-gray-700  justify-center px-2">
             <ul id="routes" className="container  rounded-lg p-2 flex items-center justify-between">
-                <Link id="profile" className="text-cyan-400 w-[25px] h-[25px] flex items-center justify-center  rounded-full" to={'/profile'} onClick={handleRoutes}><i className="fa-solid fa-user cursor-pointer"></i></Link>
-                <Link id="bookmarks" className="text-cyan-400 w-[25px] h-[25px] flex items-center justify-center  rounded-full" to={'/bookmarks'} onClick={handleRoutes}><i className="fa-solid fa-bookmark cursor-pointer"></i></Link>
-                <Link id="home" className="text-cyan-400 w-[25px] h-[25px] flex items-center justify-center  rounded-full" to={'/'} onClick={handleRoutes}><i className="fa-solid  fa-home cursor-pointer "></i></Link>
-                <Link id="settings" className="text-cyan-400 w-[25px] h-[25px] flex items-center justify-center  rounded-full" to={'/settings'} onClick={handleRoutes}><i className="fa-solid fa-gear cursor-pointer"></i></Link>
-                <Link id="search" className="text-cyan-400 w-[25px] h-[25px] flex items-center justify-center  rounded-full" to={'/search'} onClick={handleRoutes}><i className="fa-solid fa-search cursor-pointer"></i></Link>
+                <Link id="profile" className="dark:text-white text-black  w-[25px] h-[25px] flex items-center justify-center  rounded-full" to={'/profile'} onClick={handleRoutes}><i className="fa-solid fa-user cursor-pointer"></i></Link>
+                <Link id="bookmarks" className="dark:text-white text-black w-[25px] h-[25px] flex items-center justify-center  rounded-full" to={'/bookmarks'} onClick={handleRoutes}><i className="fa-solid fa-bookmark cursor-pointer"></i></Link>
+                <Link id="home" className="dark:text-white text-black w-[25px] h-[25px] flex items-center justify-center  rounded-full" to={'/'} onClick={handleRoutes}><i className="fa-solid  fa-home cursor-pointer "></i></Link>
+                <Link id="settings" className="dark:text-white text-black w-[25px] h-[25px] flex items-center justify-center  rounded-full" to={'/settings'} onClick={handleRoutes}><i className="fa-solid fa-gear cursor-pointer"></i></Link>
+                <Link id="search" className="dark:text-white text-black w-[25px] h-[25px] flex items-center justify-center  rounded-full" to={'/search'} onClick={handleRoutes}><i className="fa-solid fa-search cursor-pointer"></i></Link>
             </ul>
         </footer>
     );

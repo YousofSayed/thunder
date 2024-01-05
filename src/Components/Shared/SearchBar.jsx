@@ -26,7 +26,7 @@ function SearchBar({ searchCompCtx }) {
     }
 
     return (
-        <header className="w-full items-center bg-[#fff] dark:bg-gray-950 p-2 rounded-lg flex ring-1">
+        <header className="w-full items-center bg-[#fff] dark:bg-[#111] p-2 rounded-lg flex ring-gray-400 ring-[1.5px]">
             <input ref={searchInpRef} type="search" onKeyUp={handleSreach} className=" w-full bg-transparent  text-black dark:text-white font-bold outline-none" placeholder="Search" title="search input" />
             <i className="fa-solid  fa-search text-1xl text-cyan-400 dark:text-white" title='search icon'></i>
         </header>
