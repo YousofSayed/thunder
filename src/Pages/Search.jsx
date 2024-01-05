@@ -4,6 +4,7 @@ import Loader from "../Components/Shared/Loader";
 import NoDataHere from "../Components/Shared/NoDataHere";
 import Post from "../Components/Post";
 import Repost from "../Components/Repost";
+import { Container } from "../Components/Shared/Container";
 
 function Search() {
     const [searchCtx, setSearchCtx] = useState({
@@ -15,7 +16,7 @@ function Search() {
     const postRef = useRef();
 
     return (
-        <section ref={postSectionRef} className="container h-full relative  flex flex-col   items-center gap-3 bg-[#eee] dark:bg-gray-900 rounded-lg p-2 overflow-x-auto hide-scrollbar">
+        <Container innerRef={postSectionRef}>
             <SearchBar searchCompCtx={[searchCtx, setSearchCtx]} />
             {
                 searchCtx.posts[0]
@@ -29,7 +30,8 @@ function Search() {
             }
             {searchCtx.showLoader && <Loader />}
             {searchCtx.isNoDataHere && <NoDataHere />}
-        </section>
+
+        </Container>
     );
 }
 

@@ -3,6 +3,7 @@ import Post from "../Components/Post";
 import Repost from "../Components/Repost";
 import { CocktailDB, parse } from "../js/cocktail";
 import NoDataHere from "../Components/Shared/NoDataHere";
+import { Container } from "../Components/Shared/Container";
 
 function Bookmarks() {
     const [posts, setPosts] = useState([]);
@@ -11,7 +12,7 @@ function Bookmarks() {
 
     useEffect(() => {
         getPostsFromIDB();
-    },[])
+    }, [])
 
     const getPostsFromIDB = async () => {
         const db = new CocktailDB(user.email);
@@ -20,7 +21,7 @@ function Bookmarks() {
     }
 
     return (
-        <section ref={postSectionRef} className="container h-full relative  flex flex-col   items-center gap-3 bg-[#eee] dark:bg-gray-900 rounded-lg p-2 overflow-x-auto hide-scrollbar">
+        <Container innerRef={postSectionRef}>
             {
                 posts[0]
                 &&
@@ -33,7 +34,7 @@ function Bookmarks() {
             }
 
             {!posts.length && <NoDataHere />}
-        </section>
+        </Container>
     );
 }
 

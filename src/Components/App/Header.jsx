@@ -48,7 +48,7 @@ function Header() {
 
 
     return (
-        <header className="w-full h-[50px] px-2 z-10 blur-c fixed top-0 dark:border-b  dark:border-b-gray-700" title='header'>
+        <header className="w-full h-[50px] p-4 z-10 blur-c fixed top-0 dark:border-b  dark:border-b-gray-700" title='header'>
 
             <section dir='ltr' className="relative h-[100%] m-auto container flex  items-center p-2  justify-between rounded-lg" title='container'>
 
