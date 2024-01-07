@@ -4,6 +4,7 @@ import logo from '../../Assets/images/logo.svg';
 import userAvatar from '../../Assets/images/user-avatar.png';
 import tb from '../../js/tb';
 import { addClickClass, parse } from "../../js/cocktail";
+import { Marquee } from '../Shared/Marquee';
 
 
 function Header() {
@@ -34,28 +35,28 @@ function Header() {
 
     const handledDarkMode = (ev) => {
         addClickClass(ev.currentTarget, 'click');
-
+        const html = document.documentElement
+        html.classList.contains('dark') ? html.classList.replace('dark', 'light') : html.classList.replace('light', 'dark');
         if (theme == 'dark') {
             setTheme('light');
             localStorage.setItem('theme', 'light');
-            document.documentElement.classList.remove('dark');
         }
         else {
             setTheme('dark');
             localStorage.setItem('theme', 'dark');
-            document.documentElement.classList.add('dark');
         }
     }
 
 
     return (
-        <header className="w-full h-[60px] z-10 blur-c dark:border-b  dark:border-b-gray-400" title='header'>
+        <header className="w-full h-[60px]  z-10 blur-c dark:border-b  dark:border-b-gray-700 bfc relative transition-all" title='header'>
 
-            <section dir='ltr' className="relative h-[100%] m-auto container flex  items-center   justify-between rounded-lg" title='container'>
+            <section dir='ltr' className="relative w-full h-[100%] m-auto container flex  items-center  justify-between rounded-lg" title='container'>
 
                 <figure className="flex items-center gap-2">
                     {/* <i className="fa-solid fa-bolt text-3xl text-cyan-400" title='thunder logo'></i> */}
-                    <img src={logo} alt="thunder" className='h-[40px] dark:invert-[100%]' title='thunder text logo' loading='lazy' />
+                    <img src={logo} alt="thunder" className='max-h-[40px] max-w-[40px] dark:invert-[100%]' title='thunder text logo' loading='lazy' />
+                    <p className='font-bold text-2xl text-black dark:text-white'>THUNDER</p>
                 </figure>
 
                 <section className='flex items-center gap-5'>
@@ -63,14 +64,13 @@ function Header() {
                         <i className={`fa-solid ${theme == 'dark' ? 'fa-moon' : 'fa-sun'} text-2xl  text-black dark:text-white `} title={theme == 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}></i>
                     </figure>
 
-                    <figure className={`flex items-center gap-2  rounded h-full ${user && 'px-2'} sm:bg-[#fff] sm:dark:bg-gray-950`} onClick={showLogOrSignComp}>
+                    <figure className={`flex items-center gap-2  ${user ? 'px-2 rounded' : ' rounded-full'} h-full  sm:bg-[#fff] sm:dark:bg-[#111]`} onClick={showLogOrSignComp}>
                         {user && <p className="font-bold text-xl hidden sm:block text-black dark:text-white" title='name of user'>{user.name}</p>}
                         <img className="w-[30px] h-[30px] rounded-full cursor-pointer ring-2" src={profImg} id="profImgId" alt='' loading='lazy' title='profile image' />
                     </figure>
                 </section>
-
-                <marquee className="h-[2px] absolute  scale-0 bottom-0  overflow-hidden" id="marq" direction="right" scrollamount="50"><div className='h-[2px] w-[150px] bg-cyan-400'></div></marquee>
             </section>
+            <Marquee />
 
         </header>
 

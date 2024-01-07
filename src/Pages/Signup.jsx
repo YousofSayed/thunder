@@ -7,6 +7,8 @@ import tb from '../js/tb';
 import { useNavigate } from 'react-router-dom';
 import { useRef, useState } from 'react';
 import PasswordInput from '../Components/Shared/PasswordInput';
+import { LogoContainer } from '../Components/Shared/LogoContainer';
+import { Marquee } from '../Components/Shared/Marquee';
 
 function Signup() {
     const navigate = useNavigate()
@@ -76,12 +78,15 @@ function Signup() {
 
     return (
         <section className='w-full h-full'>
-            <Logo />
-            <section className='h-[calc(100%-56px)] grid items-center bg-white dark:bg-gray-950 '>
+            <LogoContainer><Logo /></LogoContainer>
+            <section className='h-[calc(100%-56px)] grid items-center bg-white dark:bg-transparent '>
                 <form className={styles.form} onSubmit={signup} >
-                    <marquee className="w-full h-[2px] scale-0" id="marq" direction="right" scrollamount="50"><div className='h-[2px] w-[150px] bg-cyan-400'></div></marquee>
+                    <Marquee/>
                     <h1 className={styles.title}>Signup</h1>
-                    <img src={userAvater} ref={profImgRef} className="w-32 h-32 cursor-pointer rounded-full" onClick={(ev) => {addClickClass(ev.currentTarget); $('#inpFile').click() }} alt="user avatar" />
+                    <figure className='rounded-full relative w-fit overflow-hidden' onClick={(ev) => { addClickClass(ev.currentTarget); $('#inpFile').click() }}>
+                        <i className='fa-solid fa-plus flex items-center justify-center w-[30px] h-[30px] absolute bottom-[20px] right-[0px] cursor-pointer text-black dark:text-white bg-white'></i>
+                        <img src={userAvater} ref={profImgRef} className="w-32 h-32 cursor-pointer rounded-full"  alt="user avatar" />
+                    </figure>
                     <div id="warn" className={styles.warn}></div>
                     <input type="text" id="name" placeholder="Enter Your Name" className={styles.input} />
                     <input type="email" id="email" placeholder="Enter Your Email" className={styles.input} />

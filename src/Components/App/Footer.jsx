@@ -26,7 +26,7 @@ function Footer() {
     };
 
     return (
-        <footer className="w-full h-[55px]  flex blur-c dark:border-t dark:border-t-gray-700  justify-center px-2">
+        <footer className="w-full h-[55px]  flex blur-c dark:border-t dark:border-t-gray-700  justify-center px-2 relative bac">
             <ul id="routes" className="container  rounded-lg p-2 flex items-center justify-between">
                 <Link id="profile" className="dark:text-white text-black  w-[25px] h-[25px] flex items-center justify-center  rounded-full" to={'/profile'} onClick={handleRoutes}><i className="fa-solid fa-user cursor-pointer"></i></Link>
                 <Link id="bookmarks" className="dark:text-white text-black w-[25px] h-[25px] flex items-center justify-center  rounded-full" to={'/bookmarks'} onClick={handleRoutes}><i className="fa-solid fa-bookmark cursor-pointer"></i></Link>

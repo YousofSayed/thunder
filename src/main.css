@@ -9,8 +9,44 @@
     outline: none;
 }
 
+
+.bac::after , .bfc::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    transition: .3s;
+}
+
+
+html.dark .bfc::before{
+    background-image: linear-gradient(45deg   , #000 , #000 ,#ffffffc2);
+
+}
+
+html.dark .bac::after{
+    background-image: linear-gradient(45deg   , #ffffff79 , #ffffff00 ,#000);
+}
+
+html.light .bfc::before{
+    background-image: linear-gradient(45deg   , #fff , #fff ,#000000c2);
+}
+
+html.light .bac::after{
+    background-image: linear-gradient(45deg   , #000000c2 , #0000000d ,#fff);
+}
+
+/* @media(prefers-color-scheme: light){
+    .bfc::before{
+    }
+} */
+
+
 .blur-c {
-    background-color: rgba(128, 128, 128, 0.034);
+    background-color: rgba(128, 128, 128, 0);
     backdrop-filter: blur(27px);
 }
 

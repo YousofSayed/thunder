@@ -1,7 +1,9 @@
-
+import logo from '../../Assets/images/logo.svg'
 function Logo() {
     return (
-        <header className="text-center w-full h-fit p-3 " ><i className="fa-solid fa-bolt text-2xl text-cyan-400 "></i></header>
+        // <header className="flex justify-center w-full h-fit p-3 " >
+            <img src={logo} alt="thunder" className='max-h-[30px] max-w-[40px] dark:invert-[100%]' title='thunder text logo' loading='lazy' />
+        // </header>
     );
 }
 
