@@ -66,7 +66,7 @@ function Header() {
 
                     <figure className={`flex items-center gap-2  ${user ? 'px-2 rounded' : ' rounded-full'} h-full  sm:bg-[#fff] sm:dark:bg-[#111]`} onClick={showLogOrSignComp}>
                         {user && <p className="font-bold text-xl hidden sm:block text-black dark:text-white" title='name of user'>{user.name}</p>}
-                        <img className="w-[30px] h-[30px] rounded-full cursor-pointer ring-2" src={profImg} id="profImgId" alt='' loading='lazy' title='profile image' />
+                        <img className="max-w-[50px] max-h-[40px] rounded-full cursor-pointer ring-black dark:ring-white ring-2" src={profImg} id="profImgId" alt='' loading='lazy' title='profile image' />
                     </figure>
                 </section>
             </section>
