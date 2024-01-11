@@ -8,7 +8,7 @@ import PostDate from "./Post/Date";
 import PostMedia from "./Post/Media";
 export const PostContext = createContext();
 
-function Post({ post, className, withReacts, postSectionRef, repost }) {
+function Post({ post, className = 'bg-white dark:bg-[#171717]', withReacts, postSectionRef, repost }) {
     const { postContent, index } = post
     const postRef = useRef();
     const [context, setContext] = useState({
@@ -29,7 +29,7 @@ function Post({ post, className, withReacts, postSectionRef, repost }) {
 
 
     return (
-        <section id={`post-${unId}`} index={context.index} ref={postRef} className={`w-full p-2  ${repost ? '' :  'bg-white dark:bg-[#080808]'} rounded-lg   ${className}`}>
+        <section id={`post-${unId}`} index={context.index} ref={postRef} className={`w-full p-2  rounded-lg   ${className}`}>
             {/* <PostContext.Provider value={{ context, setContext }}> */}
                 <PostHeader context={context} setContext={setContext} />
 

@@ -8,7 +8,7 @@ import { Marquee } from '../Shared/Marquee';
 
 
 function Header() {
-    const [profImg, setProfImg] = useState('');
+    const [profImg, setProfImg] = useState(userAvatar);
     const [theme, setTheme] = useState(localStorage.getItem('theme'));
     const user = parse(localStorage.getItem('user'));
 
@@ -22,7 +22,7 @@ function Header() {
             if (!user || !user.profImgId) { setProfImg(userAvatar); return }
             setProfImg(await tb.getFileFromBot(user.profImgId))
         } catch (error) {
-            getProfImgAndName();
+            setTimeout(()=>getProfImgAndName() , 2000);
             throw new Error(error.message)
         }
 
@@ -49,7 +49,7 @@ function Header() {
 
 
     return (
-        <header className="w-full h-[60px]  z-10 blur-c dark:border-b  dark:border-b-gray-700 bfc relative transition-all" title='header'>
+        <header className="w-full h-[60px]  z-10 blur-c dark:border-b  dark:border-b-gray-700  relative transition-all" title='header'>
 
             <section dir='ltr' className="relative w-full h-[100%] m-auto container flex  items-center  justify-between rounded-lg" title='container'>
 
@@ -64,13 +64,12 @@ function Header() {
                         <i className={`fa-solid ${theme == 'dark' ? 'fa-moon' : 'fa-sun'} text-2xl  text-black dark:text-white `} title={theme == 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}></i>
                     </figure>
 
-                    <figure className={`flex items-center gap-2  ${user ? 'px-2 rounded' : ' rounded-full'} h-full  sm:bg-[#fff] sm:dark:bg-[#111]`} onClick={showLogOrSignComp}>
+                    <figure className={`flex items-center gap-2 p-2  h-full  `} onClick={showLogOrSignComp}>
                         {user && <p className="font-bold text-xl hidden sm:block text-black dark:text-white" title='name of user'>{user.name}</p>}
-                        <img className="max-w-[50px] max-h-[40px] rounded-full cursor-pointer ring-black dark:ring-white ring-2" src={profImg} id="profImgId" alt='' loading='lazy' title='profile image' />
+                        <img className="max-w-[40px] max-h-[35px] rounded-full cursor-pointer ring-black dark:ring-white ring-2" src={profImg} id="profImgId" alt='' loading='lazy' title='profile image' />
                     </figure>
                 </section>
             </section>
-            <Marquee />
 
         </header>
 

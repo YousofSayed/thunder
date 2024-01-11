@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { getFromTo } from '../js/global';
 import CreatePost from '../Components/CreatePost';
 import Post from '../Components/Post';
@@ -7,12 +7,14 @@ import Loader from '../Components/Shared/Loader';
 import Repost from '../Components/Repost';
 import NoDataHere from '../Components/Shared/NoDataHere';
 import { Container } from '../Components/Shared/Container';
+import { storeCtx } from '../js/store';
 
 function PostsView() {
     const [states, setStates] = useState({
-        posts: [],
         showLoader: true
     });
+
+    const { state, dispatch } = useContext(storeCtx)
 
     const postSectionRef = useRef();
     useEffect(() => {
@@ -25,7 +27,7 @@ function PostsView() {
     });
 
     const getSocketData = (post) => {
-        setStates({ ...states, posts: [...states.posts, post] });
+        dispatch({ type: 'put', key: 'posts', value: [...states.posts, post] })
         postSocket.removeListener('msg', getSocketData)
     };
 
@@ -33,12 +35,16 @@ function PostsView() {
 
     const getPosts = async (from, to) => {
         try {
+            if (state.posts.length) return;
             const postsData = await getFromTo('Posts', from, to);
-            postsData[0] ? setStates({
-                posts: [...states.posts, ...postsData.reverse()],
-                showLoader: false
-            }) :
+            if (postsData.length) {
+                setStates({showLoader: false});
+                dispatch({ type: 'put', key: 'posts', value: [...state.posts, ...postsData.reverse()] })
+            }
+            else {
+
                 setStates({ ...states, showLoader: false })
+            }
         } catch (error) {
             throw new Error(error.message);
         }
@@ -53,9 +59,9 @@ function PostsView() {
                 <CreatePost />
 
                 {
-                    states.posts[0]
+                    state.posts[0]
                     &&
-                    states.posts.map((postData, i) => {
+                    state.posts.map((postData, i) => {
                         if (postData.type == 'post')
                             return (<section className='w-full' key={postData.schema._id}><Post post={postData.schema} className={`border-b border-b-gray-700`} withReacts={true} postSectionRef={postSectionRef.current} /></section>)
                         else
@@ -64,7 +70,7 @@ function PostsView() {
                 }
 
                 {states.showLoader && <Loader />}
-                {!states.showLoader && !states.posts[0] && <NoDataHere />}
+                {!states.showLoader && !state.posts[0] && <NoDataHere />}
             </Container>
         </>
     );

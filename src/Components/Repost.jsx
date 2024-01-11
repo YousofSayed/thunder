@@ -15,11 +15,11 @@ function Repost({ repost, postSectionRef}) {
 
 
     return (
-        <section className="w-full p-2 bg-white dark:bg-[#080808] dark:border-b dark:border-b-gray-700 rounded-lg ">
+        <section className="w-full p-2 bg-white dark:bg-[#171717] dark:border-b dark:border-b-gray-700 rounded-lg ">
             <PostHeader context={context} setContext={setContext} />
             <PostDate date={context.date} />
             <PostArticle context={context} setContext={setContext} />
-            {context.post && <Post post={context.post} className={`bg-[#eee] dark:bg-[#000] dark:ring-gray-700 ring-1`} postSectionRef={postSectionRef}  repost={repost} />}
+            {context.post && <Post post={context.post} className={`bg-[#eee] dark:bg-[#000]  dark:ring-white ring-1`} postSectionRef={postSectionRef}  repost={repost} />}
         </section>
     );
 }

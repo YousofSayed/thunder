@@ -1,6 +1,6 @@
 import { createContext, useReducer } from "react";
 const initState = {
-   
+   posts:[],
 }
 
 const storeCtx = createContext(initState);
