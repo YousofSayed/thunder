@@ -81,11 +81,10 @@ function Signup() {
             <LogoContainer><Logo /></LogoContainer>
             <section className='h-[calc(100%-56px)] grid items-center bg-white dark:bg-transparent '>
                 <form className={styles.form} onSubmit={signup} >
-                    <Marquee/>
+                    <Marquee />
                     <h1 className={styles.title}>Signup</h1>
                     <figure className='rounded-full relative w-fit overflow-hidden' onClick={(ev) => { addClickClass(ev.currentTarget); $('#inpFile').click() }}>
-                        <i className='fa-solid fa-plus flex items-center justify-center w-[30px] h-[30px] absolute bottom-[20px] right-[0px] cursor-pointer text-black dark:text-white bg-white'></i>
-                        <img src={userAvater} ref={profImgRef} className="w-32 h-32 cursor-pointer rounded-full"  alt="user avatar" />
+                        <img src={userAvater} ref={profImgRef} className="w-32 h-32 cursor-pointer rounded-full" alt="user avatar" />
                     </figure>
                     <div id="warn" className={styles.warn}></div>
                     <input type="text" id="name" placeholder="Enter Your Name" className={styles.input} />
