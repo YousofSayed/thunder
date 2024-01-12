@@ -13,13 +13,12 @@ function PostsView() {
     const [states, setStates] = useState({
         showLoader: true
     });
-
-    const { state, dispatch } = useContext(storeCtx)
-
     const postSectionRef = useRef();
+    const { state, dispatch } = useContext(storeCtx);
+
     useEffect(() => {
         postSectionRef.current.scrollTop = +sessionStorage.getItem('postSectionScroll');
-        getPosts(1, 500)
+        getPosts(1, 500);
     }, []);
 
     useEffect(() => {
@@ -35,16 +34,10 @@ function PostsView() {
 
     const getPosts = async (from, to) => {
         try {
-            if (state.posts.length) return;
+            if (state.posts.length) { setStates({ ...states, showLoader: false });return };
             const postsData = await getFromTo('Posts', from, to);
-            if (postsData.length) {
-                setStates({showLoader: false});
-                dispatch({ type: 'put', key: 'posts', value: [...state.posts, ...postsData.reverse()] })
-            }
-            else {
-
-                setStates({ ...states, showLoader: false })
-            }
+            setStates({ ...states, showLoader: false });
+            dispatch({ type: 'put', key: 'posts', value: [...state.posts, ...postsData.reverse()] })
         } catch (error) {
             throw new Error(error.message);
         }
@@ -55,7 +48,7 @@ function PostsView() {
 
     return (
         <>
-            <Container innerRef={postSectionRef}>
+            <Container innerRef={postSectionRef} >
                 <CreatePost />
 
                 {
@@ -63,9 +56,17 @@ function PostsView() {
                     &&
                     state.posts.map((postData, i) => {
                         if (postData.type == 'post')
-                            return (<section className='w-full' key={postData.schema._id}><Post post={postData.schema} className={`border-b border-b-gray-700`} withReacts={true} postSectionRef={postSectionRef.current} /></section>)
+                            return (
+                                <section className='w-full' key={i}>
+                                    <Post post={postData.schema} className={`border-b border-b-gray-700`} withReacts={true} postSectionRef={postSectionRef.current} />
+                                </section>
+                            )
                         else
-                            return <section className='w-full' key={postData.schema._id}><Repost repost={postData.schema} postSectionRef={postSectionRef.current} /></section>
+                            return (
+                                <section className='w-full' key={i}>
+                                    <Repost repost={postData.schema} postSectionRef={postSectionRef.current} />
+                                </section>
+                            )
                     })
                 }
 

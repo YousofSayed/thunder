@@ -71,7 +71,7 @@ function MakeRetweet() {
                 context.post ?
                     <section className="p-2 container h-full max-h-[100%] overflow-x-auto bg-white dark:bg-[#080808] rounded-lg ">
                         <Textarea lengthLimit={100} context={context} setContext={setContext} overwriteValue={'repostContent'} />
-                        <Post post={post} className={'h-fit max-h-[400px] overflow-y-auto bg-[#eee]  dark:bg-[#000] hide-scrollbar my-3'} />
+                        <Post post={post} className={'h-fit  overflow-y-auto bg-[#eee]  dark:bg-[#000] hide-scrollbar my-3'} />
                         <Button clickCallback={repost}>Repost</Button>
                     </section>
                     :

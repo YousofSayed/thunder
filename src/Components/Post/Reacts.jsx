@@ -3,6 +3,7 @@ import { $, CocktailDB, addClickClass, copyToClipboard, getLocalDate, isNumber, 
 import { clear, getFromTo, update } from "../../js/global";
 import { postSocket } from "../../js/initSockets";
 import { useNavigate } from "react-router-dom";
+import { storeCtx } from "../../js/store";
 
 function PostReacts({ context, setContext }) {
     const [react, setReact] = useState('');
@@ -12,7 +13,8 @@ function PostReacts({ context, setContext }) {
     const reactIconRef = useRef();
     const reacCounterRef = useRef();
     const editeIconRef = useRef();
-    const { showPostEditBtn, postSectionRef, postRef, userID, reacts, reposts, _id ,index, post, repost } = context;
+    const {state} = useContext(storeCtx);
+    const { showPostEditBtn, postRef, userID, reacts, reposts, _id ,index, post, repost } = context;
     const user = parse(localStorage.getItem('user'));
     const db = new CocktailDB(user.email);
     useEffect(() => {
@@ -89,7 +91,7 @@ function PostReacts({ context, setContext }) {
                 return
             }
         }
-        sessionStorage.setItem('postSectionScroll', postSectionRef.scrollTop)
+        sessionStorage.setItem('postSectionScroll', state.postSectionRef.scrollTop)
         navigete(`/repost/${post.index}`);
     };
 

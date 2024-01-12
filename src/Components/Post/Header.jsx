@@ -4,7 +4,7 @@ import Button from "../Shared/Button";
 import { showMarquee, update } from "../../js/global";
 import userAvatar from '../../Assets/images/user-avatar.png';
 import tb from "../../js/tb";
-import User from "../Shared/User";
+import User from "../Shared/UserThumbnail";
 
 
 function PostHeader({ context, setContext }) {
@@ -42,7 +42,7 @@ function PostHeader({ context, setContext }) {
     }
     return (
         <header className={`relative flex justify-between items-center `}>
-           <User userAvatar={userAvatar} profImgId={profImgId} userName={userName} className={'bg-white dark:bg-[#111]'}/>
+           <User userAvatar={userAvatar} profImgId={profImgId} userName={userName} className={'bg-white dark:bg-[#222]'}/>
             {showPostEditBtn && <Button clickCallback={postEdit}>Post</Button>}
         </header>
     );

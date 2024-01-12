@@ -5,6 +5,7 @@ import userAvatar from '../../Assets/images/user-avatar.png';
 import tb from '../../js/tb';
 import { addClickClass, parse } from "../../js/cocktail";
 import { Marquee } from '../Shared/Marquee';
+import UserThumbnail from '../Shared/UserThumbnail';
 
 
 function Header() {
@@ -22,16 +23,12 @@ function Header() {
             if (!user || !user.profImgId) { setProfImg(userAvatar); return }
             setProfImg(await tb.getFileFromBot(user.profImgId))
         } catch (error) {
-            setTimeout(()=>getProfImgAndName() , 2000);
+            setTimeout(() => getProfImgAndName(), 2000);
             throw new Error(error.message)
         }
 
     };
 
-    const showLogOrSignComp = () => {
-        if (user) return;
-        $('#logOrSign').classList.remove('hidden');
-    };
 
     const handledDarkMode = (ev) => {
         addClickClass(ev.currentTarget, 'click');
@@ -64,10 +61,17 @@ function Header() {
                         <i className={`fa-solid ${theme == 'dark' ? 'fa-moon' : 'fa-sun'} text-2xl  text-black dark:text-white `} title={theme == 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}></i>
                     </figure>
 
-                    <figure className={`flex items-center gap-2 p-2  h-full  `} onClick={showLogOrSignComp}>
+                    <UserThumbnail
+                        className={`bg-transparent flex-row-reverse`}
+                        userAvatar={userAvatar}
+                        profImgId={profImg}
+                        userName={user.name}
+                        
+                    />
+                    {/* <figure className={`flex items-center gap-3 p-2  h-full  `} >
                         {user && <p className="font-bold text-xl hidden sm:block text-black dark:text-white" title='name of user'>{user.name}</p>}
-                        <img className="max-w-[40px] max-h-[35px] rounded-full cursor-pointer ring-black dark:ring-white ring-2" src={profImg} id="profImgId" alt='' loading='lazy' title='profile image' />
-                    </figure>
+                        <img className="max-w-[35px] max-h-[35px] rounded-full cursor-pointer ring-black dark:ring-white ring-2" src={profImg} id="profImgId" alt='' loading='lazy' title='profile image' />
+                    </figure> */}
                 </section>
             </section>
 
