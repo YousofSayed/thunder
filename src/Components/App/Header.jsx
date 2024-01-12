@@ -1,7 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import textLogo from '../../Assets/images/textLogo.png';
 import logo from '../../Assets/images/logo.svg';
-import userAvatar from '../../Assets/images/user-avatar.png';
+// import userAvatar from '../../Assets/images/user-avatar.png';
 import tb from '../../js/tb';
 import { addClickClass, parse } from "../../js/cocktail";
 import { Marquee } from '../Shared/Marquee';
@@ -9,25 +9,25 @@ import UserThumbnail from '../Shared/UserThumbnail';
 
 
 function Header() {
-    const [profImg, setProfImg] = useState(userAvatar);
+    // const [profImg, setProfImg] = useState(userAvatar);
     const [theme, setTheme] = useState(localStorage.getItem('theme'));
     const user = parse(localStorage.getItem('user'));
 
     useEffect(() => {
-        getProfImgAndName();
+        // getProfImgAndName();
     }, []);
 
-    //Methods
-    const getProfImgAndName = async () => {
-        try {
-            if (!user || !user.profImgId) { setProfImg(userAvatar); return }
-            setProfImg(await tb.getFileFromBot(user.profImgId))
-        } catch (error) {
-            setTimeout(() => getProfImgAndName(), 2000);
-            throw new Error(error.message)
-        }
+    // //Methods
+    // const getProfImgAndName = async () => {
+    //     try {
+    //         if (!user || !user.profImgId) { setProfImg(userAvatar); return }
+    //         setProfImg(await tb.getFileFromBot(user.profImgId))
+    //     } catch (error) {
+    //         setTimeout(() => getProfImgAndName(), 2000);
+    //         throw new Error(error.message)
+    //     }
 
-    };
+    // };
 
 
     const handledDarkMode = (ev) => {
@@ -63,10 +63,9 @@ function Header() {
 
                     <UserThumbnail
                         className={`bg-transparent flex-row-reverse`}
-                        userAvatar={userAvatar}
-                        profImgId={profImg}
+                        profImgId={user.profImgId}
                         userName={user.name}
-                        
+                        showName={false}
                     />
                     {/* <figure className={`flex items-center gap-3 p-2  h-full  `} >
                         {user && <p className="font-bold text-xl hidden sm:block text-black dark:text-white" title='name of user'>{user.name}</p>}

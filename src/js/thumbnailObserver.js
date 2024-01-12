@@ -6,6 +6,7 @@ export const thumbnailObserver = new IntersectionObserver((entries)=>{
             const id = thumbnail.target.getAttribute('tbid');
             if(id)thumbnail.target.src = await tb.getFileFromBot(id);
             thumbnail.target.removeAttribute('tbid')
+            thumbnailObserver.unobserve(thumbnail.target);
         }
     })
     
