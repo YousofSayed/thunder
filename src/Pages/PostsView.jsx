@@ -22,6 +22,14 @@ function PostsView() {
     }, []);
 
     useEffect(() => {
+        if(postSectionRef.current){
+            // gsap.fromTo(postSectionRef.current,{
+            //     x:100,
+            //     opacity:0,
+            //     duration:2
+            // })
+
+        }
         postSocket.on('msg', getSocketData);
     });
 
@@ -34,7 +42,7 @@ function PostsView() {
 
     const getPosts = async (from, to) => {
         try {
-            if (state.posts.length) { setStates({ ...states, showLoader: false });return };
+            if (state.posts.length) { setStates({ ...states, showLoader: false }); return };
             const postsData = await getFromTo('Posts', from, to);
             setStates({ ...states, showLoader: false });
             dispatch({ type: 'put', key: 'posts', value: [...state.posts, ...postsData.reverse()] })
@@ -58,13 +66,13 @@ function PostsView() {
                         if (postData.type == 'post')
                             return (
                                 <section className='w-full' key={i}>
-                                    <Post post={postData.schema} className={`border-b border-b-gray-700`} withReacts={true} postSectionRef={postSectionRef.current} />
+                                    <Post post={postData.schema} className={`border-b border-b-gray-700`} withReacts={true}  />
                                 </section>
                             )
                         else
                             return (
                                 <section className='w-full' key={i}>
-                                    <Repost repost={postData.schema} postSectionRef={postSectionRef.current} />
+                                    <Repost repost={postData.schema}  />
                                 </section>
                             )
                     })

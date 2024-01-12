@@ -4,6 +4,7 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import Footer from "../Components/App/Footer";
 import { StoreProvider } from "../js/store";
+
 function App() {
     const user = parse(localStorage.getItem('user'));
     const navigate = useNavigate();
