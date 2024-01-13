@@ -1,4 +1,4 @@
-import { $, GET, POST, PUT, parse, stringify } from "./cocktail";
+import { $, GET, POST, PUT, parse, repeatAsArray, stringify } from "./cocktail";
 
 export function success(msg) {
     $('#warn').classList.replace('text-red-600', 'text-green-400')
@@ -100,6 +100,24 @@ export async function getAllSheetValues(range) {
         throw new Error(error.message)
     }
 }
+
+
+const simulationBigData = async (range) => {
+    const reText = 'y'.repeat(40000)
+    const post = { "type": "post", "schema": { "_id": "ad3312ff-5c1f-4a83-ace2-801ddc58843f", "userName": "Yousef Sayed", "userID": "MzA2Mg==", "date": "12/25/2023, 3:49:14 PM", "email": "yousef.sayed1231@gmail.com", "profImgId": "BQACAgQAAxkDAAIC5mWCE4fIEC5yDxM__pjDFsG3K0nuAAIiEwACKr0QUDV-nNHfQZAdMwQ", "postContent": reText, "media": { "images": [], "vid": [], "iframeSrc": [] }, "reacts": { "love": 4, "haha": 0, "sad": 0, "angry": 0 }, "reposts": 0, "watches": 0, "index": 3 } }
+    const strPost = [stringify(post)];
+    const data = [...repeatAsArray(strPost, 1000)];
+    const res = await PUT({
+        url: `https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_DB_ID}/values/${range}?valueInputOption=RAW&key=${import.meta.env.VITE_SHEET_AKEY}`,
+        headers: await headers(),
+        data: {
+            values: data
+        }
+    });
+    console.log(res);
+}
+
+// setTimeout(()=>{simulationBigData('Posts')},7000)
 
 export async function getFromTo(sheetName, from, to) {
     try {

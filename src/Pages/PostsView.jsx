@@ -18,7 +18,7 @@ function PostsView() {
 
     useEffect(() => {
         postSectionRef.current.scrollTop = +sessionStorage.getItem('postSectionScroll');
-        getPosts(1, 500);
+        getPosts(1, 200);
     }, []);
 
     useEffect(() => {
