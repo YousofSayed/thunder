@@ -66,7 +66,6 @@ function CreatePostFooter() {
                 alert(`Enter content to post`);
                 return;
             }
-            showMarquee(true);
             const postData = {
                 type: 'post',
                 schema: postSchema({ user, postContent, iframeSrc })
@@ -95,7 +94,6 @@ function CreatePostFooter() {
             const res = await append('Posts', postData);
             const index = res.updates.updatedRange?.match(/\d+/ig)[0];
             postData.schema.index = index;
-            console.log(postData);
             textAreaRef.value = '';
             iframeInputRef ? iframeInputRef.value = '' : null;
             setContext({
@@ -107,7 +105,6 @@ function CreatePostFooter() {
                 iframeSrc: [],
             });
             postSocket.emit('msg', postData);
-            showMarquee(false);
             btn.disabled = false;
         }
         catch (error) {

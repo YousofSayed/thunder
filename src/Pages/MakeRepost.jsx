@@ -40,7 +40,6 @@ function MakeRetweet() {
         const btn = ev.currentTarget;
         btn.disabled = true;
         addClickClass(btn, 'click');
-        showMarquee(true);
         try {
             const postRes = await (await getFromTo('Posts', postIndex, postIndex))[0];
             postRes.schema.reposts = postRes.schema.reposts ? postRes.schema.reposts++ : 1;
@@ -60,7 +59,6 @@ function MakeRetweet() {
         }
         finally {
             btn.disabled = false;
-            showMarquee(false);
         }
 
     }

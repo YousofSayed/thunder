@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { $, CocktailDB, addClickClass, copyToClipboard, getLocalDate, isNumber, nFormatter, parse } from "../../js/cocktail";
-import { clear, getFromTo, update } from "../../js/global";
+import { $, CocktailDB, addClickClass, copyToClipboard, getLocalDate, isNumber, nFormatter, parse, stringify } from "../../js/cocktail";
+import { clear, getAllSheetValues, getFromTo, update } from "../../js/global";
 import { postSocket } from "../../js/initSockets";
 import { useNavigate } from "react-router-dom";
 import { storeCtx } from "../../js/store";
@@ -95,7 +95,7 @@ function PostReacts({ context, setContext }) {
         navigete(`/repost/${post.index}`);
     };
 
-    const doEdit = (ev) => {
+    const doEdit = async(ev) => {
         const btn = ev.currentTarget;
         addClickClass(btn, 'click');
         editeIconRef.current.classList.toggle('text-cyan-400');
@@ -161,7 +161,7 @@ function PostReacts({ context, setContext }) {
             </button>
 
             {
-                (repost?._id && user.id == userID)
+                (user.id == userID)
                 &&
                 <button onClick={(ev) => { doEdit(ev) }}>
                     <i ref={editeIconRef} className={`fa-solid fa-pen-to-square text-lg text-black dark:text-white`}></i>

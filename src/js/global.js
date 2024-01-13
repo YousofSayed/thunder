@@ -29,7 +29,7 @@ export async function getAllSheetValues(range) {
         const jsonRes = await res.json()
         if (res.status == 200) {
             return {
-                data:jsonRes,
+                data: jsonRes,
                 async filter(value) {
                     const result = [];
                     const keyWords = new RegExp(value?.toLowerCase().match(/\w+|[\u0600-\u06FF\u0750-\u077F]+/ig)?.join('|'));
@@ -54,6 +54,31 @@ export async function getAllSheetValues(range) {
                         }
                     });
                     return await (await res.json()).updatedRange ? 'Successfully updates' : 'Failed to update';
+                },
+                async replaceItemWithItem(uniqueKey, newItem) {
+                    const data = jsonRes.values;
+                    const dataWillBeRender = [];
+                    data.forEach(val => {
+                        if (!val[0]) return;
+                        const isIt = stringify(val).includes(uniqueKey);
+                        val[0] = parse(val[0])
+                        if (isIt && val[0].type == 'post') {
+                            val[0].schema = newItem
+                        }
+                        else if (val[0].type == 'repost' && isIt) {
+                            val[0].schema.post = newItem;
+                        }
+                        dataWillBeRender.push(val[0]);
+                        val[0] = stringify(val[0])
+                    });
+                    const res = await PUT({
+                        url: `https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_DB_ID}/values/${range}?valueInputOption=RAW&key=${import.meta.env.VITE_SHEET_AKEY}`,
+                        headers: await headers(),
+                        data: {
+                            values: [...data]
+                        }
+                    });
+                    return await (await res.json()).updatedRange ? { data: dataWillBeRender, msg: 'Successfully updates', ok: true } : { data: [], msg: 'Failed to update', ok: false };
                 },
                 async users() {
                     const data = jsonRes.values;
@@ -98,7 +123,6 @@ export async function getFromTo(sheetName, from, to) {
         throw new Error(error.message)
     }
 }
-
 
 export async function append(range, values) {
     const res = await POST({

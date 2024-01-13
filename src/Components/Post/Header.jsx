@@ -1,10 +1,9 @@
 import { useContext, useRef, useEffect } from "react";
 import Button from "../Shared/Button";
-// import { PostContext } from "../Post";
-import { showMarquee, update } from "../../js/global";
+import { getAllSheetValues, showMarquee, update } from "../../js/global";
 import userAvatar from '../../Assets/images/user-avatar.png';
-import tb from "../../js/tb";
 import User from "../Shared/UserThumbnail";
+import { storeCtx } from "../../js/store";
 
 
 function PostHeader({ context, setContext }) {
@@ -19,24 +18,23 @@ function PostHeader({ context, setContext }) {
         repost,
         post
     } = context;
+    const {dispatch,state} = useContext(storeCtx);
 
 
     const postEdit = async () => {
         try {
-            showMarquee(true);
             editeIconRef.classList.toggle('text-cyan-400');
             if (editeValue == content) {
-                showMarquee(false);
                 setContext({ ...context, showPostEditBtn: false });
                 return;
             }
             post.postContent = editeValue;
-            const upd = await update(`Posts!A${post.index}`, { type: 'post', schema: post });
-            repost ? await update(`Posts!A${repost.index}`, { type: 'repost', schema: { ...repost, post: post } }) : null;
+            const res = await (await getAllSheetValues('posts')).replaceItemWithItem(post._id,post);
             setContext({ ...context, content: editeValue, showPostEditBtn: false });
-            showMarquee(false);
+            const renderData = res.data.slice(0,200).reverse()
+            res.ok ? dispatch({type:'put',key:'posts',value:[...renderData]}) : '';
         } catch (error) {
-            setTimeout(() => postEdit(), 1000);
+            setTimeout(() => postEdit(), 1000)
             throw new Error(error.message);
         }
     }

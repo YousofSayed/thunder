@@ -1,7 +1,7 @@
 import { createContext, useReducer } from "react";
 const initState = {
-   posts:[],
-   postSectionRef:'',
+    posts: [],
+    postSectionRef: '',
 }
 
 const storeCtx = createContext(initState);
@@ -10,7 +10,7 @@ const reducer = (state, action) => {
     const { type, key, value } = action;
     switch (type) {
         case 'put':
-            return { ...state, [key]: value }
+            return { ...state, [key]: value };
         case 'get':
             return state;
         default:
