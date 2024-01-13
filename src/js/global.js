@@ -44,16 +44,28 @@ export async function getAllSheetValues(range) {
                     return result.length ? result : null;
                 },
                 async replaceAllAndUpdate(value, newValue) {
-                    const data = stringify(jsonRes.values);
-                    const newData = data.replaceAll(value, newValue);
+                    const data = jsonRes.values;
+                    const ranges = [];
+                    const newVal = [];
+                    data.forEach((val, i) => {
+                        // console.log(val);
+                        if (val[0] && val[0].includes(value)) {
+                            const newVal = val[0].replace(value, newValue);
+                            console.log(newVal);
+                            ranges.push(`${range}!A${i}:Z${999}`);
+                            newVal.push(``)
+                        };
+
+                    })
+                    // const newData = data.replaceAll(value, newValue);
                     const res = await PUT({
-                        url: `https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_DB_ID}/values/${range}?valueInputOption=RAW&key=${import.meta.env.VITE_SHEET_AKEY}`,
+                        url: `https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_DB_ID}/values/batchUpdate?valueInputOption=RAW&key=${import.meta.env.VITE_SHEET_AKEY}`,
                         headers: await headers(),
-                        data: {
-                            values: [...parse(newData)]
-                        }
+                        data: ranges
                     });
-                    return await (await res.json()).updatedRange ? 'Successfully updates' : 'Failed to update';
+                    const jsonRes2 = res.json()
+                    console.log(ranges , await jsonRes2);
+                    return await (await jsonRes2).updatedRange ? 'Successfully updates' : 'Failed to update';
                 },
                 async replaceItemWithItem(uniqueKey, newItem) {
                     const data = jsonRes.values;
@@ -101,6 +113,10 @@ export async function getAllSheetValues(range) {
     }
 }
 
+// window.addEventListener('click', async () => {
+//     await (await getAllSheetValues('Posts')).replaceAllAndUpdate('y'.repeat(40000),'lol')
+
+// })
 
 const simulationBigData = async (range) => {
     const reText = 'y'.repeat(40000)

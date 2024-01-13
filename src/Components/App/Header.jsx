@@ -63,8 +63,8 @@ function Header() {
 
                     <UserThumbnail
                         className={`bg-transparent flex-row-reverse`}
-                        profImgId={user.profImgId}
-                        userName={user.name}
+                        profImgId={user?.profImgId}
+                        userName={user?.name}
                         showName={false}
                     />
                     {/* <figure className={`flex items-center gap-3 p-2  h-full  `} >
