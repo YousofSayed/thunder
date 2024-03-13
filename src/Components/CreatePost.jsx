@@ -4,6 +4,7 @@ import Textarea from './Shared/Textarea';
 import IframeSectionHandler from './CreatePost/IframeSection';
 import CreatePostMedia from './CreatePost/Media';
 import CreatePostFooter from './CreatePost/Footer';
+import { CreatePostHeader } from './CreatePost/Header';
 export const CreatePostContext = createContext();
 
 function CreatePost() {
@@ -14,6 +15,7 @@ function CreatePost() {
         video:[],
         iframeSrc:[],
         showIframeSection:false,
+        showLoader:false,
         textAreaRef:null,
         iframeInputRef:null,
         user : parse(localStorage.getItem('user'))
@@ -23,6 +25,7 @@ function CreatePost() {
         <section className='w-full flex  flex-col bg-[#fff] dark:bg-[#000] h-fit rounded-lg p-2'>
 
             <CreatePostContext.Provider value={{context , setContext}}>
+                
                 <Textarea lengthLimit={5000} context={context} setContext={setContext} overwriteValue={'postContent'}/>
 
                 <IframeSectionHandler />

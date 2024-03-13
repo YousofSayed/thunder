@@ -6,6 +6,7 @@ import tb from "../../js/tb";
 import { addClickClass, stringify } from "../../js/cocktail";
 import { postSocket } from "../../js/initSockets";
 import Button from "../Shared/Button";
+import Loader from "../Shared/Loader";
 
 function CreatePostFooter() {
     const imagesInputRef = useRef();
@@ -61,6 +62,7 @@ function CreatePostFooter() {
         const btn = ev.currentTarget;
         btn.disabled = true;
         addClickClass(btn, 'click');
+        setContext({...context , showLoader:true})
         try {
             if (!postContent) {
                 alert(`Enter content to post`);
@@ -100,12 +102,12 @@ function CreatePostFooter() {
                 ...context,
                 postContent: '',
                 charLength: 0,
+                showLoader:false,
                 imagesMedia: [],
                 video: [],
                 iframeSrc: [],
             });
             postSocket.emit('msg', postData);
-            btn.disabled = false;
         }
         catch (error) {
             throw new Error(error.message);
@@ -124,6 +126,7 @@ function CreatePostFooter() {
                     <i className='fa-solid fa-link cursor-pointer transition-all text-black dark:text-white text-lg' onClick={showAndHideIframeSection}></i>
                     <span className='p-2 bg-black text-white dark:bg-white dark:text-black font-bold rounded-lg '>{charLength}/5000</span>
                 </ul>
+                
                 <Button clickCallback={postThePost}>POST</Button>
                 {/* <button className='px-2 py-1 bg-black text-white dark:bg-white dark:text-black rounded-md font-bold' onClick={postThePost}>POST</button> */}
             </footer>

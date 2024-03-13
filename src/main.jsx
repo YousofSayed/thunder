@@ -12,6 +12,7 @@ import MakeRetweet from './Pages/MakeRepost';
 import Search from './Pages/Search';
 import Bookmarks from './Pages/Bookmarks';
 import Profile from './Pages/Profile';
+import './js/Animations';
 import { gsap, CSSRulePlugin, ScrollTrigger } from 'gsap/all';
 gsap.registerPlugin(CSSRulePlugin, ScrollTrigger);
 

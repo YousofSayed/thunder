@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 function Textarea({ value, focus, lengthLimit, setContext, context , overwriteValue }) {
-    const { postContent } = context;
+    const { postContent , showLoader } = context;
     const textAreaRef = useRef();
     useEffect(() => {
         if (focus) {
@@ -35,6 +35,7 @@ function Textarea({ value, focus, lengthLimit, setContext, context , overwriteVa
     return (
         <section className='relative overflow-y-auto  max-h-[400px] h-fit mt-3'>
             <i onClick={fitAndShrinkContetntArea} className="fa-solid fa-expand  absolute bg-[#fff] text-black dark:text-white font-bold dark:bg-[#333] ltr:right-[5px] rtl:left-[5px] top-[5px] cursor-pointer p-2 flex items-center justify-center rounded-full  "></i>
+            {showLoader && <span  className="  absolute w-[30px] h-[30px]  ltr:right-[5px] rtl:left-[5px] top-[5px] cursor-pointer p-2 flex items-center justify-center rounded-full border border-l-transparent dark:border-l-transparent border-black dark:border-white animate-spin  "></span>} 
             <textarea
                 ref={textAreaRef}
                 onInput={limitChars}

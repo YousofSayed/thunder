@@ -6,58 +6,54 @@ import PostHeader from "./Post/Header";
 import PostArticle from "./Post/Article";
 import PostDate from "./Post/Date";
 import PostMedia from "./Post/Media";
-import { gsap } from 'gsap/all';
-import { animate } from "../js/animateObserver";
 
 export const PostContext = createContext();
-const tl = gsap.timeline({repeatDelay:0});
+// const tl = gsap.timeline({repeatDelay:0});
 
 function Post({ post, className, withReacts, repost }) {
-    const { postContent, index } = post
-    const postRef = useRef();
-    const [context, setContext] = useState({
-        showPostEditBtn: false,
-        editeValue: postContent,
-        content: postContent,
-        postRef: postRef.current,
-        repost,
-        post,
-        ...post
-    });
-    const unId = uniqueID();
+  const { postContent, index } = post;
+  const postRef = useRef();
+  const [context, setContext] = useState({
+    showPostEditBtn: false,
+    editeValue: postContent,
+    content: postContent,
+    postRef: postRef.current,
+    repost,
+    post,
+    ...post,
+  });
+  const unId = uniqueID();
 
-    useEffect(() => {
-        animate(postRef.current,{
-            opacity:0,
-            transform:'translateX(-100px)',
-        },{
-            opacity:1,
-            transform:'translateX(0)',
-        },{
-            duration:500,
-            direction:'alternate'
-        });
-        setContext({ ...context, postRef: postRef.current })
-    }, []);
+  useEffect(() => {
+    setContext({ ...context, postRef: postRef.current });
+  }, []);
 
-   
+  return (
+    <section
+      id={`post-${unId}`}
+      index={context.index}
+      ref={postRef}
+      className={`w-full p-2 rounded-lg  bg-white dark:bg-[#000] ${className}`}
+    >
+      {/* <PostContext.Provider value={{ context, setContext }}> */}
+      <PostHeader context={context} setContext={setContext} />
 
+      <PostDate date={context.date} />
 
-    return (
-        <section id={`post-${unId}`} index={context.index} ref={postRef} className={`w-full p-2 rounded-lg  bg-white dark:bg-[#000] ${className}`}>
-            {/* <PostContext.Provider value={{ context, setContext }}> */}
-            <PostHeader context={context} setContext={setContext} />
+      <PostArticle context={context} setContext={setContext} />
 
-            <PostDate date={context.date} />
+      <PostMedia
+        media={context.media}
+        post={context.post}
+        repost={context.repost}
+      />
 
-            <PostArticle context={context} setContext={setContext} />
-
-            <PostMedia media={context.media} post={context.post} repost={context.repost} />
-
-            {withReacts && <Reacts context={context} setContext={setContext} type={'post'} />}
-            {/* </PostContext.Provider> */}
-        </section>
-    );
+      {withReacts && (
+        <Reacts context={context} setContext={setContext} type={"post"} />
+      )}
+      {/* </PostContext.Provider> */}
+    </section>
+  );
 }
 
 export default Post;

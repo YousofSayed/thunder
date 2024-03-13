@@ -1,122 +1,104 @@
 'use strict'
 /*cocktail (typeScript version) library created at 3/10/2023 - Devloped by yousef sayed*/
+/*===================(Start Dom)===================*/
+const _callbacksContainer = {};
 /**
- * Shortcut for querySelector
- * @param {string} root 
- * @returns {HTMLElement | HTMLInputElement | Element}
+ * It is define the callback event
+ * @param {(
+ * ev: Event |
+ *  DragEvent |
+ *  MouseEvent |
+ *  TouchEvent |
+ *  AnimationEvent |
+ *  FocusEvent |
+ *  TrackEvent |
+ *  InputEvent |
+ *  WheelEvent |
+ *  {target:Element |
+ *  HTMLElement |
+ *  HTMLAudioElement |
+ *  HTMLVideoElement |
+ *  HTMLIFrameElement |
+ *  HTMLBodyElement |
+ *  HTMLAreaElement |
+ *  HTMLImageElement
+ *  } )} callback
+ * @returns
  */
-export function $(root) {
-  return document.querySelector(root) ? document.querySelector(root) : null;
-}
+export const def = (callback) => {
+  const uuid = crypto.randomUUID().replaceAll("-", "");
+  _callbacksContainer[uuid] = callback;
+  return uuid;
+};
+
+const domObserver = new MutationObserver((nodes) => {
+  nodes.forEach((node) => {
+    const chlds = Array.from(node.addedNodes);
+    chlds
+      .filter((chld) => chld instanceof HTMLElement)
+      .forEach((chld) => {
+        //Start handelling parent child  
+        const parentChildAttrs = Array.from(chld.getAttributeNames())
+          .filter((attr) => attr.startsWith("on"))
+          .forEach((attr) => {
+            const eventName = attr.replace("on", "");
+            chld.addEventListener(
+              eventName,
+              _callbacksContainer[chld.getAttribute(attr)]
+            );
+            chld.removeAttribute(attr);
+          });
+
+        //Start handelling childs  
+        const chldNodes = Array.from(chld.querySelectorAll("*"));
+        const tes = chldNodes.map((chldNode) => {
+          const filterAttr = Array.from(chldNode.getAttributeNames()).filter(
+            (attr) => attr.startsWith("on")
+          );
+          return filterAttr.length > 0
+            ? { chldNode, filterAttr }
+            : { chldNode, filterAttr: [] };
+        });
+        tes.forEach(({ chldNode, filterAttr }) => {
+          filterAttr.forEach((evAttr) => {
+            const eventName = evAttr.replace("on", "");
+            chldNode.addEventListener(
+              eventName,
+              _callbacksContainer[chldNode.getAttribute(evAttr)]
+            );
+            chldNode.removeAttribute(evAttr);
+          });
+        });
+      });
+  });
+});
+
+domObserver.observe(document.body, {
+  characterData: true,
+  childList: true,
+  attributes: true,
+  subtree: true,
+});
+
+export const html = String.raw;
+export const css = String.raw;
 
 /**
- * Fast way to get all elements at same time in one array
- * @param  {string[]} roots 
- * @returns {HTMLElement[]}
- */
-export function $m(...roots) {
-  return roots.map(e => document.querySelector(e))
-}
-
-/**
- * Shortcut for querySelectorAll
+ *
  * @param {string} root
- * @returns {HTMLElement[]}
+ * @returns
  */
-export function $a(root) {
+export const $ = (root) => {
+  return document.querySelector(root);
+};
+
+/**
+ * 
+ * @param {string} root 
+ * @returns 
+ */
+export function $a (root){
   return document.querySelectorAll(root);
-}
-
-//handling Dom
-const _containerOFCocktailEvents_ = {};
-
-function excuteEvents(root = '*') {
-  const allEls = document.querySelectorAll(root);
-  allEls.forEach((el) => {
-    if (el.getAttribute('excuted') === 'true') return;
-    const { attributes } = el;
-    [...attributes].filter(attr => attr.name.startsWith('@')).forEach((attr) => {
-      el.addEventListener(`${attr.name.replace('@', '')}`, _containerOFCocktailEvents_[el.getAttribute(attr.name)])
-      el.setAttribute('excuted', 'true');
-      el.removeAttribute(attr.name)
-      delete _containerOFCocktailEvents_[el.getAttribute(attr.name)]
-    })
-  })
-}
-
-function parseAndExcuteEventWhileInsert(HTML) {
-  const parsedHTML = parseToHTML(HTML).body;
-  [...parsedHTML.querySelectorAll('*')].map((el) => {
-    const { attributes } = el;
-    for (const attr of [...attributes]) {
-      if (attr.name.startsWith('@')) {
-        el.setAttribute('excuted', 'false');
-        return el;
-      }
-    }
-    return el;
-  })
-  return parsedHTML.innerHTML;
-}
-
-/**
- * Use it if you want to handle your Component with data in array 
- * @param {string[]} array 
- * @param {()=> any} callback 
- * @returns {string}
- */
-export function useMap(array, callback) {
-  return parseToHTML(array.map((e, i) => {
-    return callback(e, i)
-  }).join('')).body.innerHTML;
-}
-
-/**
- * Define your callback in event attribute.
- * @param {()=>void} callback 
- * @returns {string}
- */
-export function def(callback) {
-  const id = hash(uniqueID());
-  _containerOFCocktailEvents_[id] = callback;
-  return id;
-}
-
-/**
- * Insert component in begnning of main root element
- * @param {string} root 
- * @param {string} component 
- */
-export function insertInBegin(root, component) {
-  const el = document.querySelector(root);
-  const parsedHTML = parseAndExcuteEventWhileInsert(component);
-  el?.insertAdjacentHTML('afterbegin', parsedHTML);
-  excuteEvents(`${root} [excuted="false"]`);
-}
-
-/**
- * Insert component in end of main root element
- * @param {string} root 
- * @param {string} component 
- */
-export function insertInEnd(root, component) {
-  const el = document.querySelector(root);
-  const parsedHTML = parseAndExcuteEventWhileInsert(component)
-  el?.insertAdjacentHTML('beforeend', parsedHTML);
-  excuteEvents(`${root} [excuted="false"]`);
-}
-
-/**
- * If you wanna replace same component
- * @param {string} root 
- * @param {string} oldHTML 
- * @param {string} newHTML 
- */
-export function replaceAndCommit(root, oldComponent, newComponent) {
-  const el = document.querySelector(root);
-  if (!el) throw new Error(`Your element root "${oldComponent}" is ${el}`)
-  const inner = el.innerHTML.replace(oldComponent, newComponent);
-  render(root, inner)
 }
 
 /**
@@ -127,140 +109,110 @@ export function replaceAndCommit(root, oldComponent, newComponent) {
 export function parseToHTML(text) {
   const el = new DOMParser().parseFromString(text, 'text/html').body.children;
   return +el.length ? el[0] : undefined;
+};
+
+/*===================(End Dom)===================*/
+
+
+/*===================(Start Animtaion)===================*/
+const _Animations = {};
+let threshold;
+const animateObserver = new IntersectionObserver(
+  (nodes) => {
+    nodes.forEach((node) => {
+      const animtaionName = node.target.getAttribute("animate");
+      let cssText = ``,
+        formObj = _Animations[animtaionName][0],
+        toObj = _Animations[animtaionName][1],
+        duration = _Animations[animtaionName][2];
+
+      //Set from style
+      for (const prop in formObj) {
+        cssText += `${prop}:${formObj[prop]};${
+          duration ? `transition:${duration}` : ""
+        };`;
+      }
+      node.target.style.cssText = cssText;
+
+      //While Intersecting
+      if (node.isIntersecting) {
+        cssText = ``; //clear var to reuse it
+        //Set to style
+        for (const prop in toObj) {
+          cssText += `${prop}:${toObj[prop]};${
+            duration ? `transition:${duration}` : ""
+          };`;
+        }
+        node.target.style.cssText = cssText;
+
+        //If you wanna animtaion to be not once
+        if (node.target.getAttribute("once") == "false") {
+          return;
+        }
+        animateObserver.unobserve(node.target);
+      }
+    });
+  },
+  {threshold:0.1}
+);
+
+const domObserverForAnimtaions = new MutationObserver((nodes) => {
+  nodes.forEach((node) => {
+    const childs = Array.from(node.addedNodes)
+      .filter((nodeChild) => nodeChild instanceof HTMLElement)
+      .forEach((nodeChild) => {
+        const animatedElements = [
+          nodeChild.hasAttribute("animate") ? nodeChild : null,
+          ...nodeChild.querySelectorAll("[animate]"),
+        ];
+        animatedElements[0]?observeAnimatedElement(animatedElements):null;
+      });
+  });
+});
+
+/**
+ *
+ * @param {{
+ * name:string ,
+ * from:CSSStyleDeclaration ,
+ * to:CSSStyleDeclaration ,
+ * duration:string
+ * }} param0
+ */
+export function defineAnimation({ name, from, to, duration }) {
+  _Animations[name] = [from, to, duration];
 }
 
-//set render class 
-/**
- * Render your componet
- * @param {string} root 
- * @param {string} component 
- */
-export function render(root, component) {
-  const element = document.querySelector(root);
-  if (!element) throw new Error(`Your element root "${root}" is ${element}`)
-  const fragment = document.createElement('template');
-
-  if (typeof component === 'object') {
-    fragment.innerHTML += component.html;
-    if (component.onBeforeMounted) component.onBeforeMounted();
-    element.innerHTML = fragment.innerHTML;
-    if (component.onAfterMounted) component.onAfterMounted();
-  }
-  else { fragment.innerHTML += component; element.innerHTML = fragment.innerHTML; }
-  excuteEvents(`${root} *`);
+function observeAnimatedElement(els) {
+  Array.from(els).forEach((el) => {
+    animateObserver.observe(el);
+  });
 }
 
 /**
  * 
- * @param {{
- *  el: keyof HTMLElementTagNameMap,
- *  props:Element | HTMLVideoElement | HTMLImageElement | HTMLAudioElement | HTMLInputElement ,
- *  content:string
- * }} param0 
+ * @param {number} thresholdNum 
  */
-
-let _CocktailRoutes_, _cocktailRoot;
-/**
- * Make router on 
- * @warn Don’t use render Function with useRouter Function 
- * @param {string} root 
- * @param {object} routes 
-*/
-export function useRouter(root, routes, params) {
-  const rgx = /(\/)?(\:)?(\w+)?/ig;
-  _CocktailRoutes_ = cloneObject(routes);
-  _cocktailRoot = root;
-  params = params || '';
-  console.log(params);
-
-  const getAllCa = () => {
-    const routesEls = document.querySelectorAll('c-a');
-    const { pathname } = location;
-    routesEls.forEach((routeEl) => {
-      routeEl.addEventListener('click', () => {
-        const route = routeEl.getAttribute('to') || '';
-        if (!route) { throw new Error(`Route not founded , try to set "to" attribute at "<c-a>" element`) }
-        if (pathname == route) { return };
-        routes['/404'] = !routes[route] && !routes['/404'] ? `404 page not founded..:(` : routes['/404'];
-
-        for (const key in routes) {
-          const keyMatch = key?.match(rgx) || [], routeMatch = route.match(rgx) || [];
-          if (keyMatch[0] !== routeMatch[0]) { continue; }
-          history.pushState(null, '', route);
-          render(root, isFunction(routes[key]) ? routes[key](params[key]) : routes[key]);
-        }
-
-        getAllCa();
-      })
-    });
-  }
-  getAllCa();
-
-  function popAndLoadHandler() {
-    const { pathname } = location;
-
-    switch (true) {
-      case !routes[pathname] && !routes['/404']:
-        (render(root, `404 page not founded..:(`))
-        break;
-
-      case !routes[pathname] && routes['/404']:
-        (render(root, isFunction(routes['/404']) ? routes['/404'](params[key]) : routes['/404']))
-        break;
-
-      default:
-        break;
-    }
-
-    for (const key in routes) {
-      const keyMatch = key?.match(rgx) || [], pathMatch = pathname.match(rgx) || [];
-      if (keyMatch[0] != pathMatch[0]) {
-        continue;
-      }
-      render(root, isFunction(routes[key]) ? routes[key](params[key]) : routes[key]);
-    }
-    getAllCa();
-    return;
-  }
-
-  window.addEventListener('popstate', () => {
-    popAndLoadHandler()
-  });
-
-  window.addEventListener('load', () => {
-    popAndLoadHandler()
-  })
-};
-
-/**
- * It is routing you to your specific route
- * @param {string} route 
- */
-export function navigate(route) {
-  history.pushState({}, '', route);
-  render(_cocktailRoot, isFunction(_CocktailRoutes_[route]) ? _CocktailRoutes_[route]() : _CocktailRoutes_[route])
-
+ export function turnOnAnimation(thresholdNum) {
+  threshold = thresholdNum;
+  const animatedElements = Array.from(
+    document.body.querySelectorAll("[animate]")
+  );
+  observeAnimatedElement(animatedElements);
+  console.log(_Animations);
 }
 
-/**
- * Returns Params in one object 
- * @returns {object}
- */
-export function useParams() {
-  const rgx = /\/(\:)?(\w+)?/ig;
-  const routes = cloneObject(_CocktailRoutes_);
-  const { pathname } = location;
-  const params = {};
-  Object.keys(routes).map(key => {
-    const keyMatchs = key.match(rgx) || [], routeMatches = pathname.match(rgx) || [];
-    if (keyMatchs[0] != routeMatches[0]) return;
-    keyMatchs.forEach((param, i) => {
-      if (i == 0) return;
-      params[param.replace(/\/(\:)?/ig, '')] = routeMatches[i]?.replace('/', '');;
-    });
-  });
-  return params;
-}
+domObserverForAnimtaions.observe(document.body, {
+  characterData: true,
+  childList: true,
+  attributes: true,
+  subtree: true,
+});
+// turnOnAnimation();
+
+/*===================(End Animtaion)===================*/
+
+
 
 /**
  * Returns get method to get specific query that you want

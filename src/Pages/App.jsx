@@ -1,5 +1,5 @@
 import Header from "../Components/App/Header";
-import { $a, parse } from "../js/cocktail";
+import {  parse } from "../js/cocktail";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import Footer from "../Components/App/Footer";

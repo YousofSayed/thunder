@@ -167,7 +167,7 @@ export async function append(range, values) {
         },
         json: true,
     })
-
+    console.log(await res);
     return res;
 }
 
